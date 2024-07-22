@@ -1,0 +1,6 @@
+rootProject.name = 'escapeSparta'
+include 'escape-core'
+include 'escape-admin'
+include 'escape-manager'
+include 'escape-consumer'
+
