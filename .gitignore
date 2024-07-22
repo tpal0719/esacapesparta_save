@@ -1,3 +1,8 @@
+/escape-core/src/main/resources/properties/env.properties
+/escape-admin/src/main/resources/properties/env.properties
+/escape-consumer/src/main/resources/properties/env.properties
+/escape-manager/src/main/resources/properties/env.properties
+
 HELP.md
 .gradle
 build/
