@@ -9,14 +9,18 @@ import lombok.NoArgsConstructor;
 public class StoreRequestParamDto {
     private String keyWord = "";
     private String area = "";
-    private Integer pageNum = 1;
+    private String sort = "name";
+    private int pageNum = 1;
+    private int pageSize = 10;
     private Boolean isDesc = false;
 
     @Builder
-    public StoreRequestParamDto(String keyWord, String area, Integer pageNum, Boolean isDesc) {
+    public StoreRequestParamDto(String keyWord, String area, String sort, int pageNum, int pageSize, Boolean isDesc) {
         this.keyWord = keyWord;
         this.area = area;
+        this.sort = sort;
         this.pageNum = pageNum;
+        this.pageSize = pageSize;
         this.isDesc = isDesc;
     }
 }
