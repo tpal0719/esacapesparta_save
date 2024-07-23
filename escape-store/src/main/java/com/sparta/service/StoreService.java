@@ -43,28 +43,27 @@ public class StoreService {
 
     @Transactional
     public StoreModifyResponseDto modifyStore(Long storeId, StoreModifyRequestDto requestDto, User manager) {
-        Store findStore = storeRepository.findByIdOrElseThrow(storeId);
-        StoreStatus.verifyStoreIsActive(findStore);
-        findStore.checkManager(manager);
+        Store store = storeRepository.findByIdOrElseThrow(storeId);
+        store.verifyStoreIsActive();
+        store.checkManager(manager);
 
-        findStore.updateStore(
+        store.updateStore(
                 requestDto.getName(),
                 requestDto.getAddress(),
                 requestDto.getPhoneNumber(),
                 requestDto.getWorkHours()
         );
 
-        storeRepository.save(findStore);
-        return new StoreModifyResponseDto(findStore);
+        storeRepository.save(store);
+        return new StoreModifyResponseDto(store);
     }
 
     @Transactional
     public void deleteStore(Long storeId, User manager) {
-        Store findStore = storeRepository.findByIdOrElseThrow(storeId);
-        StoreStatus.verifyStoreIsActive(findStore);
-        findStore.checkManager(manager);
-
-        findStore.deactivateStore();
+        Store store = storeRepository.findByIdOrElseThrow(storeId);
+        store.verifyStoreIsActive();
+        store.checkManager(manager);
+        store.deactivateStore();
     }
 
 }

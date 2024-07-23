@@ -67,4 +67,10 @@ public class Store extends TimeStamped {
             throw new StoreException(StoreErrorCode.USER_NOT_STORE_MANAGER);
         }
     }
+
+    public void verifyStoreIsActive() {
+        if(!this.storeStatus.equals(StoreStatus.ACTIVE)) {
+            throw new StoreException(StoreErrorCode.INVALID_STORE_STATUS);
+        }
+    }
 }

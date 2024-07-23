@@ -8,9 +8,4 @@ public enum StoreStatus {
     ACTIVE,
     DEACTIVE;
 
-    public static void verifyStoreIsActive(Store store) {
-        if(!store.getStoreStatus().equals(ACTIVE)) {
-            throw new StoreException(StoreErrorCode.INVALID_STORE_STATUS);
-        }
-    }
 }

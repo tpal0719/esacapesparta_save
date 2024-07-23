@@ -1,6 +1,7 @@
 package com.sparta.controller;
 
 import com.sparta.domain.user.entity.User;
+import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.dto.request.StoreModifyRequestDto;
 import com.sparta.dto.request.StoreRegisterRequestDto;
 import com.sparta.dto.response.StoreModifyResponseDto;
@@ -19,16 +20,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StoreController {
     private final StoreService storeService;
+    private final UserRepository userRepository;
 
     /**
      * 방탈출 카페 등록 요청
      * @param requestDto
-     * @param user
+     * @param manager
      * @return
      */
     @PostMapping
-    public ResponseEntity<ResponseMessage<StoreRegisterResponseDto>> registerStore(StoreRegisterRequestDto requestDto, User user) {
-        StoreRegisterResponseDto responseDto = storeService.registerStore(requestDto, user);
+    public ResponseEntity<ResponseMessage<StoreRegisterResponseDto>> registerStore(@RequestBody StoreRegisterRequestDto requestDto, User manager) {
+
+        StoreRegisterResponseDto responseDto = storeService.registerStore(requestDto, manager);
 
         ResponseMessage<StoreRegisterResponseDto> responseMessage = ResponseMessage.<StoreRegisterResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())
@@ -41,13 +44,13 @@ public class StoreController {
 
     /**
      * 본인의 방탈출 카페 조회
-     * @param user
+     * @param manager
      * @return
      */
     @GetMapping
 //    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ResponseMessage<StoresGetResponseDto>> getMyStore(User user) {
-        StoresGetResponseDto responseDto = storeService.getMyStore(user);
+    public ResponseEntity<ResponseMessage<StoresGetResponseDto>> getMyStore(User manager) {
+        StoresGetResponseDto responseDto = storeService.getMyStore(manager);
 
         ResponseMessage<StoresGetResponseDto> responseMessage = ResponseMessage.<StoresGetResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -62,12 +65,12 @@ public class StoreController {
      * 방탈출 카페 수정
      * @param storeId
      * @param requestDto
-     * @param user
+     * @param manager
      * @return
      */
     @PutMapping("/{storeId}")
-    public ResponseEntity<ResponseMessage<StoreModifyResponseDto>> modifyStore(@PathVariable Long storeId, @RequestBody StoreModifyRequestDto requestDto, User user) {
-        StoreModifyResponseDto responseDto = storeService.modifyStore(storeId, requestDto, user);
+    public ResponseEntity<ResponseMessage<StoreModifyResponseDto>> modifyStore(@PathVariable Long storeId, @RequestBody StoreModifyRequestDto requestDto, User manager) {
+        StoreModifyResponseDto responseDto = storeService.modifyStore(storeId, requestDto, manager);
 
         ResponseMessage<StoreModifyResponseDto> responseMessage = ResponseMessage.<StoreModifyResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())

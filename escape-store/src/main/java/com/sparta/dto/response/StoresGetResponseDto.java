@@ -8,10 +8,10 @@ import java.util.List;
 @Getter
 public class StoresGetResponseDto {
     private int totalStore;
-    private List<StoreDetailResponseDto> storeDetailResponseDtoList;
+    private List<StoreDetailResponseDto> storeDtoList;
 
     public StoresGetResponseDto(List<Store> storeList) {
         this.totalStore = storeList.size();
-        this.storeDetailResponseDtoList = storeList.stream().map(StoreDetailResponseDto::new).toList();
+        this.storeDtoList = storeList.stream().map(StoreDetailResponseDto::new).toList();
     }
 }
