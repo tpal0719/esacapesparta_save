@@ -1,7 +1,7 @@
 package com.sparta.domain.store.dto;
+
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.entity.StoreStatus;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 
