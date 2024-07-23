@@ -1,5 +1,6 @@
 package com.sparta.domain.store.entity;
 
+import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,6 +28,10 @@ public class Store extends TimeStamped {
 
     @Column(nullable = false)
     private String storeImage;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id", nullable = false)
+    private User manager;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
