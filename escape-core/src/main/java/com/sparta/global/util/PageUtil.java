@@ -8,12 +8,14 @@ import org.springframework.data.domain.Sort;
 
 public class PageUtil {
 
-    // 유틸리티 클래스의 인스턴스화 방지
+//    public static final int PAGE_SIZE_LIMIT = 5;
+//    public static final int SEARCH_SIZE_LIMIT = 50;
+
     private PageUtil() {
-        throw new UnsupportedOperationException("Utility class");
+        throw new UnsupportedOperationException("유틸리티 클래스입니다.");
     }
 
-    public static Pageable createPageable(Integer pageNum, Integer pageSize, Boolean isDesc, String sortBy) {
+    public static Pageable createPageable(int pageNum, int pageSize, boolean isDesc, String sortBy) {
         if (pageNum < 1) {
             throw new PageException(PageErrorCode.PAGE_NOT_FOUND);
         }
@@ -23,4 +25,11 @@ public class PageUtil {
 
         return PageRequest.of(pageNum - 1, pageSize, sort);
     }
+
+//    public static long getOffset(int pageNumber) {
+//        if (pageNumber < PageUtil.PAGE_SIZE_LIMIT) {
+//            return 0;
+//        }
+//        return (pageNumber / PageUtil.PAGE_SIZE_LIMIT) * PageUtil.SEARCH_SIZE_LIMIT;
+//    }
 }

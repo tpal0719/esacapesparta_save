@@ -1,6 +1,6 @@
 package com.sparta.domain.store.dto;
 
-import lombok.Builder;
+import com.sparta.domain.store.entity.Store;
 import lombok.Getter;
 
 @Getter
@@ -9,10 +9,9 @@ public class StoreResponseDto {
     private String name;
     private String address;
 
-    @Builder
-    public StoreResponseDto(String storeImage, String name, String address){
-        this.storeImage = storeImage;
-        this.name = name;
-        this.address = address;
+    public StoreResponseDto(Store store){
+        this.storeImage = store.getStoreImage();
+        this.name = store.getName();
+        this.address = store.getAddress();
     }
 }
