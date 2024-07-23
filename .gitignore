@@ -2,6 +2,11 @@
 /escape-admin/src/main/resources/properties/env.properties
 /escape-consumer/src/main/resources/properties/env.properties
 /escape-manager/src/main/resources/properties/env.properties
+/escape-follow/src/main/resources/properties/env.properties
+/escape-reservation/src/main/resources/properties/env.properties
+/escape-review/src/main/resources/properties/env.properties
+/escape-search/src/main/resources/properties/env.properties
+/escape-store/src/main/resources/properties/env.properties
 
 HELP.md
 .gradle
