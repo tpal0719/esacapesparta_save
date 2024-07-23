@@ -21,6 +21,5 @@ public class StoreCreateRequestDto {
     private String storeImage;
     @NotNull
     private Long managerId;
-    private StoreStatus storeStatus;
 
 }

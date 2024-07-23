@@ -28,7 +28,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserResponseDto> getAllManagers(User user) {
 
-        var managers = getUsers(UserType.MANAGER);
+        List<User> managers = getUsers(UserType.MANAGER);
 
         return managers.stream()
                 .map(manager -> new UserResponseDto(manager))
@@ -43,7 +43,7 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public List<UserResponseDto> getAllConsumers(User user) {
-        var consumers = getUsers(UserType.USER);
+        List<User> consumers = getUsers(UserType.USER);
 
         return consumers.stream()
                 .map(consumer -> new UserResponseDto(consumer))
@@ -60,7 +60,7 @@ public class UserService {
      * @param userType : ADMIN, MANAGER, USER
      * @author SEMI
      */
-    public List<User> getUsers(UserType userType) {
+    private List<User> getUsers(UserType userType) {
         List<User> users = userRepository.findByUserType(userType);
 
         if (users.isEmpty()) {
