@@ -1,9 +1,12 @@
 package com.sparta.global.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Getter;
 
+
 @Getter
+@Builder
 public class BasicResponse<T> {
     private final Boolean isSuccess;
     private final int statusCode;
