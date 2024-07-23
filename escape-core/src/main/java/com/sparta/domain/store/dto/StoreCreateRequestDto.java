@@ -2,22 +2,25 @@ package com.sparta.domain.store.dto;
 
 import com.sparta.domain.store.entity.StoreStatus;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
 public class StoreCreateRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "이름을 적어주세요.")
     private String name;
-    @NotBlank
+    @NotBlank(message = "주소를 적어주세요.")
     private String address;
-    @NotBlank
+    @NotBlank(message = "전화번호를 적어주세요.")
     private String phoneNumber;
-    @NotBlank
+    @NotBlank(message = "오픈 시간을 적어주세요.")
     private String workHours;
-    @NotBlank
+
     private String storeImage;
-    @NotBlank
+    @NotNull
+    private Long managerId;
     private StoreStatus storeStatus;
 
 }

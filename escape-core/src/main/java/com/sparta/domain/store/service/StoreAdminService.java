@@ -9,7 +9,9 @@ import com.sparta.domain.store.entity.StoreStatus;
 import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserType;
+import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.global.exception.customException.EscapeRoomException;
+import com.sparta.global.exception.customException.StoreException;
 import com.sparta.global.exception.customException.UserException;
 import com.sparta.global.exception.errorCode.StoreErrorCode;
 import com.sparta.global.exception.errorCode.UserErrorCode;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class StoreAdminService {
 
     private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
 
     /**
      * TODO : 방탈출 카페 강제 등록 for Admin
@@ -36,12 +39,16 @@ public class StoreAdminService {
     @Transactional
     public StoreResponseDto createStoreByAdmin(StoreCreateRequestDto requestDto, User user) {
         validateAuthority(user);
+
+        User manager = userRepository.findByIdOrElseThrow(requestDto.getManagerId());
+
         Store store = Store.builder()
                 .name(requestDto.getName())
                 .address(requestDto.getAddress())
                 .phoneNumber(requestDto.getPhoneNumber())
                 .workHours(requestDto.getWorkHours())
                 .storeImage(requestDto.getStoreImage())
+                .manager(manager)
                 .storeStatus(StoreStatus.ACTIVE) //강제 주입
                 .build();
 
@@ -83,7 +90,7 @@ public class StoreAdminService {
         if (store.getStoreStatus().equals(StoreStatus.PENDING)) {
             store.setStoreStatus(StoreStatus.ACTIVE);
         } else {
-            throw new EscapeRoomException(StoreErrorCode.STORE_ALREADY_ACCEPT);
+            throw new StoreException(StoreErrorCode.STORE_ALREADY_EXIST);
         }
     }
 
