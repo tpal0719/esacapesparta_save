@@ -69,7 +69,7 @@ public class StoreAdminService {
         List<Store> stores = storeRepository.findAll();
 
         return stores.stream()
-                .map(store -> new StoreResponseDto(store))
+                .map(StoreResponseDto::new)
                 .collect(Collectors.toList());
     }
 

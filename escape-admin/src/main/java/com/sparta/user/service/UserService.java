@@ -31,7 +31,7 @@ public class UserService {
         List<User> managers = getUsers(UserType.MANAGER);
 
         return managers.stream()
-                .map(manager -> new UserResponseDto(manager))
+                .map(UserResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -46,7 +46,7 @@ public class UserService {
         List<User> consumers = getUsers(UserType.USER);
 
         return consumers.stream()
-                .map(consumer -> new UserResponseDto(consumer))
+                .map(UserResponseDto::new)
                 .collect(Collectors.toList());
     }
 
