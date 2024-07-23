@@ -1,7 +1,7 @@
 package com.sparta.global.exception.exceptionHandler;
 
 import com.sparta.global.exception.customException.GlobalCustomException;
-import com.sparta.global.response.ErrorResponse;
+import com.sparta.global.response.ResponseErrorMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,9 +14,10 @@ public class GlobalExceptionHandler {
      * CustomException 예외 처리
      */
     @ExceptionHandler(GlobalCustomException.class)
-    protected ResponseEntity<ErrorResponse> handlerGlobalCustomException(GlobalCustomException e) {
+    protected ResponseEntity<ResponseErrorMessage> handlerGlobalCustomException(GlobalCustomException e) {
         log.error("{} 예외 발생", e.getClass());
+
         return ResponseEntity.status(e.getErrorCode().getHttpStatusCode())
-                .body(ErrorResponse.of(e.getErrorCode()));
+                .body(new ResponseErrorMessage(e.getErrorCode()));
     }
 }
