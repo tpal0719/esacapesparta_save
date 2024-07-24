@@ -35,6 +35,9 @@ public class Store extends TimeStamped {
     @JoinColumn(name = "manager_id", nullable = false)
     private User manager;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StoreRegion storeRegion;
 
     @Setter
     @Column(nullable = false)
@@ -42,13 +45,14 @@ public class Store extends TimeStamped {
     private StoreStatus storeStatus;
 
     @Builder
-    public Store(String name, String address, String phoneNumber, String workHours, String storeImage, User manager, StoreStatus storeStatus) {
+    public Store(String name, String address, String phoneNumber, String workHours, String storeImage, User manager, StoreRegion storeRegion, StoreStatus storeStatus) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.workHours = workHours;
         this.storeImage = storeImage;
         this.manager = manager;
+        this.storeRegion = storeRegion;
         this.storeStatus = storeStatus;
     }
 }

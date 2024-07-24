@@ -1,6 +1,6 @@
 package com.sparta.domain.reservation.entity;
 
-import com.sparta.domain.escapeRoom.entity.EscapeRoom;
+import com.sparta.domain.escapeRoom.entity.Theme;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
@@ -28,13 +28,13 @@ public class Reservation extends TimeStamped {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentType paymentType;
+    private PaymentStatus paymentStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "escapeRoom_id", nullable = false)
-    private EscapeRoom escapeRoom;
+    @JoinColumn(name = "theme_id", nullable = false)
+    private Theme theme;
 }

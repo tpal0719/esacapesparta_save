@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class EscapeRoomTime {
+public class ThemeTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
