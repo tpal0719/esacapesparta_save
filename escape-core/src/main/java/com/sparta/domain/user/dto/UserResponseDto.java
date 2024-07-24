@@ -19,6 +19,6 @@ public class UserResponseDto {
         this.name = user.getName();
         this.point = user.getPoint();
         this.userStatus = user.getUserStatus();
-        this.oAuthProvider = user.getOAuthProvider();
+        this.oAuthProvider = user.getoAuthProvider();
     }
 }
