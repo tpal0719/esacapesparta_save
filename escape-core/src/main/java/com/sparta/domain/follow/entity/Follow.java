@@ -4,6 +4,7 @@ import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,10 @@ public class Follow extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
+
+    @Builder
+    public Follow(User user, Store store){
+        this.user = user;
+        this.store = store;
+    }
 }

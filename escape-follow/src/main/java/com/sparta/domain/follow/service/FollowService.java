@@ -2,9 +2,9 @@ package com.sparta.domain.follow.service;
 
 import com.sparta.domain.follow.entity.Follow;
 import com.sparta.domain.follow.repository.FollowRepository;
+import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.domain.user.entity.User;
-import com.sparta.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,33 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final StoreRepository storeRepository;
 
+    /**
+     * 방탈출 카페 팔로우
+     * @param storeId 팔로우할 카페 id
+     * @param user 로그인 유저
+     */
     @Transactional
     public void follow(Long storeId, User user) {
+        Store store = storeRepository.findByActiveStore(storeId);
+        followRepository.checkIfAlreadyFollowed(user, store);
 
-        storeRepository.findByActiveStore(storeId);
-        Follow follow = followRepository.
+        Follow follow = Follow.builder()
+                .user(user)
+                .store(store)
+                .build();
 
+        followRepository.save(follow);
+    }
+
+    /**
+     * 방탈출 카페 언팔로우
+     * @param storeId 언팔로우할 카페 id
+     * @param user 로그인 유저
+     */
+    @Transactional
+    public void unFollow(Long storeId, User user) {
+        Store store = storeRepository.findByActiveStore(storeId);
+        Follow follow = followRepository.getFollowOrThrow(user, store);
+        followRepository.delete(follow);
     }
 }
