@@ -74,7 +74,6 @@ public class StoreAdminService {
     }
 
 
-
     /**
      * TODO : 방탈출 카페 등록 승인 ( PENDING -> ACTIVE ) for Admin
      *
@@ -87,7 +86,7 @@ public class StoreAdminService {
         validateAuthority(user);
         Store store = storeRepository.findByIdOrElseThrow(storeId);
 
-        if (store.getStoreStatus().equals(StoreStatus.PENDING)) {
+        if (store.getStoreStatus() == StoreStatus.PENDING) {
             store.setStoreStatus(StoreStatus.ACTIVE);
         } else {
             throw new StoreException(StoreErrorCode.STORE_ALREADY_EXIST);

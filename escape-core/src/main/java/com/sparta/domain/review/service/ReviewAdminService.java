@@ -22,7 +22,7 @@ public class ReviewAdminService {
      * @param user
      * @author SEMI
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteReview(Long reviewId, User user) {
         validateAuthority(user);
         reviewRepository.deleteById(reviewId);
