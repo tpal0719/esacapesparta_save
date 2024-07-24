@@ -2,11 +2,15 @@ package com.sparta.domain.store.entity;
 
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
+import com.sparta.global.exception.customException.StoreException;
+import com.sparta.global.exception.errorCode.StoreErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -54,5 +58,29 @@ public class Store extends TimeStamped {
         this.manager = manager;
         this.storeRegion = storeRegion;
         this.storeStatus = storeStatus;
+    }
+
+    public void updateStore(String name, String address, String phoneNumber, String workHours, StoreRegion storeRegion) {
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.workHours = workHours;
+        this.storeRegion = storeRegion;
+    }
+
+    public void deactivateStore() {
+        this.storeStatus = StoreStatus.DEACTIVE;
+    }
+
+    public void checkManager(User manager) {
+        if(!Objects.equals(this.manager.getId(), manager.getId())) {
+            throw new StoreException(StoreErrorCode.USER_NOT_STORE_MANAGER);
+        }
+    }
+
+    public void verifyStoreIsActive() {
+        if(this.storeStatus != StoreStatus.ACTIVE) {
+            throw new StoreException(StoreErrorCode.INVALID_STORE_STATUS);
+        }
     }
 }

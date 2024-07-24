@@ -3,6 +3,7 @@ package com.sparta.config;
 import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.jwt.JwtProvider;
 import com.sparta.jwt.RefreshTokenService;
+import com.sparta.security.CustomAccessDeniedHandler;
 import com.sparta.security.JwtAuthenticationFilter;
 import com.sparta.security.JwtAuthorizationFilter;
 import com.sparta.security.UserDetailsServiceImpl;
@@ -34,6 +35,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -74,6 +76,12 @@ public class SecurityConfig {
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.exceptionHandling(exceptionHandling ->
+                exceptionHandling
+                        .accessDeniedHandler(customAccessDeniedHandler)
+        );
+
         return http.build();
     }
 }
