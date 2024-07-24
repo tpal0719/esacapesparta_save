@@ -1,5 +1,6 @@
 package com.sparta.domain.follow.controller;
 
+import com.sparta.domain.follow.dto.FollowStoreResponseDto;
 import com.sparta.domain.follow.service.FollowService;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.repository.UserRepository;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -63,5 +66,14 @@ public class FollowController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    @GetMapping("/stores")
+    public ResponseEntity<List<FollowStoreResponseDto>> getFollowStores(
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+
+        List<FollowStoreResponseDto> responseDtoList = followService.getFollowStores(userDetails.getUser());
+
+        return 
     }
 }
