@@ -69,11 +69,18 @@ public class FollowController {
     }
 
     @GetMapping("/stores")
-    public ResponseEntity<List<FollowStoreResponseDto>> getFollowStores(
+    public ResponseEntity<ResponseMessage<List<FollowStoreResponseDto>>> getFollowStores(
             @AuthenticationPrincipal UserDetailsImpl userDetails){
 
         List<FollowStoreResponseDto> responseDtoList = followService.getFollowStores(userDetails.getUser());
 
-        return 
+        ResponseMessage<List<FollowStoreResponseDto>> responseMessage = ResponseMessage
+                .<List<FollowStoreResponseDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("팔로우한 방탈출 카페를 조회했습니다.")
+                .data(responseDtoList)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 }

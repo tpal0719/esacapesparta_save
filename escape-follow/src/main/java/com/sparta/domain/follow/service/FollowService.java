@@ -1,5 +1,6 @@
 package com.sparta.domain.follow.service;
 
+import com.sparta.domain.follow.dto.FollowStoreResponseDto;
 import com.sparta.domain.follow.entity.Follow;
 import com.sparta.domain.follow.repository.FollowRepository;
 import com.sparta.domain.store.entity.Store;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +49,12 @@ public class FollowService {
         Store store = storeRepository.findByActiveStore(storeId);
         Follow follow = followRepository.getFollowOrThrow(user, store);
         followRepository.delete(follow);
+    }
+
+    @Transactional(readOnly = true)
+    public List<FollowStoreResponseDto> getFollowStores(User user) {
+        List<Follow> follow = followRepository.findByGetStores(user);
+
+        return follow.stream().map(f -> new FollowStoreResponseDto(f.getStore())).toList();
     }
 }
