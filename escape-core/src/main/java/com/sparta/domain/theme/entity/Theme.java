@@ -7,6 +7,8 @@ import com.sparta.global.exception.customException.ThemeException;
 import com.sparta.global.exception.errorCode.ThemeErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +33,14 @@ public class Theme extends TimeStamped {
 
     @Column(nullable = false)
     private String duration;
+
+    @Column(nullable = false)
+    @Min(1)
+    private Integer minPlayer; // 플레이 인원
+
+    @Column(nullable = false)
+    @Max(10)
+    private Integer maxPlayer; // 플레이 인원
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

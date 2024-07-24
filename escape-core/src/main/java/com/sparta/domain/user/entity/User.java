@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "users")
 public class User extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,4 +48,13 @@ public class User extends TimeStamped {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Reaction> reactions;
 
+
+    public User(String name, String email, String password,OAuthProvider oAuthProvider,UserType userType, UserStatus userStatus) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.oAuthProvider = oAuthProvider;
+        this.userType = userType;
+        this.userStatus = userStatus;
+    }
 }
