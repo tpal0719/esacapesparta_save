@@ -22,7 +22,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class EscapeRoomRepositoryImpl implements EscapeRoomRepositoryCustom{
+public class ThemeRepositoryImpl implements ThemeRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
