@@ -1,16 +1,14 @@
 package com.sparta.store.controller;
 
-import com.sparta.domain.store.dto.StoreCreateRequestDto;
-import com.sparta.domain.store.dto.StoreResponseDto;
-import com.sparta.domain.store.service.StoreAdminService;
-import com.sparta.domain.user.entity.User;
+import com.sparta.dto.request.StoreCreateRequestDto;
+import com.sparta.dto.response.StoreResponseDto;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.service.StoreAdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,11 +20,18 @@ public class StoreController {
 
     private final StoreAdminService storeAdminService;
 
-    // TODO : 방탈출 카페 강제 등록 for Admin
+    /**
+     * TODO : 방탈출 카페 강제 등록 for Admin
+     *
+     * @param requestDto
+     * @return StoreResponseDto : 방탈출 카페 정보
+     * @author SEMI
+     */
     @PostMapping("/stores")
-    public ResponseEntity<ResponseMessage<StoreResponseDto>> createStoreByAdmin(StoreCreateRequestDto requestDto, User user) {
+    @Secured("ADMIN")
+    public ResponseEntity<ResponseMessage<StoreResponseDto>> createStoreByAdmin(StoreCreateRequestDto requestDto) {
 
-        StoreResponseDto responseDto = storeAdminService.createStoreByAdmin(requestDto, user);
+        StoreResponseDto responseDto = storeAdminService.createStoreByAdmin(requestDto);
 
         ResponseMessage<StoreResponseDto> responseMessage = ResponseMessage.<StoreResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())
@@ -37,11 +42,17 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
-    // TODO : 모든 방탈출 카페 조회 (모든상태: 대기중,활성화,비활성화 ) for Admin
+    /**
+     * TODO : 모든 방탈출 카페 조회 (모든상태: 대기중,활성화,비활성화 ) for Admin
+     *
+     * @return List<StoreResponseDto> : 방탈출 카페 정보 리스트
+     * @author SEMI
+     */
     @GetMapping("/stores")
-    public ResponseEntity<ResponseMessage<List<StoreResponseDto>>> getAllStore(User user) {
+    @Secured("ADMIN")
+    public ResponseEntity<ResponseMessage<List<StoreResponseDto>>> getAllStore() {
 
-        List<StoreResponseDto> responseDto = storeAdminService.getAllStore(user);
+        List<StoreResponseDto> responseDto = storeAdminService.getAllStore();
 
         ResponseMessage<List<StoreResponseDto>> responseMessage = ResponseMessage.<List<StoreResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -52,11 +63,17 @@ public class StoreController {
     }
 
 
-    // TODO : Admin이 방탈출 카페 등록 승인 ( PENDING -> ACTIVE )
+    /**
+     * TODO : Admin이 방탈출 카페 등록 승인 ( PENDING -> ACTIVE )
+     *
+     * @param storeId
+     * @author SEMI
+     */
     @PutMapping("/stores/{storeId}/approval")
-    public ResponseEntity<ResponseMessage<Void>> approveStore(@Valid @PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @Secured("ADMIN")
+    public ResponseEntity<ResponseMessage<Void>> approveStore(@Valid @PathVariable Long storeId) {
 
-        storeAdminService.approveStore(storeId, userDetails.getUser());
+        storeAdminService.approveStore(storeId);
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -67,11 +84,17 @@ public class StoreController {
     }
 
 
-    // TODO : 방탈출 카페 완전 삭제 for Admin
+    /**
+     * TODO : 방탈출 카페 완전 삭제 for Admin
+     *
+     * @param storeId
+     * @author SEMI
+     */
     @DeleteMapping
-    public ResponseEntity<ResponseMessage<Void>> deleteStore(@Valid @RequestBody Long storeId,User user) {
+    @Secured("ADMIN")
+    public ResponseEntity<ResponseMessage<Void>> deleteStore(@Valid @RequestBody Long storeId) {
 
-        storeAdminService.deleteStore(storeId, user);
+        storeAdminService.deleteStore(storeId);
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.OK.value())
