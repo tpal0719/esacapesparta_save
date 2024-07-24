@@ -4,6 +4,8 @@ import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +30,10 @@ public class Theme extends TimeStamped {
 
     @Column(nullable = false)
     private String duration;
+
+    @Column(nullable = false)
+    @Min(1) @Max(10)
+    private int players; // 플레이 인원
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

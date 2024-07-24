@@ -40,7 +40,7 @@ public class User extends TimeStamped {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private OAuthProvider OAuthProvider;
+    private OAuthProvider oAuthProvider;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Reservation> reservations;
@@ -53,7 +53,7 @@ public class User extends TimeStamped {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.OAuthProvider = oAuthProvider;
+        this.oAuthProvider = oAuthProvider;
         this.userType = userType;
         this.userStatus = userStatus;
     }

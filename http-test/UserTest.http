@@ -12,7 +12,9 @@ Content-Type: application/json
 POST http://localhost:8080/users/login
 Content-Type: application/json
 
+
 {
   "email": "ata01@naver.com",
   "password": "Test1234!"
 }
+> {% client.global.set("user1Auth", response.headers.valueOf("Authorization")); %}
