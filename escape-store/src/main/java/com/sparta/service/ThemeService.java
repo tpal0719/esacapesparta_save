@@ -32,6 +32,10 @@ public class ThemeService {
                 .contents(requestDto.getContents())
                 .level(requestDto.getLevel())
                 .duration(requestDto.getDuration())
+                .minPlayer(requestDto.getMinPlayer())
+                .maxPlayer(requestDto.getMaxPlayer())
+                .price(requestDto.getPrice())
+                .themeImage("temp")
                 .themeType(requestDto.getThemeType())
                 .themeStatus(ThemeStatus.ACTIVE)
                 .store(store)
@@ -52,7 +56,6 @@ public class ThemeService {
     @Transactional
     public ThemeDetailResponseDto modifyTheme(Long themeId, ThemeModifyRequestDto requestDto, User manager) {
         Theme theme = themeRepository.findByIdOrElseThrow(themeId);
-        theme.verifyThemeIsActive();
 
         Store store = theme.getStore();
         store.verifyStoreIsActive();
@@ -63,6 +66,8 @@ public class ThemeService {
                 requestDto.getContents(),
                 requestDto.getLevel(),
                 requestDto.getDuration(),
+                requestDto.getMinPlayer(),
+                requestDto.getMaxPlayer(),
                 requestDto.getThemeType(),
                 requestDto.getPrice()
         );
@@ -74,12 +79,21 @@ public class ThemeService {
     @Transactional
     public void deleteTheme(Long themeId, User manager) {
         Theme theme = themeRepository.findByIdOrElseThrow(themeId);
-        theme.verifyThemeIsActive();
 
         Store store = theme.getStore();
         store.verifyStoreIsActive();
         store.checkManager(manager);
 
-        theme.deactivateTheme();
+        themeRepository.delete(theme);
+    }
+
+    @Transactional
+    public void changeThemeStatus(Long themeId, User manager) {
+        Theme theme = themeRepository.findByIdOrElseThrow(themeId);
+        Store store = theme.getStore();
+        store.verifyStoreIsActive();
+        store.checkManager(manager);
+
+        theme.toggleThemeStatus();
     }
 }

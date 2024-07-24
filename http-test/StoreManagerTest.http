@@ -1,0 +1,59 @@
+### 방탈출 카페 등록 요청
+POST http://localhost:8088/manager/stores
+Authorization: {{manager1Auth}}
+Content-Type: application/json
+
+{
+  "name": "방탈출 카페 3",
+  "address": "서울시 송파구 올림픽로 139-2",
+  "phoneNumber": "02-927-1097",
+  "workHours": "9:00 ~ 22:00",
+  "storeRegion": "SEOUL"
+}
+
+### 방탈출 카페 등록 요청 실패 - 일반 유저
+POST http://localhost:8088/manager/stores
+Authorization: {{user1Auth}}
+Content-Type: application/json
+
+{
+  "name": "방탈출 카페 2",
+  "address": "서울시 송파구 올림픽로 139-2",
+  "phoneNumber": "02-927-1097",
+  "workHours": "9:00 ~ 22:00",
+  "storeRegion": "SEOUL"
+}
+
+### 자신의 방탈출 카페 조회
+GET http://localhost:8088/manager/stores
+Authorization: {{manager1Auth}}
+
+### 방탈출 카페 수정
+PUT http://localhost:8088/manager/stores/1
+Authorization: {{manager1Auth}}
+Content-Type: application/json
+
+{
+  "name": "방탈출 카페 - 수정1",
+  "address": "서울시 송파구 올림픽로 139-2",
+  "phoneNumber": "02-927-1097",
+  "workHours": "9:00 ~ 22:00",
+  "storeRegion": "SEOUL"
+}
+
+### 방탈출 카페 수정 - validation
+PUT http://localhost:8088/manager/stores/1
+Authorization: {{manager1Auth}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "address": "",
+  "phoneNumber": "02-927-1097",
+  "workHours": "9:00 ~ 22:00",
+  "storeRegion": "SEOUL"
+}
+
+### 방탈출 카페 삭제
+DELETE http://localhost:8088/manager/stores/6
+Authorization: {{manager1Auth}}

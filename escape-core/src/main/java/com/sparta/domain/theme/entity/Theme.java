@@ -64,11 +64,13 @@ public class Theme extends TimeStamped {
     private List<Reservation> reservations;
 
     @Builder
-    public Theme(String title, String contents, Long level, String duration, ThemeType themeType, String themeImage, Long price, ThemeStatus themeStatus, Store store) {
+    public Theme(String title, String contents, Long level, String duration, Integer minPlayer, Integer maxPlayer, ThemeType themeType, String themeImage, Long price, ThemeStatus themeStatus, Store store) {
         this.title = title;
         this.contents = contents;
         this.level = level;
         this.duration = duration;
+        this.minPlayer = minPlayer;
+        this.maxPlayer = maxPlayer;
         this.themeType = themeType;
         this.themeImage = themeImage;
         this.price = price;
@@ -76,7 +78,7 @@ public class Theme extends TimeStamped {
         this.store = store;
     }
 
-    public void updateTheme(String title, String contents, Long level, String duration, ThemeType themeType, Long price) {
+    public void updateTheme(String title, String contents, Long level, String duration, Integer minPlayer, Integer maxPlayer,ThemeType themeType, Long price) {
         this.title = title;
         this.contents = contents;
         this.level = level;
@@ -85,8 +87,9 @@ public class Theme extends TimeStamped {
         this.price = price;
     }
 
-    public void deactivateTheme() {
-        this.themeStatus = ThemeStatus.DEACTIVE;
+    public void toggleThemeStatus() {
+        this.themeStatus = this.themeStatus == ThemeStatus.ACTIVE ? ThemeStatus.DEACTIVE : ThemeStatus.ACTIVE;
+
     }
 
     public void verifyThemeIsActive() {

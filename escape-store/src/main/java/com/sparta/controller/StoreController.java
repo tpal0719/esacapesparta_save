@@ -8,30 +8,34 @@ import com.sparta.dto.response.StoreModifyResponseDto;
 import com.sparta.dto.response.StoresGetResponseDto;
 import com.sparta.dto.response.StoreRegisterResponseDto;
 import com.sparta.global.response.ResponseMessage;
+import com.sparta.security.UserDetailsImpl;
 import com.sparta.service.StoreService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/manager/stores")
+@Secured("MANAGER")
 @RequiredArgsConstructor
 public class StoreController {
     private final StoreService storeService;
-    private final UserRepository userRepository;
 
     /**
      * 방탈출 카페 등록 요청
-     * @param requestDto
-     * @param manager
-     * @return
      */
     @PostMapping
-    public ResponseEntity<ResponseMessage<StoreRegisterResponseDto>> registerStore(@RequestBody StoreRegisterRequestDto requestDto, User manager) {
+    public ResponseEntity<ResponseMessage<StoreRegisterResponseDto>> registerStore(
+            @Valid @RequestBody StoreRegisterRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
 
-        StoreRegisterResponseDto responseDto = storeService.registerStore(requestDto, manager);
+        StoreRegisterResponseDto responseDto = storeService.registerStore(requestDto, userDetails.getUser());
 
         ResponseMessage<StoreRegisterResponseDto> responseMessage = ResponseMessage.<StoreRegisterResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())
@@ -44,13 +48,10 @@ public class StoreController {
 
     /**
      * 본인의 방탈출 카페 조회
-     * @param manager
-     * @return
      */
     @GetMapping
-//    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ResponseMessage<StoresGetResponseDto>> getMyStore(User manager) {
-        StoresGetResponseDto responseDto = storeService.getMyStore(manager);
+    public ResponseEntity<ResponseMessage<StoresGetResponseDto>> getMyStore(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        StoresGetResponseDto responseDto = storeService.getMyStore(userDetails.getUser());
 
         ResponseMessage<StoresGetResponseDto> responseMessage = ResponseMessage.<StoresGetResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -63,14 +64,14 @@ public class StoreController {
 
     /**
      * 방탈출 카페 수정
-     * @param storeId
-     * @param requestDto
-     * @param manager
-     * @return
      */
     @PutMapping("/{storeId}")
-    public ResponseEntity<ResponseMessage<StoreModifyResponseDto>> modifyStore(@PathVariable Long storeId, @RequestBody StoreModifyRequestDto requestDto, User manager) {
-        StoreModifyResponseDto responseDto = storeService.modifyStore(storeId, requestDto, manager);
+    public ResponseEntity<ResponseMessage<StoreModifyResponseDto>> modifyStore(
+            @PathVariable Long storeId,
+            @Valid @RequestBody StoreModifyRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        StoreModifyResponseDto responseDto = storeService.modifyStore(storeId, requestDto, userDetails.getUser());
 
         ResponseMessage<StoreModifyResponseDto> responseMessage = ResponseMessage.<StoreModifyResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -83,13 +84,13 @@ public class StoreController {
 
     /**
      * 방탈출 카페 삭제
-     * @param storeId
-     * @param user
-     * @return
      */
     @DeleteMapping("/{storeId}")
-    public ResponseEntity<ResponseMessage<Void>> deleteStore(@PathVariable Long storeId, User user) {
-        storeService.deleteStore(storeId, user);
+    public ResponseEntity<ResponseMessage<Void>> deleteStore(
+            @PathVariable Long storeId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        storeService.deleteStore(storeId, userDetails.getUser());
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.OK.value())

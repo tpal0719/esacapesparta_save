@@ -1,6 +1,8 @@
 package com.sparta.dto.response;
 
 import com.sparta.domain.store.entity.Store;
+import com.sparta.domain.store.entity.StoreRegion;
+import com.sparta.domain.store.entity.StoreStatus;
 import lombok.Getter;
 
 @Getter
@@ -10,6 +12,8 @@ public class StoreDetailResponseDto {
     private String phoneNumber;
     private String workHours;
     private String storeImage;
+    private StoreRegion storeRegion;
+    private StoreStatus storeStatus;
     private Long managerId;
     private String managerName;
 
@@ -19,6 +23,8 @@ public class StoreDetailResponseDto {
         this.phoneNumber = store.getPhoneNumber();
         this.workHours = store.getWorkHours();
         this.storeImage = store.getStoreImage();
+        this.storeRegion = store.getStoreRegion();
+        this.storeStatus = store.getStoreStatus();
         this.managerId = store.getManager().getId();
         this.managerName = store.getManager().getName();
     }

@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -58,11 +60,12 @@ public class Store extends TimeStamped {
         this.storeStatus = storeStatus;
     }
 
-    public void updateStore(String name, String address, String phoneNumber, String workHours) {
+    public void updateStore(String name, String address, String phoneNumber, String workHours, StoreRegion storeRegion) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.workHours = workHours;
+        this.storeRegion = storeRegion;
     }
 
     public void deactivateStore() {
@@ -70,13 +73,13 @@ public class Store extends TimeStamped {
     }
 
     public void checkManager(User manager) {
-        if(!this.manager.equals(manager)) {
+        if(!Objects.equals(this.manager.getId(), manager.getId())) {
             throw new StoreException(StoreErrorCode.USER_NOT_STORE_MANAGER);
         }
     }
 
     public void verifyStoreIsActive() {
-        if(!this.storeStatus.equals(StoreStatus.ACTIVE)) {
+        if(this.storeStatus != StoreStatus.ACTIVE) {
             throw new StoreException(StoreErrorCode.INVALID_STORE_STATUS);
         }
     }

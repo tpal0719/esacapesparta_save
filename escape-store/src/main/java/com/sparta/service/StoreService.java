@@ -22,6 +22,7 @@ public class StoreService {
 
     @Transactional
     public StoreRegisterResponseDto registerStore(StoreRegisterRequestDto requestDto, User manager) {
+
         Store store = Store.builder()
                 .name(requestDto.getName())
                 .address(requestDto.getAddress())
@@ -29,6 +30,7 @@ public class StoreService {
                 .workHours(requestDto.getWorkHours())
                 .storeImage("temp")
                 .manager(manager)
+                .storeRegion(requestDto.getStoreRegion())
                 .storeStatus(StoreStatus.PENDING)
                 .build();
 
@@ -51,7 +53,8 @@ public class StoreService {
                 requestDto.getName(),
                 requestDto.getAddress(),
                 requestDto.getPhoneNumber(),
-                requestDto.getWorkHours()
+                requestDto.getWorkHours(),
+                requestDto.getStoreRegion()
         );
 
         storeRepository.save(store);
