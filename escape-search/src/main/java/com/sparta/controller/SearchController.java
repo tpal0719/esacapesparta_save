@@ -9,6 +9,7 @@ import com.sparta.domain.store.service.StoreService;
 import com.sparta.domain.theme.dto.*;
 import com.sparta.domain.theme.service.ThemeService;
 import com.sparta.global.response.ResponseMessage;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -93,7 +94,7 @@ public class SearchController {
      */
     @GetMapping("/stores/theme/{themeId}/info")
     public ResponseEntity<ResponseMessage<ThemeInfoResponseDto>> getThemeInfo(
-            @RequestBody ThemeInfoRequestDto themeInfoRequestDto,
+            @Valid @RequestBody ThemeInfoRequestDto themeInfoRequestDto,
             @PathVariable Long themeId) {
 
         ThemeInfoResponseDto responseDto = themeService.getThemeInfo(themeInfoRequestDto.getStoreId(), themeId);
@@ -115,7 +116,7 @@ public class SearchController {
      */
     @GetMapping("/stores/theme/{themeId}/time")
     public ResponseEntity<ResponseMessage<List<ThemeTimeResponseDto>>> getThemeTime(
-            @RequestBody ThemeTimeRequestDto themeTimeRequestDto,
+            @Valid @RequestBody ThemeTimeRequestDto themeTimeRequestDto,
             @PathVariable Long themeId){
 
         List<ThemeTimeResponseDto> responseDtoList = themeService.getThemeTime(themeTimeRequestDto.getStoreId(), themeId);
@@ -136,7 +137,7 @@ public class SearchController {
      */
     @GetMapping("/review")
     public ResponseEntity<ResponseMessage<List<ReviewResponseDto>>> getReview(
-                @RequestBody ReviewRequestDto reviewRequestDto){
+                @Valid @RequestBody ReviewRequestDto reviewRequestDto){
 
         List<ReviewResponseDto> reviewResponseDtoList = reviewService.getReview(reviewRequestDto.getStoreId()
                 , reviewRequestDto.getThemeId());
