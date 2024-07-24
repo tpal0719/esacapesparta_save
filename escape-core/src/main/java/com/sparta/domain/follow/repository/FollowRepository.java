@@ -14,7 +14,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     default Follow findByUserAndStoreCheck(User user, Store store){
         Follow follow = findByUserAndStore(user, store).orElse(null);
         if(follow != null){
-            throw new
+            throw new 
         }
     }
 }
