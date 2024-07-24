@@ -32,8 +32,12 @@ public class Theme extends TimeStamped {
     private String duration;
 
     @Column(nullable = false)
-    @Min(1) @Max(10)
-    private int players; // 플레이 인원
+    @Min(1)
+    private Integer minPlayer; // 플레이 인원
+
+    @Column(nullable = false)
+    @Max(10)
+    private Integer maxPlayer; // 플레이 인원
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

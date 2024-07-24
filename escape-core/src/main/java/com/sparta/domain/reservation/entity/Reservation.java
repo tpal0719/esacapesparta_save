@@ -18,7 +18,7 @@ public class Reservation extends TimeStamped {
     private Long id;
 
     @Column(nullable = false)
-    private Integer players; //플레이 인원
+    private Integer player; //플레이 인원
 
     @Column(nullable = false)
     private LocalDateTime themeTime;
