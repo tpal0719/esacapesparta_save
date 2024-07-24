@@ -1,5 +1,6 @@
-package com.sparta.domain.review.service;
+package com.sparta.review.service;
 
+import com.sparta.domain.review.entity.Review;
 import com.sparta.domain.review.repository.ReviewRepository;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserType;
@@ -19,32 +20,15 @@ public class ReviewAdminService {
      * TODO : 리뷰 강제 삭제
      *
      * @param reviewId
-     * @param user
      * @author SEMI
      */
     @Transactional
-    public void deleteReview(Long reviewId, User user) {
-        validateAuthority(user);
-        reviewRepository.deleteById(reviewId);
+    public void deleteReview(Long reviewId) {
+
+        Review review = reviewRepository.findByIdOrElse(reviewId);
+
+        reviewRepository.delete(review);
     }
 
 
-
-    /* Utils */
-
-
-    /**
-     * TODO : 권한 확인
-     *
-     * @param user
-     * @author SEMI
-     */
-    public void validateAuthority(User user) {
-        // admin 이용자
-        if (user.getUserType() == UserType.ADMIN) {
-            return;
-        } else {
-            throw new UserException(UserErrorCode.USER_NOT_AUTHORITY);
-        }
-    }
 }

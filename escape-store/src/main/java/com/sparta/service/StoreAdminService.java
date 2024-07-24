@@ -1,7 +1,7 @@
-package com.sparta.domain.store.service;
+package com.sparta.service;
 
-import com.sparta.domain.store.dto.StoreCreateRequestDto;
-import com.sparta.domain.store.dto.StoreResponseDto;
+import com.sparta.dto.request.StoreCreateRequestDto;
+import com.sparta.dto.response.StoreResponseDto;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.entity.StoreStatus;
 import com.sparta.domain.store.repository.StoreRepository;
@@ -30,12 +30,12 @@ public class StoreAdminService {
      * TODO : 방탈출 카페 강제 등록 for Admin
      *
      * @param requestDto
-     * @param user
+     * @return StoreResponseDto : 방탈출 카페 정보
      * @author SEMI
      */
     @Transactional
-    public StoreResponseDto createStoreByAdmin(StoreCreateRequestDto requestDto, User user) {
-        validateAuthority(user);
+    public StoreResponseDto createStoreByAdmin(StoreCreateRequestDto requestDto) {
+        //validateAuthority(user);
 
         User manager = userRepository.findByIdOrElseThrow(requestDto.getManagerId());
 
@@ -57,12 +57,12 @@ public class StoreAdminService {
     /**
      * TODO : 모든 방탈출 카페 조회 (모든상태: 대기중,활성화,비활성화 ) for Admin
      *
-     * @param user
+     * @return List<StoreResponseDto> 모든 방탈출카페
      * @author SEMI
      */
     @Transactional(readOnly = true)
-    public List<StoreResponseDto> getAllStore(User user) {
-        validateAuthority(user);
+    public List<StoreResponseDto> getAllStore() {
+        //validateAuthority(user);
         List<Store> stores = storeRepository.findAll();
 
         return stores.stream()
@@ -75,12 +75,11 @@ public class StoreAdminService {
      * TODO : 방탈출 카페 등록 승인 ( PENDING -> ACTIVE ) for Admin
      *
      * @param storeId
-     * @param user
      * @author SEMI
      */
     @Transactional
-    public void approveStore(Long storeId, User user) {
-        validateAuthority(user);
+    public void approveStore(Long storeId) {
+        //validateAuthority(user);
         Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         if (store.getStoreStatus() == StoreStatus.PENDING) {
@@ -91,16 +90,16 @@ public class StoreAdminService {
     }
 
 
+
     /**
      * TODO : Admin 또는 Manager가 방탈출 카페 활성화 ( DEACTIVE -> ACTIVE )
      *
      * @param storeId
-     * @param user
      * @author SEMI
      */
     @Transactional
-    public void activeStore(Long storeId, User user) {
-        validateAuthority(user);
+    public void activeStore(Long storeId) {
+        //validateAuthority(user);
         Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         store.setStoreStatus(StoreStatus.ACTIVE);
@@ -110,12 +109,11 @@ public class StoreAdminService {
      * TODO : Admin 또는 Manager가 방탈출 카페 비활성화 ( ACTIVE -> DEACTIVE )
      *
      * @param storeId
-     * @param user
      * @author SEMI
      */
     @Transactional
-    public void deactiveStore(Long storeId, User user) {
-        validateAuthority(user);
+    public void deactiveStore(Long storeId) {
+        //validateAuthority(user);
         Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         store.setStoreStatus(StoreStatus.DEACTIVE);
@@ -125,36 +123,16 @@ public class StoreAdminService {
      * TODO : 방탈출 카페 완전 삭제 for Admin
      *
      * @param storeId
-     * @param user
      * @author SEMI
      */
     @Transactional
-    public void deleteStore(Long storeId, User user) {
-        validateAuthority(user);
+    public void deleteStore(Long storeId) {
+        //validateAuthority(user);
         Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         storeRepository.delete(store);
     }
 
-
-
-    /* Utils */
-
-
-    /**
-     * TODO : 권한 확인
-     *
-     * @param user
-     * @author SEMI
-     */
-    public void validateAuthority(User user) {
-        // admin 이용자
-        if (user.getUserType() == UserType.ADMIN) {
-            return;
-        } else {
-            throw new UserException(UserErrorCode.USER_NOT_AUTHORITY);
-        }
-    }
 
 
 }
