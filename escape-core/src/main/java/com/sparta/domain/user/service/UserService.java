@@ -26,6 +26,7 @@ public class UserService {
 
     /**
      * 회원가입
+     *
      * @param requestDto 회원가입 요청 데이터를 담은 Dto
      * @return 회원가입된 사용자의 정보를 담은 Dto
      * @throws UserException 유저 중복 예외처리
@@ -34,13 +35,13 @@ public class UserService {
     public SignupResponseDto createUser(SignupRequestDto requestDto) {
 
         // 이메일로 유저 중복검사
-        dupulicateUserEmail(requestDto.getEmail());
+        duplicateUserEmail(requestDto.getEmail());
 
         //암호화
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         User user = new User(requestDto.getName(), requestDto.getEmail(), encodedPassword,
-                                OAuthProvider.ORIGIN, UserType.USER, UserStatus.ACTIVE);
+                OAuthProvider.ORIGIN, UserType.USER, UserStatus.ACTIVE);
         // ORIGIN 일단 구현 -> 나중에 @kakao, @google 등으로 이메일 확인해서 swtich case로 구현 생각중
         userRepository.save(user);
 
@@ -50,7 +51,10 @@ public class UserService {
     /**
      * useremail 유효성 검사
      */
-    private void dupulicateUserEmail(String email) {
-        User user = userRepository.findByEmailOrElseThrow(email);
+    private void duplicateUserEmail(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+        if (findUser.isPresent()) {
+            throw new UserException(UserErrorCode.USER_DUPLICATION);
+        }
     }
 }
