@@ -63,7 +63,8 @@ public class ThemeService {
      * @param storeId 검색할 테마의 스토어 id
      * @param themeId 해당 카페의 테마 id
      * @return theme 시간 반환
-     */    public List<ThemeTimeResponseDto> getThemeTime(Long storeId, Long themeId) {
+     */
+    public List<ThemeTimeResponseDto> getThemeTime(Long storeId, Long themeId) {
         storeRepository.findByActiveStore(storeId);
         Theme theme = themeRepository.findByActiveTheme(themeId);
         List<ThemeTime> themeTimeList = themeTimeRepository.findByTheme(theme);
