@@ -1,13 +1,12 @@
 package com.sparta.user.controller;
 
-import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.user.dto.UserResponseDto;
-import com.sparta.domain.user.entity.User;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +20,16 @@ public class UserController {
 
     private final UserService userService;
 
-    //TODO : 모든 Manager 조회
+    /**
+     * TODO : 모든 Manager 조회
+     *
+     * @author SEMI
+     */
     @GetMapping("/managers")
-    public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllManagers(User user) {
+    @Secured("ADMIN")
+    public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllManagers() {
 
-        List<UserResponseDto> responseDto = userService.getAllManagers(user);
+        List<UserResponseDto> responseDto = userService.getAllManagers();
 
         ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -35,11 +39,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    //TODO : 모든 Consumer 조회
+    /**
+     * TODO : 모든 Consumer 조회
+     *
+     * @author SEMI
+     */
     @GetMapping("/consumers")
-    public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllConsumers(User user) {
+    @Secured("ADMIN")
+    public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllConsumers() {
 
-        List<UserResponseDto> responseDto = userService.getAllConsumers(user);
+        List<UserResponseDto> responseDto = userService.getAllConsumers();
 
         ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
