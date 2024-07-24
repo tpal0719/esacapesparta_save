@@ -63,7 +63,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
         UserType role = userDetails.getUser().getUserType();
 
-        String username = userDetails.getUserEmail();
+        String username = userDetails.getUsername();
         String accessToken = jwtProvider.createToken(username, TOKEN_TIME, role);
         String refreshToken = jwtProvider.createToken(username, REFRESH_TOKEN_TIME, role);
 
