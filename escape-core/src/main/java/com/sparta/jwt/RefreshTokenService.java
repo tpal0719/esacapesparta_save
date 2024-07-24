@@ -14,24 +14,24 @@ public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public Optional<RefreshToken> findByUsername(String username) {
-        return refreshTokenRepository.findByUsername(username);
+    public Optional<RefreshToken> findByEmail(String email) {
+        return refreshTokenRepository.findByEmail(email); //
     }
 
     @Transactional
     public void saveRefreshToken(User user, String refreshToken) {
-        Optional<RefreshToken> existToken = findByUsername(user.getName());
+        Optional<RefreshToken> existToken = findByEmail(user.getEmail());
 
         if (existToken.isPresent()) {
             existToken.get().update(refreshToken);
         } else {
-            refreshTokenRepository.save(new RefreshToken(user.getName(), refreshToken));
+            refreshTokenRepository.save(new RefreshToken(user.getEmail(), refreshToken));
         }
     }
 
     @Transactional
-    public void deleteToken(String username) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUsername(username).orElseThrow(
+    public void deleteToken(String email) {
+        RefreshToken refreshToken = refreshTokenRepository.findByEmail(email).orElseThrow( //
                 () -> new IllegalArgumentException("해당 사용자의 refresh Token이 존재하지 않습니다.")
         );
         refreshTokenRepository.delete(refreshToken);

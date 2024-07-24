@@ -17,15 +17,15 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    private String email;
 
     private String refreshToken;
 
     /**
      * 토큰 생성자
      */
-    public RefreshToken(String username, String refreshToken) {
-        this.username = username;
+    public RefreshToken(String email, String refreshToken) {
+        this.email = email;
         this.refreshToken = refreshToken;
     }
 
