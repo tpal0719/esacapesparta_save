@@ -35,7 +35,7 @@ public class UserService {
     public SignupResponseDto createUser(SignupRequestDto requestDto) {
 
         // 이메일로 유저 중복검사
-        dupulicateUserEmail(requestDto.getEmail());
+        duplicateUserEmail(requestDto.getEmail());
 
         //암호화
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
@@ -51,7 +51,7 @@ public class UserService {
     /**
      * useremail 유효성 검사
      */
-    private void dupulicateUserEmail(String email) {
+    private void duplicateUserEmail(String email) {
         Optional<User> findUser = userRepository.findByEmail(email);
         if (findUser.isPresent()) {
             throw new UserException(UserErrorCode.USER_DUPLICATION);
