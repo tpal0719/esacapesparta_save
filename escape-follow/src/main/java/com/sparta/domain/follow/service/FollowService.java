@@ -27,7 +27,7 @@ public class FollowService {
      * @param user 로그인 유저
      */
     @Transactional
-    public void follow(Long storeId, User user) {
+    public void followStore(Long storeId, User user) {
         Store store = storeRepository.findByActiveStore(storeId);
         followRepository.checkIfAlreadyFollowed(user, store);
 
@@ -45,7 +45,7 @@ public class FollowService {
      * @param user 로그인 유저
      */
     @Transactional
-    public void unFollow(Long storeId, User user) {
+    public void unfollowStore(Long storeId, User user) {
         Store store = storeRepository.findByActiveStore(storeId);
         Follow follow = followRepository.getFollowOrThrow(user, store);
         followRepository.delete(follow);

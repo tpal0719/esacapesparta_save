@@ -2,9 +2,6 @@ package com.sparta.domain.follow.controller;
 
 import com.sparta.domain.follow.dto.FollowStoreResponseDto;
 import com.sparta.domain.follow.service.FollowService;
-import com.sparta.domain.user.entity.User;
-import com.sparta.domain.user.repository.UserRepository;
-import com.sparta.domain.user.service.UserService;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +28,11 @@ public class FollowController {
      * @return status.code, message
      */
     @PostMapping("/stores/{storeId}")
-    public ResponseEntity<ResponseMessage<Void>> follow(
+    public ResponseEntity<ResponseMessage<Void>> followStore(
             @PathVariable Long storeId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        followService.follow(storeId, userDetails.getUser());
+        followService.followStore(storeId, userDetails.getUser());
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -53,11 +50,11 @@ public class FollowController {
      * @return status.code, message
      */
     @DeleteMapping("/stores/{storeId}")
-    public ResponseEntity<ResponseMessage<Void>> unFollow(
+    public ResponseEntity<ResponseMessage<Void>> unfollowStore(
             @PathVariable Long storeId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        followService.unFollow(storeId, userDetails.getUser());
+        followService.unfollowStore(storeId, userDetails.getUser());
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.OK.value())
