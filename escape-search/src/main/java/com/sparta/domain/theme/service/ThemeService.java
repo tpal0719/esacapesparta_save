@@ -1,10 +1,10 @@
-package com.sparta.domain.escapeRoom.service;
+package com.sparta.domain.theme.service;
 
-import com.sparta.domain.escapeRoom.dto.EscapeRoomResponseDto;
-import com.sparta.domain.escapeRoom.entity.Theme;
-import com.sparta.domain.escapeRoom.repository.ThemeRepository;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.repository.StoreRepository;
+import com.sparta.domain.theme.dto.ThemeResponseDto;
+import com.sparta.domain.theme.entity.Theme;
+import com.sparta.domain.theme.repository.ThemeRepository;
 import com.sparta.global.util.PageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EscapeRoomService {
+public class ThemeService {
 
     private final ThemeRepository themeRepository;
     private final StoreRepository storeRepository;
@@ -30,12 +30,12 @@ public class EscapeRoomService {
      * @param sort 속성별 정렬 기준
      * @return EscapeRoom 리스트
      */
-    public Page<EscapeRoomResponseDto> getEscapeRoom(Long storeId, int pageNum, int pageSize, boolean isDesc, String sort) {
+    public Page<ThemeResponseDto> getTheme(Long storeId, int pageNum, int pageSize, boolean isDesc, String sort) {
         Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         Pageable pageable = PageUtil.createPageable(pageNum, pageSize, isDesc, sort);
-        Page<Theme> escapeRooms = themeRepository.findByStore(store, pageable);
+        Page<Theme> themes = themeRepository.findByStore(store, pageable);
 
-        return escapeRooms.map(EscapeRoomResponseDto::new);
+        return themes.map(ThemeResponseDto::new);
     }
 }

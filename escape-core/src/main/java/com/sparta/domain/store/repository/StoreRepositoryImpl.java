@@ -8,7 +8,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.domain.store.entity.QStore;
 import com.sparta.domain.store.entity.Store;
-import com.sparta.global.util.PageUtil;
+import com.sparta.domain.store.entity.StoreRegion;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,12 +28,12 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Store> findByName(String name, String area, Pageable pageable) {
+    public Page<Store> findByName(String name, StoreRegion storeRegion, Pageable pageable) {
         QStore store = QStore.store;
 
         JPAQuery<Store> query = jpaQueryFactory.selectFrom(store)
                 .where(nameContains(name))
-                .where(areaContains(area))
+                .where(storeRegionContains(storeRegion))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
@@ -62,9 +62,10 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom{
         return name != null ? store.name.containsIgnoreCase(name) : null;
     }
 
-    private BooleanExpression areaContains(String area) {
+    private BooleanExpression storeRegionContains(StoreRegion storeRegion) {
         QStore store = QStore.store;
+
         // name이 null이면 null을 반환하여 조건이 적용되지 않도록 함
-        return area != null ? store.area.containsIgnoreCase(area) : null;
+        return storeRegion == StoreRegion.ALL ? null : store.storeRegion.eq(storeRegion);
     }
 }

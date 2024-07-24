@@ -1,13 +1,13 @@
-package com.sparta.domain.escapeRoom.repository;
+package com.sparta.domain.theme.repository;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.domain.escapeRoom.entity.Theme;
-import com.sparta.domain.escapeRoom.entity.QEscapeRoom;
 import com.sparta.domain.store.entity.Store;
+import com.sparta.domain.theme.entity.QTheme;
+import com.sparta.domain.theme.entity.Theme;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,24 +27,24 @@ public class ThemeRepositoryImpl implements ThemeRepositoryCustom {
 
     @Override
     public Page<Theme> findByStore(Store store, Pageable pageable) {
-        QEscapeRoom escapeRoom = QEscapeRoom.escapeRoom;
+        QTheme theme = QTheme.theme;
 
-        JPAQuery<Theme> query = jpaQueryFactory.selectFrom(escapeRoom)
-                .where(escapeRoom.store.eq(store))
+        JPAQuery<Theme> query = jpaQueryFactory.selectFrom(theme)
+                .where(theme.store.eq(store))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
         for (Sort.Order order : pageable.getSort()) {
-            PathBuilder<Theme> pathBuilder = new PathBuilder<>(escapeRoom.getType(), escapeRoom.getMetadata());
+            PathBuilder<Theme> pathBuilder = new PathBuilder<>(theme.getType(), theme.getMetadata());
             query.orderBy(new OrderSpecifier<>(
                     order.isAscending() ? Order.ASC : Order.DESC,
                     pathBuilder.get(order.getProperty(), Comparable.class)
             ));
         }
 
-        JPAQuery<Long> total = jpaQueryFactory.select(escapeRoom.count())
-                .from(escapeRoom)
-                .where(escapeRoom.store.eq(store));
+        JPAQuery<Long> total = jpaQueryFactory.select(theme.count())
+                .from(theme)
+                .where(theme.store.eq(store));
 
         List<Theme> results = query.fetch();
 

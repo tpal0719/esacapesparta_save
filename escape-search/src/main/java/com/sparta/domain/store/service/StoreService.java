@@ -2,6 +2,7 @@ package com.sparta.domain.store.service;
 
 import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.entity.Store;
+import com.sparta.domain.store.entity.StoreRegion;
 import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.global.util.PageUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,15 @@ public class StoreService {
      * @param pageSize 페이지에 담는 데이터 수
      * @param isDesc 오름차순, 내림차순 정렬 기준
      * @param keyWord 검색 키워드
-     * @param area 카페 지역
+     * @param storeRegion 카페 지역
      * @param sort 속성별 정렬 기준
      * @return Store 리스트
      */
     public Page<StoreResponseDto> getStores(int pageNum, int pageSize, boolean isDesc,
-                                            String keyWord, String area, String sort) {
+                                            String keyWord, StoreRegion storeRegion, String sort) {
 
         Pageable pageable = PageUtil.createPageable(pageNum, pageSize, isDesc, sort);
-        Page<Store> stores = storeRepository.findByName(keyWord, area, pageable);
+        Page<Store> stores = storeRepository.findByName(keyWord, storeRegion, pageable);
         return stores.map(StoreResponseDto::new);
     }
 }

@@ -20,9 +20,6 @@ public class Store extends TimeStamped {
     private String name;
 
     @Column(nullable = false)
-    private String area;
-
-    @Column(nullable = false)
     private String address;
 
     @Column(nullable = false)
