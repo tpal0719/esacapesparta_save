@@ -1,4 +1,4 @@
-package com.sparta.domain.escapeRoom.entity;
+package com.sparta.domain.theme.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

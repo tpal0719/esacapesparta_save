@@ -1,4 +1,4 @@
-package com.sparta.domain.escapeRoom.entity;
+package com.sparta.domain.theme.entity;
 
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.store.entity.Store;
@@ -47,6 +47,6 @@ public class Theme extends TimeStamped {
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
-    @OneToMany(mappedBy = "escapeRoom", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "theme", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 }

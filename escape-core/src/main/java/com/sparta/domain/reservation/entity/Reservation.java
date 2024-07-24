@@ -1,6 +1,6 @@
 package com.sparta.domain.reservation.entity;
 
-import com.sparta.domain.escapeRoom.entity.Theme;
+import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
@@ -21,7 +21,7 @@ public class Reservation extends TimeStamped {
     private Integer player; //플레이 인원
 
     @Column(nullable = false)
-    private LocalDateTime escapeRoomTime;
+    private LocalDateTime themeTime;
 
     @Column(nullable = false)
     private Long price;

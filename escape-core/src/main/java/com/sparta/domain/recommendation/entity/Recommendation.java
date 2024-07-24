@@ -1,6 +1,6 @@
 package com.sparta.domain.recommendation.entity;
 
-import com.sparta.domain.escapeRoom.entity.Theme;
+import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
