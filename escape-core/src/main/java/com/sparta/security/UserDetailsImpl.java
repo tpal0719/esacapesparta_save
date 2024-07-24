@@ -15,6 +15,10 @@ public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
+    public String getUserEmail() {
+        return user.getEmail();
+    }
+
     public UserDetailsImpl(User user) {
         this.user = user;
     }
