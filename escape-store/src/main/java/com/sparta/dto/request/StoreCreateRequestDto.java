@@ -1,4 +1,4 @@
-package com.sparta.domain.store.dto;
+package com.sparta.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

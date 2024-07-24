@@ -22,11 +22,10 @@ public class UserService {
     /**
      * TODO : 모든 Manager 조회
      *
-     * @param user
      * @author SEMI
      */
     @Transactional(readOnly = true)
-    public List<UserResponseDto> getAllManagers(User user) {
+    public List<UserResponseDto> getAllManagers() {
 
         List<User> managers = getUsers(UserType.MANAGER);
 
@@ -38,11 +37,10 @@ public class UserService {
     /**
      * TODO : 모든 Consumer 조회
      *
-     * @param user
      * @author SEMI
      */
     @Transactional(readOnly = true)
-    public List<UserResponseDto> getAllConsumers(User user) {
+    public List<UserResponseDto> getAllConsumers() {
         List<User> consumers = getUsers(UserType.USER);
 
         return consumers.stream()
