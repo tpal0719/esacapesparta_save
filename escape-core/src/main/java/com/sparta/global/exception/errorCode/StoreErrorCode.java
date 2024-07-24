@@ -14,4 +14,5 @@ public enum StoreErrorCode implements ErrorCode {
 
     private final int httpStatusCode;
     private final String errorDescription;
+
 }

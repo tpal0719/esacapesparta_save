@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ThemeRepository extends JpaRepository<Theme, Long> {
+public interface ThemeRepository extends JpaRepository<Theme, Long>, ThemeRepositoryCustom {
     List<Theme> findAllByStoreId(Long storeId);
 
     default Theme findByIdOrElseThrow(Long themeId) {
         return findById(themeId).orElseThrow(() ->
                 new ThemeException(ThemeErrorCode.THEME_NOT_FOUND));
     }
+
 }
