@@ -43,7 +43,6 @@ public class EmailController {
     @GetMapping
     public ResponseEntity<ResponseMessage<String>> verifyCertificationNumber(@Valid @RequestBody EmailVerificationRequestDto requestDTO,
                                                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        log.info("verifyCertificationNumber");
         emailService.verifyEmail(userDetails.getUser().getEmail(), requestDTO.getVerificationCode());
         userService.updateUserActive(userDetails.getUser());
 
