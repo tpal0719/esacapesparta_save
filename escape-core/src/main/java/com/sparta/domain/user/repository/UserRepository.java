@@ -7,6 +7,7 @@ import com.sparta.global.exception.errorCode.UserErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -14,4 +15,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return findById(userId).orElseThrow(()->new UserException(UserErrorCode.USER_NOT_FOUND));
     }
     List<User> findByUserType(UserType userType);
+
+    default User findByEmailOrElseThrow(String email) {
+        return findByEmail(email).orElseThrow(()->new UserException(UserErrorCode.USER_NOT_FOUND));
+    }
+    Optional<User> findByEmail(String email); // 고민중
 }
