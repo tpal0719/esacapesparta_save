@@ -1,7 +1,5 @@
 package com.sparta.controller;
 
-import com.sparta.domain.user.entity.User;
-import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.dto.request.StoreModifyRequestDto;
 import com.sparta.dto.request.StoreRegisterRequestDto;
 import com.sparta.dto.response.StoreModifyResponseDto;
@@ -15,13 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/manager/stores")
-@Secured("MANAGER")
 @RequiredArgsConstructor
 public class StoreController {
     private final StoreService storeService;
@@ -30,6 +26,7 @@ public class StoreController {
      * 방탈출 카페 등록 요청
      */
     @PostMapping
+    @Secured("MANAGER")
     public ResponseEntity<ResponseMessage<StoreRegisterResponseDto>> registerStore(
             @Valid @RequestBody StoreRegisterRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -50,6 +47,7 @@ public class StoreController {
      * 본인의 방탈출 카페 조회
      */
     @GetMapping
+    @Secured("MANAGER")
     public ResponseEntity<ResponseMessage<StoresGetResponseDto>> getMyStore(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         StoresGetResponseDto responseDto = storeService.getMyStore(userDetails.getUser());
 
@@ -66,6 +64,7 @@ public class StoreController {
      * 방탈출 카페 수정
      */
     @PutMapping("/{storeId}")
+    @Secured({"MANAGER", "ADMIN"})
     public ResponseEntity<ResponseMessage<StoreModifyResponseDto>> modifyStore(
             @PathVariable Long storeId,
             @Valid @RequestBody StoreModifyRequestDto requestDto,
@@ -86,6 +85,7 @@ public class StoreController {
      * 방탈출 카페 삭제
      */
     @DeleteMapping("/{storeId}")
+    @Secured({"MANAGER", "ADMIN"})
     public ResponseEntity<ResponseMessage<Void>> deleteStore(
             @PathVariable Long storeId,
             @AuthenticationPrincipal UserDetailsImpl userDetails

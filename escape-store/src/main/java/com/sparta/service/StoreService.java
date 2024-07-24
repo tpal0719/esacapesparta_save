@@ -4,6 +4,7 @@ import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.entity.StoreStatus;
 import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.domain.user.entity.User;
+import com.sparta.domain.user.entity.UserType;
 import com.sparta.dto.request.StoreRegisterRequestDto;
 import com.sparta.dto.request.StoreModifyRequestDto;
 import com.sparta.dto.response.StoreRegisterResponseDto;
@@ -44,10 +45,13 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreModifyResponseDto modifyStore(Long storeId, StoreModifyRequestDto requestDto, User manager) {
+    public StoreModifyResponseDto modifyStore(Long storeId, StoreModifyRequestDto requestDto, User user) {
         Store store = storeRepository.findByIdOrElseThrow(storeId);
         store.verifyStoreIsActive();
-        store.checkManager(manager);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            store.checkManager(user);
+        }
 
         store.updateStore(
                 requestDto.getName(),
@@ -62,10 +66,13 @@ public class StoreService {
     }
 
     @Transactional
-    public void deleteStore(Long storeId, User manager) {
+    public void deleteStore(Long storeId, User user) {
         Store store = storeRepository.findByIdOrElseThrow(storeId);
         store.verifyStoreIsActive();
-        store.checkManager(manager);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            store.checkManager(user);
+        }
         store.deactivateStore();
     }
 
