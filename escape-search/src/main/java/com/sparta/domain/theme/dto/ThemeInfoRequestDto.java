@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class ThemeInfoRequestDto {
-    @NotNull
+    @NotNull(message = "방탈출 카페 id가 없습니다.")
     private Long storeId;
 }
