@@ -1,7 +1,10 @@
 package com.sparta.controller;
 
-import com.sparta.domain.escapeRoom.dto.EscapeRoomResponseDto;
-import com.sparta.domain.escapeRoom.service.EscapeRoomService;
+import com.sparta.domain.store.entity.StoreRegion;
+import com.sparta.domain.theme.dto.ThemeInfoResponseDto;
+import com.sparta.domain.theme.dto.ThemeResponseDto;
+import com.sparta.domain.theme.dto.ThemeTimeResponseDto;
+import com.sparta.domain.theme.service.ThemeService;
 import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.service.StoreService;
 import com.sparta.global.response.ResponseMessage;
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class SearchController {
     private final StoreService storeService;
-    private final EscapeRoomService escapeRoomService;
+    private final ThemeService themeService;
 
     /**
      * 방탈출 카페 조회
@@ -26,7 +29,7 @@ public class SearchController {
      * @param pageSize 페이지에 담는 데이터 수
      * @param isDesc 오름차순, 내림차순 정렬 기준
      * @param keyWord 검색 키워드
-     * @param area 카페 지역
+     * @param storeRegion 카페 지역
      * @param sort 속성별 정렬 기준
      * @return status.code, message, Store 리스트
      */
@@ -36,10 +39,10 @@ public class SearchController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam(value = "isDesc", required = false, defaultValue = "false") boolean isDesc,
             @RequestParam(value = "keyWord", required = false) String keyWord,
-            @RequestParam(value = "area", required = false, defaultValue = "") String area,
+            @RequestParam(value = "storeRegion", required = false, defaultValue = "ALL") StoreRegion storeRegion,
             @RequestParam(value = "sort", required = false, defaultValue = "name") String sort){
 
-        Page<StoreResponseDto> stores = storeService.getStores(pageNum, pageSize, isDesc, keyWord, area, sort);
+        Page<StoreResponseDto> stores = storeService.getStores(pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
 
         ResponseMessage<Page<StoreResponseDto>> responseMessage = ResponseMessage.<Page<StoreResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -59,25 +62,31 @@ public class SearchController {
      * @param sort 속성별 정렬 기준
      * @return status.code, message, EscapeRoom 리스트
      */
-    @GetMapping("/stores/{storeId}/escape-room")
-    public ResponseEntity<ResponseMessage<Page<EscapeRoomResponseDto>>> getEscapeRoom(
+    @GetMapping("/stores/{storeId}/theme")
+    public ResponseEntity<ResponseMessage<Page<ThemeResponseDto>>> getTheme(
             @PathVariable Long storeId,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
             @RequestParam(value = "isDesc", required = false, defaultValue = "false") boolean isDesc,
             @RequestParam(value = "sort", required = false, defaultValue = "title") String sort){
 
-        Page<EscapeRoomResponseDto> escapeRooms = escapeRoomService.getEscapeRoom(storeId, pageNum, pageSize, isDesc, sort);
+        Page<ThemeResponseDto> themes = themeService.getTheme(storeId, pageNum, pageSize, isDesc, sort);
 
-        ResponseMessage<Page<EscapeRoomResponseDto>> responseMessage = ResponseMessage.<Page<EscapeRoomResponseDto>>builder()
+        ResponseMessage<Page<ThemeResponseDto>> responseMessage = ResponseMessage.<Page<ThemeResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("방탈출 카페 테마 조회에 성공했습니다.")
-                .data(escapeRooms)
+                .data(themes)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-
     }
+
+    @GetMapping("/stores/theme/{themeId}/info")
+    public ResponseEntity<ResponseMessage<ThemeInfoResponseDto>> getThemeInfo()
+
+
+    @GetMapping("/stores/theme/{themeId}/time")
+    public ResponseEntity<ResponseMessage<ThemeTimeResponseDto>>
 }
 
 
