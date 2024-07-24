@@ -41,7 +41,7 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         User user = new User(requestDto.getName(), requestDto.getEmail(), encodedPassword,
-                OAuthProvider.ORIGIN, UserType.USER, UserStatus.ACTIVE);
+                OAuthProvider.ORIGIN, UserType.USER, UserStatus.DEACTIVE);
         // ORIGIN 일단 구현 -> 나중에 @kakao, @google 등으로 이메일 확인해서 swtich case로 구현 생각중
         userRepository.save(user);
 
@@ -56,5 +56,14 @@ public class UserService {
         if (findUser.isPresent()) {
             throw new UserException(UserErrorCode.USER_DUPLICATION);
         }
+    }
+
+    /**
+     * 이메일 인증받은 유저 상태 업데이트
+     */
+    @Transactional
+    public void updateUserActive(User user) {
+        user.ActiveUser();
+        userRepository.save(user);
     }
 }

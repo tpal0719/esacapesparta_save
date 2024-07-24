@@ -30,8 +30,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getName();
-    }
+        return user.getEmail();
+    } // email 수정
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
