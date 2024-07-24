@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -36,6 +37,8 @@ public class Store extends TimeStamped {
     @JoinColumn(name = "manager_id", nullable = false)
     private User manager;
 
+
+    @Setter
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private StoreStatus storeStatus;

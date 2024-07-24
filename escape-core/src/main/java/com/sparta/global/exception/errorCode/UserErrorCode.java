@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum UserErrorCode implements ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 유저를 찾을 수 없습니다."),
-    USER_NOT_MANAGER(HttpStatus.BAD_REQUEST.value(), "매니저만 접근할 수 있습니다.");
+    USER_NOT_MANAGER(HttpStatus.BAD_REQUEST.value(), "매니저만 접근할 수 있습니다."),
+    USER_NOT_AUTHORITY(HttpStatus.UNAUTHORIZED.value(),"접근 권한이 없습니다." ),
+    USER_NO_ONE(HttpStatus.NOT_FOUND.value(),"유저가 존재하지 않습니다." );
 
     private final int httpStatusCode;
     private final String errorDescription;
