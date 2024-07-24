@@ -1,11 +1,10 @@
 package com.sparta.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.domain.user.dto.LoginRequestDto;
+import com.sparta.domain.user.dto.request.LoginRequestDto;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.jwt.JwtProvider;
-import com.sparta.jwt.RefreshTokenRepository;
 import com.sparta.jwt.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +27,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final RefreshTokenService refreshTokenService;
 
-    public JwtAuthenticationFilter(JwtProvider jwtProvider, RefreshTokenRepository refreshTokenRepository) {
+    public JwtAuthenticationFilter(JwtProvider jwtProvider, RefreshTokenService refreshTokenService) {
         this.jwtProvider = jwtProvider;
         this.refreshTokenService = refreshTokenService;
         setFilterProcessesUrl("/users/login");
@@ -69,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String refreshToken = jwtProvider.createToken(username, REFRESH_TOKEN_TIME, role);
 
         //refresh토큰 저장메서드 추가
-        RefreshTokenService.saveRefreshToken(userDetails.getUser(), refreshToken.substring(BEAR.length()));
+        refreshTokenService.saveRefreshToken(userDetails.getUser(), refreshToken.substring(BEAR.length()));
 
         // 응답 헤더에 토큰 추가
         response.addHeader(JwtProvider.AUTHORIZATION_HEADER, accessToken);

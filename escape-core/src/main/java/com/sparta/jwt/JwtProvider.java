@@ -74,7 +74,7 @@ public class JwtProvider {
             if("refresh".equals(type)){
                 Claims info = getUsernameFromClaims(token);
 
-                RefreshToken refreshToken = refreshTokenService.findByUsername(info.getSubject()).orElse(null);
+                RefreshToken refreshToken = refreshTokenService.findByEmail(info.getSubject()).orElse(null);
 
                 if(refreshToken == null) {
                     return false;
