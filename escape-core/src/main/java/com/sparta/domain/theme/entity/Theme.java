@@ -1,4 +1,4 @@
-package com.sparta.domain.escapeRoom.entity;
+package com.sparta.domain.theme.entity;
 
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.store.entity.Store;
@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class EscapeRoom extends TimeStamped {
+public class Theme extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +30,8 @@ public class EscapeRoom extends TimeStamped {
     private String duration;
 
     @Column(nullable = false)
-    private String theme;
+    @Enumerated(EnumType.STRING)
+    private ThemeType themeType;
 
     @Column(nullable = false)
     private String themeImage;
@@ -40,12 +41,12 @@ public class EscapeRoom extends TimeStamped {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private EscapeRoomStatus escapeRoomStatus;
+    private ThemeStatus themeStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
-    @OneToMany(mappedBy = "escapeRoom", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "theme", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 }

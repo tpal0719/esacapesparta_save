@@ -1,4 +1,4 @@
-package com.sparta.domain.escapeRoom.entity;
+package com.sparta.domain.theme.entity;
 
 
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class EscapeRoomTime {
+public class ThemeTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
