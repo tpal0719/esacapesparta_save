@@ -82,7 +82,11 @@ public class SearchController {
     }
 
     @GetMapping("/stores/theme/{themeId}/info")
-    public ResponseEntity<ResponseMessage<ThemeInfoResponseDto>> getThemeInfo()
+    public ResponseEntity<ResponseMessage<ThemeInfoResponseDto>> getThemeInfo(
+            @PathVariable Long themeId) {
+
+        return
+    }
 
 
     @GetMapping("/stores/theme/{themeId}/time")

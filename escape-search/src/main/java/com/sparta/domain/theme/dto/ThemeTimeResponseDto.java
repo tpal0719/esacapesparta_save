@@ -1,5 +1,6 @@
 package com.sparta.domain.theme.dto;
 
+import com.sparta.domain.theme.entity.ThemeTime;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -8,4 +9,9 @@ import java.time.LocalDateTime;
 public class ThemeTimeResponseDto {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+
+    public ThemeTimeResponseDto(ThemeTime themeTime){
+        this.startTime = themeTime.getStartTime();
+        this.endTime = themeTime.getEndTime();
+    }
 }
