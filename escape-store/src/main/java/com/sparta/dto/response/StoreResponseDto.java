@@ -1,4 +1,4 @@
-package com.sparta.domain.store.dto;
+package com.sparta.dto.response;
 
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.entity.StoreStatus;
