@@ -5,10 +5,13 @@ import com.sparta.global.exception.customException.StoreException;
 import com.sparta.global.exception.errorCode.StoreErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StoreRepository extends JpaRepository<Store, Long> {
-    default Store findByIdOrElseThrow(Long storeId){
-        return findById(storeId).orElseThrow(
-                ()-> new StoreException(StoreErrorCode.STORE_NOT_FOUND)
-        );
-    };
+import java.util.List;
+
+public interface StoreRepository extends JpaRepository<Store, Long>, StoreRepositoryCustom {
+    List<Store> findAllByManagerId(Long managerId);
+
+    default Store findByIdOrElseThrow(Long storeId) {
+        return findById(storeId).orElseThrow(() ->
+                new StoreException(StoreErrorCode.STORE_NOT_FOUND));
+    }
 }
