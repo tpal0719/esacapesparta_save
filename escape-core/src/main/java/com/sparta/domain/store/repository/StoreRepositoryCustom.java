@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StoreRepositoryCustom {
     Page<Store> findByName(String name, StoreRegion storeRegion, Pageable pageable);
+    Store findByActiveStore(Long storeId);
 }

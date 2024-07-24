@@ -9,6 +9,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.domain.store.entity.QStore;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.entity.StoreRegion;
+import com.sparta.domain.store.entity.StoreStatus;
+import com.sparta.global.exception.customException.StoreException;
+import com.sparta.global.exception.errorCode.StoreErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -34,6 +37,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom{
         JPAQuery<Store> query = jpaQueryFactory.selectFrom(store)
                 .where(nameContains(name))
                 .where(storeRegionContains(storeRegion))
+                .where(store.storeStatus.eq(StoreStatus.ACTIVE))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
@@ -47,7 +51,9 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom{
 
         JPAQuery<Long> total = jpaQueryFactory.select(store.count())
                 .from(store)
-                .where(nameContains(name));
+                .where(nameContains(name))
+                .where(storeRegionContains(storeRegion))
+                .where(store.storeStatus.eq(StoreStatus.ACTIVE));
 
         List<Store> results = query.fetch();
 
@@ -56,16 +62,26 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom{
 //        return new PageImpl<>(results, pageable, Optional.ofNullable(total.fetchOne()).orElse(0L));
     }
 
+    @Override
+    public Store findByActiveStore(Long storeId) {
+        QStore store = QStore.store;
+
+        JPAQuery<Store> query = jpaQueryFactory.selectFrom(store)
+                .where(store.storeStatus.eq(StoreStatus.ACTIVE)
+                        .and(store.id.eq(storeId)));
+
+
+        return Optional.ofNullable(query.fetchFirst()).orElseThrow(() ->
+                new StoreException(StoreErrorCode.STORE_NOT_FOUND));
+    }
+
     private BooleanExpression nameContains(String name) {
         QStore store = QStore.store;
-        // name이 null이면 null을 반환하여 조건이 적용되지 않도록 함
         return name != null ? store.name.containsIgnoreCase(name) : null;
     }
 
     private BooleanExpression storeRegionContains(StoreRegion storeRegion) {
         QStore store = QStore.store;
-
-        // name이 null이면 null을 반환하여 조건이 적용되지 않도록 함
         return storeRegion == StoreRegion.ALL ? null : store.storeRegion.eq(storeRegion);
     }
 }

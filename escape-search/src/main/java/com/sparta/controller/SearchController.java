@@ -1,9 +1,10 @@
 package com.sparta.controller;
 
+import com.sparta.domain.review.dto.ReviewRequestDto;
+import com.sparta.domain.review.dto.ReviewResponseDto;
+import com.sparta.domain.review.service.ReviewService;
 import com.sparta.domain.store.entity.StoreRegion;
-import com.sparta.domain.theme.dto.ThemeInfoResponseDto;
-import com.sparta.domain.theme.dto.ThemeResponseDto;
-import com.sparta.domain.theme.dto.ThemeTimeResponseDto;
+import com.sparta.domain.theme.dto.*;
 import com.sparta.domain.theme.service.ThemeService;
 import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.service.StoreService;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/search")
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class SearchController {
     private final StoreService storeService;
     private final ThemeService themeService;
+    private final ReviewService reviewService;
 
     /**
      * 방탈출 카페 조회
@@ -81,16 +85,71 @@ public class SearchController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
+    /**
+     * 방탈출 카페 테마 상세 조회
+     * @param themeId 해당 카페의 테마 id
+     * @param themeInfoRequestDto 검색할 테마의 스토어 id를 가지고 있는 dto
+     * @return status.code, message, theme 반환
+     */
     @GetMapping("/stores/theme/{themeId}/info")
     public ResponseEntity<ResponseMessage<ThemeInfoResponseDto>> getThemeInfo(
+            @RequestBody ThemeInfoRequestDto themeInfoRequestDto,
             @PathVariable Long themeId) {
 
-        return
+        ThemeInfoResponseDto responseDto = themeService.getThemeInfo(themeInfoRequestDto.getStoreId(), themeId);
+
+        ResponseMessage<ThemeInfoResponseDto> responseMessage = ResponseMessage.<ThemeInfoResponseDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("방탈출 카페 테마 조회에 성공했습니다")
+                .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-
+    /**
+     * 방탈출 카페 테마 시간 조회
+     * @param themeId 해당 카페의 테마 id
+     * @param themeTimeRequestDto 검색할 테마의 스토어 id를 가지고 있는 dto
+     * @return status.code, message, theme 시간 반환
+     */
     @GetMapping("/stores/theme/{themeId}/time")
-    public ResponseEntity<ResponseMessage<ThemeTimeResponseDto>>
+    public ResponseEntity<ResponseMessage<List<ThemeTimeResponseDto>>> getThemeTime(
+            @RequestBody ThemeTimeRequestDto themeTimeRequestDto,
+            @PathVariable Long themeId){
+
+        List<ThemeTimeResponseDto> responseDtoList = themeService.getThemeTime(themeTimeRequestDto.getStoreId(), themeId);
+
+        ResponseMessage<List<ThemeTimeResponseDto>> responseMessage = ResponseMessage.<List<ThemeTimeResponseDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("방탈출 카페 테마 시간 조회에 성공했습니다.")
+                .data(responseDtoList)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    /**
+     * 방탈출 카페 테마 리뷰 조회
+     * @param reviewRequestDto 방탈출 카페 id, 테마 id가 들어있는 dto
+     * @return status.code, message, 리뷰 반환
+     */
+    @GetMapping("/review")
+    public ResponseEntity<ResponseMessage<List<ReviewResponseDto>>> getReview(
+                @RequestBody ReviewRequestDto reviewRequestDto){
+
+        List<ReviewResponseDto> reviewResponseDtoList = reviewService.getReview(reviewRequestDto.getStoreId()
+                , reviewRequestDto.getThemeId());
+
+        ResponseMessage<List<ReviewResponseDto>> responseMessage = ResponseMessage.<List<ReviewResponseDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("리뷰 조회에 성공했습니다.")
+                .data(reviewResponseDtoList)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
 }
 
 

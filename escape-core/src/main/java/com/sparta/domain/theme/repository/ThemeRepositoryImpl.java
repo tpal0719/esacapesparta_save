@@ -5,9 +5,16 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.domain.store.entity.QStore;
 import com.sparta.domain.store.entity.Store;
+import com.sparta.domain.store.entity.StoreStatus;
 import com.sparta.domain.theme.entity.QTheme;
 import com.sparta.domain.theme.entity.Theme;
+import com.sparta.domain.theme.entity.ThemeStatus;
+import com.sparta.global.exception.customException.StoreException;
+import com.sparta.global.exception.customException.ThemeException;
+import com.sparta.global.exception.errorCode.StoreErrorCode;
+import com.sparta.global.exception.errorCode.ThemeErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,7 +37,8 @@ public class ThemeRepositoryImpl implements ThemeRepositoryCustom {
         QTheme theme = QTheme.theme;
 
         JPAQuery<Theme> query = jpaQueryFactory.selectFrom(theme)
-                .where(theme.store.eq(store))
+                .where(theme.store.eq(store)
+                        .and(theme.themeStatus.eq(ThemeStatus.ACTIVE)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
@@ -44,12 +52,24 @@ public class ThemeRepositoryImpl implements ThemeRepositoryCustom {
 
         JPAQuery<Long> total = jpaQueryFactory.select(theme.count())
                 .from(theme)
-                .where(theme.store.eq(store));
+                .where(theme.store.eq(store)
+                        .and(theme.themeStatus.eq(ThemeStatus.ACTIVE)));
 
         List<Theme> results = query.fetch();
 
         return PageableExecutionUtils.getPage(results, pageable, () -> Optional.ofNullable(total.fetchOne()).orElse(0L));
+    }
+
+    @Override
+    public Theme findByActiveTheme(Long themeId) {
+        QTheme theme = QTheme.theme;
+
+        JPAQuery<Theme> query = jpaQueryFactory.selectFrom(theme)
+                .where(theme.themeStatus.eq(ThemeStatus.ACTIVE)
+                        .and(theme.id.eq(themeId)));
 
 
+        return Optional.ofNullable(query.fetchFirst()).orElseThrow(() ->
+                new ThemeException(ThemeErrorCode.THEME_NOT_FOUND));
     }
 }

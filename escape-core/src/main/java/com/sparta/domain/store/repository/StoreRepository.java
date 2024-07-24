@@ -11,4 +11,5 @@ public interface StoreRepository extends JpaRepository<Store, Long> , StoreRepos
                 ()-> new StoreException(StoreErrorCode.STORE_NOT_FOUND)
         );
     };
+
 }
