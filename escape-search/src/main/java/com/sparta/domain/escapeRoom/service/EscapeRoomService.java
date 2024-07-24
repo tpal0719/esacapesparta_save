@@ -1,7 +1,7 @@
 package com.sparta.domain.escapeRoom.service;
 
 import com.sparta.domain.escapeRoom.dto.EscapeRoomResponseDto;
-import com.sparta.domain.escapeRoom.entity.EscapeRoom;
+import com.sparta.domain.escapeRoom.entity.Theme;
 import com.sparta.domain.escapeRoom.repository.EscapeRoomRepository;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.repository.StoreRepository;
@@ -34,7 +34,7 @@ public class EscapeRoomService {
         Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         Pageable pageable = PageUtil.createPageable(pageNum, pageSize, isDesc, sort);
-        Page<EscapeRoom> escapeRooms = escapeRoomRepository.findByStore(store, pageable);
+        Page<Theme> escapeRooms = escapeRoomRepository.findByStore(store, pageable);
 
         return escapeRooms.map(EscapeRoomResponseDto::new);
     }

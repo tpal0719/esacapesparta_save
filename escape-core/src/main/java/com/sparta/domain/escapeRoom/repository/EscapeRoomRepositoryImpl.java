@@ -5,7 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.domain.escapeRoom.entity.EscapeRoom;
+import com.sparta.domain.escapeRoom.entity.Theme;
 import com.sparta.domain.escapeRoom.entity.QEscapeRoom;
 import com.sparta.domain.store.entity.Store;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +26,16 @@ public class EscapeRoomRepositoryImpl implements EscapeRoomRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<EscapeRoom> findByStore(Store store, Pageable pageable) {
+    public Page<Theme> findByStore(Store store, Pageable pageable) {
         QEscapeRoom escapeRoom = QEscapeRoom.escapeRoom;
 
-        JPAQuery<EscapeRoom> query = jpaQueryFactory.selectFrom(escapeRoom)
+        JPAQuery<Theme> query = jpaQueryFactory.selectFrom(escapeRoom)
                 .where(escapeRoom.store.eq(store))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
         for (Sort.Order order : pageable.getSort()) {
-            PathBuilder<EscapeRoom> pathBuilder = new PathBuilder<>(escapeRoom.getType(), escapeRoom.getMetadata());
+            PathBuilder<Theme> pathBuilder = new PathBuilder<>(escapeRoom.getType(), escapeRoom.getMetadata());
             query.orderBy(new OrderSpecifier<>(
                     order.isAscending() ? Order.ASC : Order.DESC,
                     pathBuilder.get(order.getProperty(), Comparable.class)
@@ -46,7 +46,7 @@ public class EscapeRoomRepositoryImpl implements EscapeRoomRepositoryCustom{
                 .from(escapeRoom)
                 .where(escapeRoom.store.eq(store));
 
-        List<EscapeRoom> results = query.fetch();
+        List<Theme> results = query.fetch();
 
         return PageableExecutionUtils.getPage(results, pageable, () -> Optional.ofNullable(total.fetchOne()).orElse(0L));
 

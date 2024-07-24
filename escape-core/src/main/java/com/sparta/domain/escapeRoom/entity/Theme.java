@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class EscapeRoom extends TimeStamped {
+public class Theme extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +30,7 @@ public class EscapeRoom extends TimeStamped {
     private String duration;
 
     @Column(nullable = false)
-    private String theme;
+    private String themeType;
 
     @Column(nullable = false)
     private String themeImage;
@@ -40,7 +40,7 @@ public class EscapeRoom extends TimeStamped {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private EscapeRoomStatus escapeRoomStatus;
+    private ThemeStatus themeStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)

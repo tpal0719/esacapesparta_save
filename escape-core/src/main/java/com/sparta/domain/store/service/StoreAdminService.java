@@ -1,7 +1,5 @@
 package com.sparta.domain.store.service;
 
-import com.sparta.domain.escapeRoom.entity.EscapeRoom;
-import com.sparta.domain.escapeRoom.entity.EscapeRoomStatus;
 import com.sparta.domain.store.dto.StoreCreateRequestDto;
 import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.entity.Store;
@@ -10,7 +8,6 @@ import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.domain.user.repository.UserRepository;
-import com.sparta.global.exception.customException.EscapeRoomException;
 import com.sparta.global.exception.customException.StoreException;
 import com.sparta.global.exception.customException.UserException;
 import com.sparta.global.exception.errorCode.StoreErrorCode;

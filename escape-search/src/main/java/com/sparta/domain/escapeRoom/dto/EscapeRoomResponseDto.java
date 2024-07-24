@@ -1,6 +1,6 @@
 package com.sparta.domain.escapeRoom.dto;
 
-import com.sparta.domain.escapeRoom.entity.EscapeRoom;
+import com.sparta.domain.escapeRoom.entity.Theme;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,8 +10,8 @@ public class EscapeRoomResponseDto {
     private String themeImage;
     private String title;
 
-    public EscapeRoomResponseDto(EscapeRoom escapeRoom){
-        this.themeImage = escapeRoom.getThemeImage();
-        this.title = escapeRoom.getTitle();
+    public EscapeRoomResponseDto(Theme theme){
+        this.themeImage = theme.getThemeImage();
+        this.title = theme.getTitle();
     }
 }

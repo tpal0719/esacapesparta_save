@@ -1,6 +1,6 @@
 package com.sparta.domain.recommendation.entity;
 
-import com.sparta.domain.escapeRoom.entity.EscapeRoom;
+import com.sparta.domain.escapeRoom.entity.Theme;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
@@ -21,5 +21,5 @@ public class Recommendation extends TimeStamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "escape_room_id", nullable = false)
-    private EscapeRoom escapeRoom;
+    private Theme theme;
 }
