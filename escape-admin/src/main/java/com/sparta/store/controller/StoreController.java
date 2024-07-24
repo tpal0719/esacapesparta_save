@@ -5,10 +5,12 @@ import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.service.StoreAdminService;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.response.ResponseMessage;
+import com.sparta.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,9 +54,9 @@ public class StoreController {
 
     // TODO : Admin이 방탈출 카페 등록 승인 ( PENDING -> ACTIVE )
     @PutMapping("/stores/{storeId}/approval")
-    public ResponseEntity<ResponseMessage<Void>> approveStore(@Valid @RequestBody Long storeId, User user) {
+    public ResponseEntity<ResponseMessage<Void>> approveStore(@Valid @PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        storeAdminService.approveStore(storeId, user);
+        storeAdminService.approveStore(storeId, userDetails.getUser());
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.OK.value())

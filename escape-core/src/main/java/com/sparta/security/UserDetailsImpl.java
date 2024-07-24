@@ -15,6 +15,10 @@ public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
+    public String getUserEmail() {
+        return user.getEmail();
+    }
+
     public UserDetailsImpl(User user) {
         this.user = user;
     }
@@ -26,8 +30,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();
-    } // email 수정
+        return user.getName();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
