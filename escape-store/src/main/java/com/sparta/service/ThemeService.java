@@ -6,6 +6,7 @@ import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeStatus;
 import com.sparta.domain.theme.repository.ThemeRepository;
 import com.sparta.domain.user.entity.User;
+import com.sparta.domain.user.entity.UserType;
 import com.sparta.dto.request.ThemeCreateRequestDto;
 import com.sparta.dto.request.ThemeModifyRequestDto;
 import com.sparta.dto.response.ThemeDetailResponseDto;
@@ -23,9 +24,12 @@ public class ThemeService {
     private final StoreRepository storeRepository;
 
     @Transactional
-    public ThemeDetailResponseDto createTheme(ThemeCreateRequestDto requestDto, User manager) {
-        Store store = storeRepository.findByIdOrElseThrow(requestDto.getStoreId());
-        store.checkManager(manager);
+    public ThemeDetailResponseDto createTheme(ThemeCreateRequestDto requestDto, User user) {
+        Store store = storeRepository.findByActiveStore(requestDto.getStoreId());
+
+        if(user.getUserType() == UserType.MANAGER) {
+            store.checkManager(user);
+        }
 
         Theme theme = Theme.builder()
                 .title(requestDto.getTitle())
@@ -46,7 +50,7 @@ public class ThemeService {
     }
 
     public ThemeGetResponseDto getThemes(Long storeId, User manager) {
-        Store findStore = storeRepository.findByIdOrElseThrow(storeId);
+        Store findStore = storeRepository.findByActiveStore(storeId);
         findStore.checkManager(manager);
 
         List<Theme> themeList = themeRepository.findAllByStoreId(storeId);
@@ -54,12 +58,15 @@ public class ThemeService {
     }
 
     @Transactional
-    public ThemeDetailResponseDto modifyTheme(Long themeId, ThemeModifyRequestDto requestDto, User manager) {
+    public ThemeDetailResponseDto modifyTheme(Long themeId, ThemeModifyRequestDto requestDto, User user) {
         Theme theme = themeRepository.findByIdOrElseThrow(themeId);
 
         Store store = theme.getStore();
         store.verifyStoreIsActive();
-        store.checkManager(manager);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            store.checkManager(user);
+        }
 
         theme.updateTheme(
                 requestDto.getTitle(),
@@ -77,22 +84,28 @@ public class ThemeService {
     }
 
     @Transactional
-    public void deleteTheme(Long themeId, User manager) {
+    public void deleteTheme(Long themeId, User user) {
         Theme theme = themeRepository.findByIdOrElseThrow(themeId);
 
         Store store = theme.getStore();
         store.verifyStoreIsActive();
-        store.checkManager(manager);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            store.checkManager(user);
+        }
 
         themeRepository.delete(theme);
     }
 
     @Transactional
-    public void changeThemeStatus(Long themeId, User manager) {
+    public void changeThemeStatus(Long themeId, User user) {
         Theme theme = themeRepository.findByIdOrElseThrow(themeId);
         Store store = theme.getStore();
         store.verifyStoreIsActive();
-        store.checkManager(manager);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            store.checkManager(user);
+        }
 
         theme.toggleThemeStatus();
     }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/manager/stores")
-@Secured("MANAGER")
+@Secured({"MANAGER", "ADMIN"})
 @RequiredArgsConstructor
 public class ThemeController {
     private final ThemeService themeService;

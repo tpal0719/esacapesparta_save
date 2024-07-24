@@ -46,8 +46,7 @@ public class StoreService {
 
     @Transactional
     public StoreModifyResponseDto modifyStore(Long storeId, StoreModifyRequestDto requestDto, User user) {
-        Store store = storeRepository.findByIdOrElseThrow(storeId);
-        store.verifyStoreIsActive();
+        Store store = storeRepository.findByActiveStore(storeId);
 
         if(user.getUserType() == UserType.MANAGER) {
             store.checkManager(user);
@@ -67,8 +66,7 @@ public class StoreService {
 
     @Transactional
     public void deleteStore(Long storeId, User user) {
-        Store store = storeRepository.findByIdOrElseThrow(storeId);
-        store.verifyStoreIsActive();
+        Store store = storeRepository.findByActiveStore(storeId);
 
         if(user.getUserType() == UserType.MANAGER) {
             store.checkManager(user);
