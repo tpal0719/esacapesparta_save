@@ -1,6 +1,6 @@
 package com.sparta.domain.reservation.entity;
 
-public enum PaymentType {
+public enum PaymentStatus {
     PENDING,
-    COMPLEATE
+    COMPLETE
 }
