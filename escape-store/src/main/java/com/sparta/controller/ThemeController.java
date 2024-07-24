@@ -1,12 +1,12 @@
 package com.sparta.controller;
 
 import com.sparta.domain.user.entity.User;
-import com.sparta.dto.request.EscapeRoomCreateRequestDto;
-import com.sparta.dto.request.EscapeRoomModifyRequestDto;
-import com.sparta.dto.response.EscapeRoomDetailResponseDto;
-import com.sparta.dto.response.EscapeRoomsGetResponseDto;
+import com.sparta.dto.request.ThemeCreateRequestDto;
+import com.sparta.dto.request.ThemeModifyRequestDto;
+import com.sparta.dto.response.ThemeDetailResponseDto;
+import com.sparta.dto.response.ThemeGetResponseDto;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.service.EscapeRoomService;
+import com.sparta.service.ThemeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/manager/stores")
 @RequiredArgsConstructor
-public class EscapeRoomController {
-    private final EscapeRoomService escapeRoomService;
+public class ThemeController {
+    private final ThemeService themeService;
 
     @PostMapping("/themes")
-    public ResponseEntity<ResponseMessage<EscapeRoomDetailResponseDto>> createEscapeRoom(@RequestBody EscapeRoomCreateRequestDto requestDto, User manager) {
-        EscapeRoomDetailResponseDto responseDto = escapeRoomService.createEscapeRoom(requestDto, manager);
+    public ResponseEntity<ResponseMessage<ThemeDetailResponseDto>> createEscapeRoom(@RequestBody ThemeCreateRequestDto requestDto, User manager) {
+        ThemeDetailResponseDto responseDto = themeService.createTheme(requestDto, manager);
 
-        ResponseMessage<EscapeRoomDetailResponseDto> responseMessage = ResponseMessage.<EscapeRoomDetailResponseDto>builder()
+        ResponseMessage<ThemeDetailResponseDto> responseMessage = ResponseMessage.<ThemeDetailResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())
                 .message("방탈출 테마 등록이 완료되었습니다.")
                 .data(responseDto)
@@ -32,10 +32,10 @@ public class EscapeRoomController {
     }
 
     @GetMapping("/{storeId}/themes")
-    public ResponseEntity<ResponseMessage<EscapeRoomsGetResponseDto>> getEscapeRooms(@PathVariable Long storeId, User manager) {
-        EscapeRoomsGetResponseDto responseDto = escapeRoomService.getEscapeRooms(storeId, manager);
+    public ResponseEntity<ResponseMessage<ThemeGetResponseDto>> getEscapeRooms(@PathVariable Long storeId, User manager) {
+        ThemeGetResponseDto responseDto = themeService.getThemes(storeId, manager);
 
-        ResponseMessage<EscapeRoomsGetResponseDto> responseMessage = ResponseMessage.<EscapeRoomsGetResponseDto>builder()
+        ResponseMessage<ThemeGetResponseDto> responseMessage = ResponseMessage.<ThemeGetResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("해당 방탈출 카페의 모든 테마 조회가 완료되었습니다.")
                 .data(responseDto)
@@ -45,10 +45,10 @@ public class EscapeRoomController {
     }
 
     @PutMapping("/themes/{themeId}")
-    public ResponseEntity<ResponseMessage<EscapeRoomDetailResponseDto>> modifyEscapeRoom(@PathVariable Long themeId, @RequestBody EscapeRoomModifyRequestDto requestDto, User manager) {
-        EscapeRoomDetailResponseDto responseDto = escapeRoomService.modifyEscapeRoom(themeId, requestDto, manager);
+    public ResponseEntity<ResponseMessage<ThemeDetailResponseDto>> modifyEscapeRoom(@PathVariable Long themeId, @RequestBody ThemeModifyRequestDto requestDto, User manager) {
+        ThemeDetailResponseDto responseDto = themeService.modifyTheme(themeId, requestDto, manager);
 
-        ResponseMessage<EscapeRoomDetailResponseDto> responseMessage = ResponseMessage.<EscapeRoomDetailResponseDto>builder()
+        ResponseMessage<ThemeDetailResponseDto> responseMessage = ResponseMessage.<ThemeDetailResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("방탈출 테마 수정이 완료되었습니다.")
                 .data(responseDto)
@@ -59,7 +59,7 @@ public class EscapeRoomController {
 
     @DeleteMapping("/themes/{themeId}")
     public ResponseEntity<ResponseMessage<Void>> deleteEscapeRoom(@PathVariable Long themeId, User manager) {
-        escapeRoomService.deleteEscapeRoom(themeId, manager);
+        themeService.deleteTheme(themeId, manager);
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.OK.value())

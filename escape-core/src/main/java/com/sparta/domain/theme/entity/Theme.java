@@ -3,8 +3,8 @@ package com.sparta.domain.theme.entity;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.global.entity.TimeStamped;
-import com.sparta.global.exception.customException.EscapeRoomException;
-import com.sparta.global.exception.errorCode.EscapeRoomErrorCode;
+import com.sparta.global.exception.customException.ThemeException;
+import com.sparta.global.exception.errorCode.ThemeErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,34 +54,34 @@ public class Theme extends TimeStamped {
     private List<Reservation> reservations;
 
     @Builder
-    public EscapeRoom(String title, String contents, Long level, String duration, String theme, String themeImage, Long price, EscapeRoomStatus escapeRoomStatus, Store store) {
+    public Theme(String title, String contents, Long level, String duration, ThemeType themeType, String themeImage, Long price, ThemeStatus themeStatus, Store store) {
         this.title = title;
         this.contents = contents;
         this.level = level;
         this.duration = duration;
-        this.theme = theme;
+        this.themeType = themeType;
         this.themeImage = themeImage;
         this.price = price;
-        this.escapeRoomStatus = escapeRoomStatus;
+        this.themeStatus = themeStatus;
         this.store = store;
     }
 
-    public void updateEscapeRoom(String title, String contents, Long level, String duration, String theme, Long price) {
+    public void updateTheme(String title, String contents, Long level, String duration, ThemeType themeType, Long price) {
         this.title = title;
         this.contents = contents;
         this.level = level;
         this.duration = duration;
-        this.theme = theme;
+        this.themeType = themeType;
         this.price = price;
     }
 
-    public void deactivateEscapeRoom() {
-        this.escapeRoomStatus = EscapeRoomStatus.DEACTIVE;
+    public void deactivateTheme() {
+        this.themeStatus = ThemeStatus.DEACTIVE;
     }
 
-    public void verifyEscapeRoomIsActive() {
-        if(!this.escapeRoomStatus.equals(EscapeRoomStatus.ACTIVE)) {
-            throw new EscapeRoomException(EscapeRoomErrorCode.INVALID_ESCAPE_ROOM_STATUS);
+    public void verifyThemeIsActive() {
+        if(!this.themeStatus.equals(ThemeStatus.ACTIVE)) {
+            throw new ThemeException(ThemeErrorCode.INVALID_THEME_STATUS);
         }
     }
 }
