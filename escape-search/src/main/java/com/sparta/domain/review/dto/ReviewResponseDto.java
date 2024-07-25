@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ReviewResponseDto {
+    private Long reviewId;
     private Double rating;
     private String contents;
     private String email;
@@ -14,6 +15,7 @@ public class ReviewResponseDto {
     private LocalDateTime updateAt;
 
     public ReviewResponseDto(Review review){
+        this.reviewId = review.getId();
         this.rating = review.getRating();
         this.contents = review.getContents();
         this.email = review.getUser().getEmail();

@@ -1,6 +1,6 @@
 package com.sparta.domain.reaction.entity;
 
-public enum ReactionStatus {
+public enum ReactionType {
     GOOD,
     BAD
 }

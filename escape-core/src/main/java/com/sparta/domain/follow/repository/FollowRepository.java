@@ -13,7 +13,6 @@ import java.util.Optional;
 public interface FollowRepository extends JpaRepository<Follow, Long>, FollowRepositoryCustom {
 
     Optional<Follow> findByUserAndStore(User user, Store store);
-    List<Follow> findByUser(User user);
 
     default void checkIfAlreadyFollowed(User user, Store store){
         if (findByUserAndStore(user, store).isPresent()) {
