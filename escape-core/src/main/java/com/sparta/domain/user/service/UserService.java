@@ -1,6 +1,7 @@
 package com.sparta.domain.user.service;
 
 import com.sparta.domain.user.dto.request.SignupRequestDto;
+import com.sparta.domain.user.dto.request.WithdrawRequestDto;
 import com.sparta.domain.user.dto.response.SignupResponseDto;
 import com.sparta.domain.user.entity.OAuthProvider;
 import com.sparta.domain.user.entity.User;
@@ -9,6 +10,7 @@ import com.sparta.domain.user.entity.UserType;
 import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.global.exception.customException.UserException;
 import com.sparta.global.exception.errorCode.UserErrorCode;
+import com.sparta.jwt.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenService refreshTokenService;
 
 
     /**
@@ -48,13 +51,52 @@ public class UserService {
         return new SignupResponseDto(user);
     }
 
-    /**
-     * useremail 유효성 검사
-     */
+    // TODO : 이메일 중복 검사
     private void duplicateUserEmail(String email) {
         Optional<User> findUser = userRepository.findByEmail(email);
         if (findUser.isPresent()) {
             throw new UserException(UserErrorCode.USER_DUPLICATION);
         }
+    }
+
+    // TODO : 이메일 인증받은 유저 상태 업데이트
+    @Transactional
+    public void updateUserActive(User user) {
+
+        user.ActiveUser();
+        userRepository.save(user);
+    }
+
+    // TODO : 로그아웃 전 사용자 조회
+    @Transactional
+    public Long logout(Long userId) {
+
+        User user = findByUserId(userId);
+        refreshTokenService.deleteToken(user.getEmail());
+
+        return user.getId();
+    }
+
+    // TODO : 회원 탈퇴
+    @Transactional
+    public Long withdraw(WithdrawRequestDto requestDto, Long userId) {
+
+        User user = findByUserId(userId);
+
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+            throw new UserException(UserErrorCode.PASSWORD_NOT_MATCH);
+        }
+
+        user.changeStatus(UserStatus.WITHDRAW);
+        userRepository.save(user);
+
+        return user.getId();
+    }
+
+    // TODO : 유저 찾기
+    public User findByUserId(Long userId) {
+
+        return userRepository.findById(userId).orElseThrow(
+                () -> new UserException(UserErrorCode.USER_NOT_FOUND));
     }
 }

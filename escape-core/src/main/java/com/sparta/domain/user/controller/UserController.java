@@ -1,6 +1,7 @@
 package com.sparta.domain.user.controller;
 
 import com.sparta.domain.user.dto.request.SignupRequestDto;
+import com.sparta.domain.user.dto.request.WithdrawRequestDto;
 import com.sparta.domain.user.dto.response.SignupResponseDto;
 import com.sparta.domain.user.service.UserService;
 import com.sparta.global.response.ResponseMessage;
@@ -49,6 +50,20 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    // TODO :
+    // TODO : 회원 탈퇴
+    @PutMapping("/withdraw")
+    public ResponseEntity<ResponseMessage<Long>> withdraw(
+            @Valid @RequestBody WithdrawRequestDto withdrawRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+       Long userId = userService.withdraw(withdrawRequestDto, userDetails.getUser().getId());
+
+        ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("회원 탈퇴가 완료되었습니다.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
 
 }
