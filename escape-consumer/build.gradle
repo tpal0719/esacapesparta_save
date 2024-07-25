@@ -7,4 +7,6 @@ jar{enabled = true}
 
 dependencies {
     implementation project(':escape-core')
+    implementation platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.5")
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }
