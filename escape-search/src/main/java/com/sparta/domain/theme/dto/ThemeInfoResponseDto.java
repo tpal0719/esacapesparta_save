@@ -8,10 +8,10 @@ public class ThemeInfoResponseDto {
     private Long themeId;
     private String title;
     private String contents;
-    private Long level;
+    private Integer level;
     private Integer minPlayer;
     private Integer maxPlayer;
-    private String duration;
+    private Integer duration;
     private String themeImage;
     private Long price;
 

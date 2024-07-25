@@ -22,17 +22,19 @@ public class Theme extends TimeStamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String contents;
 
     @Column(nullable = false)
-    private Long level = 0L;
+    @Min(1) @Max(5)
+    private Integer level = 0;
 
     @Column(nullable = false)
-    private String duration;
+    @Min(1)
+    private Integer duration;
 
     @Column(nullable = false)
     @Min(1)
@@ -64,7 +66,7 @@ public class Theme extends TimeStamped {
     private List<Reservation> reservations;
 
     @Builder
-    public Theme(String title, String contents, Long level, String duration, Integer minPlayer, Integer maxPlayer, ThemeType themeType, String themeImage, Long price, ThemeStatus themeStatus, Store store) {
+    public Theme(String title, String contents, Integer level, Integer duration, Integer minPlayer, Integer maxPlayer, ThemeType themeType, String themeImage, Long price, ThemeStatus themeStatus, Store store) {
         this.title = title;
         this.contents = contents;
         this.level = level;
@@ -78,11 +80,13 @@ public class Theme extends TimeStamped {
         this.store = store;
     }
 
-    public void updateTheme(String title, String contents, Long level, String duration, Integer minPlayer, Integer maxPlayer,ThemeType themeType, Long price) {
+    public void updateTheme(String title, String contents, Integer level, Integer duration, Integer minPlayer, Integer maxPlayer,ThemeType themeType, Long price) {
         this.title = title;
         this.contents = contents;
         this.level = level;
         this.duration = duration;
+        this.minPlayer = minPlayer;
+        this.maxPlayer = maxPlayer;
         this.themeType = themeType;
         this.price = price;
     }

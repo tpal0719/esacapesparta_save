@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ThemeTimeRepository extends JpaRepository<ThemeTime, Long>, ThemeTimeRepositoryCustom {
     List<ThemeTime> findByTheme(Theme theme);
+
+    List<ThemeTime> findAllByThemeId(Long themeId);
 }

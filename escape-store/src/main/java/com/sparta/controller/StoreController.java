@@ -2,7 +2,7 @@ package com.sparta.controller;
 
 import com.sparta.dto.request.StoreModifyRequestDto;
 import com.sparta.dto.request.StoreRegisterRequestDto;
-import com.sparta.dto.response.StoreModifyResponseDto;
+import com.sparta.dto.response.StoreDetailResponseDto;
 import com.sparta.dto.response.StoresGetResponseDto;
 import com.sparta.dto.response.StoreRegisterResponseDto;
 import com.sparta.global.response.ResponseMessage;
@@ -65,14 +65,14 @@ public class StoreController {
      */
     @PutMapping("/{storeId}")
     @Secured({"MANAGER", "ADMIN"})
-    public ResponseEntity<ResponseMessage<StoreModifyResponseDto>> modifyStore(
+    public ResponseEntity<ResponseMessage<StoreDetailResponseDto>> modifyStore(
             @PathVariable Long storeId,
             @Valid @RequestBody StoreModifyRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        StoreModifyResponseDto responseDto = storeService.modifyStore(storeId, requestDto, userDetails.getUser());
+        StoreDetailResponseDto responseDto = storeService.modifyStore(storeId, requestDto, userDetails.getUser());
 
-        ResponseMessage<StoreModifyResponseDto> responseMessage = ResponseMessage.<StoreModifyResponseDto>builder()
+        ResponseMessage<StoreDetailResponseDto> responseMessage = ResponseMessage.<StoreDetailResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("방탈출 카페 수정이 완료되었습니다.")
                 .data(responseDto)

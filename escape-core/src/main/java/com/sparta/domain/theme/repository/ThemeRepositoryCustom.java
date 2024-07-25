@@ -11,4 +11,6 @@ public interface ThemeRepositoryCustom {
     Page<Theme> findByStore(Store store, Pageable pageable);
 
     Theme findByActiveTheme(Long themeId);
+
+    Theme findThemeOfActiveStore(Long themeId);
 }

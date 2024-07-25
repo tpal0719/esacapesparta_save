@@ -11,6 +11,7 @@ import jakarta.annotation.PostConstruct;
 
 @Configuration
 public class RedisConfig {
+
     @Value("${spring.mail.host}")
     private String redisHost;
 

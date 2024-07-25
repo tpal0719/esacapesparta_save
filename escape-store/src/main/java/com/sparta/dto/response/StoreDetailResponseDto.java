@@ -7,6 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class StoreDetailResponseDto {
+    private Long storeId;
     private String name;
     private String address;
     private String phoneNumber;
@@ -18,6 +19,7 @@ public class StoreDetailResponseDto {
     private String managerName;
 
     public StoreDetailResponseDto(Store store) {
+        this.storeId = store.getId();
         this.name = store.getName();
         this.address = store.getAddress();
         this.phoneNumber = store.getPhoneNumber();

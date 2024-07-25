@@ -1,6 +1,8 @@
 package com.sparta.jwt;
 
 import com.sparta.domain.user.entity.User;
+import com.sparta.global.exception.customException.RefreshTokenException;
+import com.sparta.global.exception.errorCode.RefreshTokenErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,7 @@ public class RefreshTokenService {
     @Transactional
     public void deleteToken(String email) {
         RefreshToken refreshToken = refreshTokenRepository.findByEmail(email).orElseThrow( //
-                () -> new IllegalArgumentException("해당 사용자의 refresh Token이 존재하지 않습니다.")
+                () -> new RefreshTokenException(RefreshTokenErrorCode.REFRESH_TOKEN_NOT_FOUND)
         );
         refreshTokenRepository.delete(refreshToken);
     }

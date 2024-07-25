@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.global.exception.customException.GlobalCustomException;
 import com.sparta.global.exception.errorCode.CommonErrorCode;
 import com.sparta.global.response.ResponseErrorMessage;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -45,6 +48,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(CommonErrorCode.BAD_REQUEST.getHttpStatusCode())
                 .body(errorMessage);
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ResponseErrorMessage> handleConstraintViolationException(ConstraintViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getConstraintViolations().forEach(violation -> errors.put("parameter", violation.getMessage()));
+
+        ResponseErrorMessage errorMessage = new ResponseErrorMessage(CommonErrorCode.BAD_REQUEST, errors);
+
+        return ResponseEntity.status(CommonErrorCode.BAD_REQUEST.getHttpStatusCode())
+                .body(errorMessage);
+    }
+
 
     /**
      * CustomException 예외 처리
