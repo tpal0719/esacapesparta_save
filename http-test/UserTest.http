@@ -18,3 +18,29 @@ Content-Type: application/json
   "password": "Test1234!"
 }
 > {% client.global.set("user1Auth", response.headers.valueOf("Authorization")); %}
+
+### 매니저 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "email": "mmarland0@facebook.com",
+  "password": "Test1234!"
+}
+> {% client.global.set("manager1Auth", response.headers.valueOf("Authorization")); %}
+
+
+### 관리자 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "email": "admin@joomla.org",
+  "password": "Test1234!"
+}
+> {% client.global.set("adminAuth", response.headers.valueOf("Authorization")); %}
+
+### 팔로우 요청
+DELETE http://localhost:8083/follow/stores/6
+Content-Type: application/json
+Authorization: {{user1Auth}}
