@@ -93,6 +93,17 @@ public class ThemeTimeService {
         return new ThemeTimeDetailResponseDto(themeTime);
     }
 
+    @Transactional
+    public void deleteThemeTime(Long themeTimeId, User user) {
+        ThemeTime themeTime = themeTimeRepository.findThemeTimeOfActiveStore(themeTimeId);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            themeTime.getTheme().getStore().checkManager(user);
+        }
+
+        themeTimeRepository.delete(themeTime);
+    }
+
     private void checkValidStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
         if(startTime.isAfter(endTime)) {
             throw new ThemeTimeException(ThemeTimeErrorCode.INVALID_START_AND_END_TIME);

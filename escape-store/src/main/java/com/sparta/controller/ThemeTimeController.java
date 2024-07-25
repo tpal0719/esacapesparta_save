@@ -62,7 +62,7 @@ public class ThemeTimeController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    @PutMapping("theme-time/{themeTimeId}")
+    @PutMapping("/theme-time/{themeTimeId}")
     public ResponseEntity<ResponseMessage<ThemeTimeDetailResponseDto>> modifyThemeTime(
             @PathVariable Long themeTimeId,
             @Valid @RequestBody ThemeTimeModifyRequestDto requestDto,
@@ -74,6 +74,21 @@ public class ThemeTimeController {
                 .statusCode(HttpStatus.OK.value())
                 .message("방탈출 테마 예약 시간대 수정이 완료되었습니다.")
                 .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    @DeleteMapping("/theme-time/{themeTimeId}")
+    public ResponseEntity<ResponseMessage<Void>> deleteThemeTime(
+            @PathVariable Long themeTimeId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        themeTimeService.deleteThemeTime(themeTimeId, userDetails.getUser());
+
+        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("방탈출 테마 예약 시간대 삭제가 완료되었습니다.")
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
