@@ -1,8 +1,17 @@
 package com.sparta.domain.theme.repository;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.domain.store.entity.QStore;
+import com.sparta.domain.store.entity.StoreStatus;
+import com.sparta.domain.theme.entity.QTheme;
 import com.sparta.domain.theme.entity.QThemeTime;
+import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeTime;
+import com.sparta.global.exception.customException.ThemeException;
+import com.sparta.global.exception.customException.ThemeTimeException;
+import com.sparta.global.exception.errorCode.ThemeErrorCode;
+import com.sparta.global.exception.errorCode.ThemeTimeErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,5 +36,23 @@ public class ThemeTimeRepositoryImpl implements ThemeTimeRepositoryCustom{
         return jpaQueryFactory.selectFrom(themeTime)
                 .where(themeTime.startTime.between(startOfDay, endOfDay))
                 .fetch();
+    }
+
+    @Override
+    public ThemeTime findThemeTimeOfActiveStore(Long themeTimeId) {
+        QThemeTime themeTime = QThemeTime.themeTime;
+        QTheme theme = QTheme.theme;
+        QStore store = QStore.store;
+
+        JPAQuery<ThemeTime> query = jpaQueryFactory.selectFrom(themeTime)
+                .leftJoin(themeTime.theme, theme).fetchJoin()
+                .leftJoin(theme.store, store).fetchJoin()
+                .where(
+                        themeTime.id.eq(themeTimeId),
+                        store.storeStatus.eq(StoreStatus.ACTIVE)
+                );
+
+        return Optional.ofNullable(query.fetchFirst()).orElseThrow(() ->
+                new ThemeTimeException(ThemeTimeErrorCode.THEME_TIME_NOT_FOUND));
     }
 }

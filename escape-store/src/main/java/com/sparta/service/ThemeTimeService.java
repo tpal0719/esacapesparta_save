@@ -75,9 +75,23 @@ public class ThemeTimeService {
         return themeTimes.stream().map(ThemeTimeDetailResponseDto::new).toList();
     }
 
-//    public ThemeTimeDetailResponseDto modifyThemeTime(Long themeTimeId, ThemeTimeModifyRequestDto requestDto, User user) {
-//
-//    }
+    @Transactional
+    public ThemeTimeDetailResponseDto modifyThemeTime(Long themeTimeId, ThemeTimeModifyRequestDto requestDto, User user) {
+        ThemeTime themeTime = themeTimeRepository.findThemeTimeOfActiveStore(themeTimeId);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            themeTime.getTheme().getStore().checkManager(user);
+        }
+
+        LocalDateTime startTime = parseDateTimeStringToLocalDateTime(requestDto.getStartTime());
+        LocalDateTime endTime = parseDateTimeStringToLocalDateTime(requestDto.getEndTime());
+        checkValidStartTimeAndEndTime(startTime, endTime);
+
+        themeTime.updateThemeTime(startTime, endTime);
+        themeTimeRepository.save(themeTime);
+
+        return new ThemeTimeDetailResponseDto(themeTime);
+    }
 
     private void checkValidStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
         if(startTime.isAfter(endTime)) {

@@ -34,4 +34,9 @@ public class ThemeTime {
         this.endTime = endTime;
         this.theme = theme;
     }
+
+    public void updateThemeTime(LocalDateTime startTime, LocalDateTime endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }
