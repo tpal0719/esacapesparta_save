@@ -9,7 +9,6 @@ import com.sparta.domain.user.entity.UserType;
 import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.global.exception.customException.UserException;
 import com.sparta.global.exception.errorCode.UserErrorCode;
-import com.sparta.jwt.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RefreshTokenService refreshTokenService;
 
 
     /**
@@ -43,44 +41,20 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         User user = new User(requestDto.getName(), requestDto.getEmail(), encodedPassword,
-                OAuthProvider.ORIGIN, UserType.USER, UserStatus.DEACTIVE);
+                OAuthProvider.ORIGIN, UserType.USER, UserStatus.ACTIVE);
         // ORIGIN 일단 구현 -> 나중에 @kakao, @google 등으로 이메일 확인해서 swtich case로 구현 생각중
         userRepository.save(user);
 
         return new SignupResponseDto(user);
     }
 
-    // TODO : 이메일 중복 검사
+    /**
+     * useremail 유효성 검사
+     */
     private void duplicateUserEmail(String email) {
-
         Optional<User> findUser = userRepository.findByEmail(email);
         if (findUser.isPresent()) {
             throw new UserException(UserErrorCode.USER_DUPLICATION);
         }
-    }
-
-    // TODO : 이메일 인증받은 유저 상태 업데이트
-    @Transactional
-    public void updateUserActive(User user) {
-
-        user.ActiveUser();
-        userRepository.save(user);
-    }
-
-    // TODO : 로그아웃 전 사용자 조회
-    @Transactional
-    public Long logout(Long userId) {
-
-        User user = findByUserId(userId);
-        refreshTokenService.deleteToken(user.getEmail());
-
-        return user.getId();
-    }
-
-    // TODO : 유저 찾기
-    public User findByUserId(Long userId) {
-
-        return userRepository.findById(userId).orElseThrow(
-                () -> new UserException(UserErrorCode.USER_NOT_FOUND));
     }
 }

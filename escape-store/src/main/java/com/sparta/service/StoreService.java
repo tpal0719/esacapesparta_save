@@ -7,9 +7,9 @@ import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.dto.request.StoreRegisterRequestDto;
 import com.sparta.dto.request.StoreModifyRequestDto;
+import com.sparta.dto.response.StoreDetailResponseDto;
 import com.sparta.dto.response.StoreRegisterResponseDto;
 import com.sparta.dto.response.StoresGetResponseDto;
-import com.sparta.dto.response.StoreModifyResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreModifyResponseDto modifyStore(Long storeId, StoreModifyRequestDto requestDto, User user) {
+    public StoreDetailResponseDto modifyStore(Long storeId, StoreModifyRequestDto requestDto, User user) {
         Store store = storeRepository.findByActiveStore(storeId);
 
         if(user.getUserType() == UserType.MANAGER) {
@@ -61,7 +61,7 @@ public class StoreService {
         );
 
         storeRepository.save(store);
-        return new StoreModifyResponseDto(store);
+        return new StoreDetailResponseDto(store);
     }
 
     @Transactional
