@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/manager/stores")
@@ -28,11 +29,12 @@ public class StoreController {
     @PostMapping
     @Secured("MANAGER")
     public ResponseEntity<ResponseMessage<StoreRegisterResponseDto>> registerStore(
-            @Valid @RequestBody StoreRegisterRequestDto requestDto,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @Valid @RequestPart StoreRegisterRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
 
-        StoreRegisterResponseDto responseDto = storeService.registerStore(requestDto, userDetails.getUser());
+        StoreRegisterResponseDto responseDto = storeService.registerStore(file, requestDto, userDetails.getUser());
 
         ResponseMessage<StoreRegisterResponseDto> responseMessage = ResponseMessage.<StoreRegisterResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())

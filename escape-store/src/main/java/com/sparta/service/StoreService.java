@@ -10,9 +10,13 @@ import com.sparta.dto.request.StoreModifyRequestDto;
 import com.sparta.dto.response.StoreDetailResponseDto;
 import com.sparta.dto.response.StoreRegisterResponseDto;
 import com.sparta.dto.response.StoresGetResponseDto;
+import com.sparta.global.exception.customException.S3Exception;
+import com.sparta.s3.S3Uploader;
+import com.sparta.s3.S3Util;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,22 +24,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreService {
     private final StoreRepository storeRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
-    public StoreRegisterResponseDto registerStore(StoreRegisterRequestDto requestDto, User manager) {
-
+    public StoreRegisterResponseDto registerStore(MultipartFile file, StoreRegisterRequestDto requestDto, User manager) {
         Store store = Store.builder()
                 .name(requestDto.getName())
                 .address(requestDto.getAddress())
                 .phoneNumber(requestDto.getPhoneNumber())
                 .workHours(requestDto.getWorkHours())
-                .storeImage("temp")
                 .manager(manager)
                 .storeRegion(requestDto.getStoreRegion())
                 .storeStatus(StoreStatus.PENDING)
                 .build();
 
         storeRepository.save(store);
+
+        String storeImage;
+        try {
+            storeImage = s3Uploader.uploadStoreImage(file, store.getId());
+        } catch(S3Exception e) {
+            storeImage = S3Util.DEFAULT_IMAGE_URL;
+        }
+
+        store.updateStoreImage(storeImage);
         return new StoreRegisterResponseDto(store);
     }
 

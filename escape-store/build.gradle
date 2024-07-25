@@ -7,4 +7,7 @@ jar{enabled = true}
 
 dependencies {
     implementation project(':escape-core')
+
+    // AWS
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.0'
 }
