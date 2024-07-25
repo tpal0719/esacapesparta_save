@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface ReviewRepositoryCustom {
     List<Review> findByThemeReview(Theme theme);
+    List<Review> findByMyReviews(User user);
+    Review findByReview(Long reviewId);
 }

@@ -1,6 +1,5 @@
 package com.sparta.jwt;
 
-import com.sparta.domain.user.entity.User;
 import com.sparta.global.exception.customException.UserException;
 import com.sparta.global.exception.errorCode.UserErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;

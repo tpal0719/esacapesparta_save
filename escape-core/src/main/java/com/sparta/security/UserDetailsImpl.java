@@ -65,4 +65,26 @@ public class UserDetailsImpl implements UserDetails {
 
         return authorities;
     }
+
+    // @feign 사용하기 위한 마이그레이션
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+    // --------
 }

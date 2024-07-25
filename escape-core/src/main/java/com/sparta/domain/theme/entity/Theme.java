@@ -6,9 +6,9 @@ import com.sparta.global.entity.TimeStamped;
 import com.sparta.global.exception.customException.ThemeException;
 import com.sparta.global.exception.errorCode.ThemeErrorCode;
 import jakarta.persistence.*;
-import lombok.Builder;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
