@@ -49,7 +49,7 @@ public class LocalDateTimeUtil {
 
     public static void checkValidStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
         if(startTime.isAfter(endTime)) {
-            throw new ThemeTimeException(ThemeTimeErrorCode.INVALID_START_AND_END_TIME);
+            throw new LocalDateTimeException(LocalDateTimeErrorCode.INVALID_START_AND_END_TIME);
         }
     }
 
