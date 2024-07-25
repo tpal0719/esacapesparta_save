@@ -19,10 +19,11 @@ public class ThemeModifyRequestDto {
     @NotNull(message = "방탈출 테마 난이도는 필수값입니다.")
     @Min(value = 1)
     @Max(value = 5)
-    private Long level;
+    private Integer level;
 
-    @NotBlank(message = "방탈출 테마 플레이 시간은 필수값입니다.")
-    private String duration;
+    @NotNull(message = "방탈출 테마 플레이 시간은 필수값입니다.")
+    @Min(value = 5)
+    private Integer duration;
 
     @NotNull(message = "플레이 최소 인원은 필수값입니다.")
     @Min(value = 1)

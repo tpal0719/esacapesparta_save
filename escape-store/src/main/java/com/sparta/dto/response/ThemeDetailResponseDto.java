@@ -10,8 +10,8 @@ public class ThemeDetailResponseDto {
     private Long themeId;
     private String title;
     private String contents;
-    private Long level;
-    private String duration;
+    private Integer level;
+    private Integer duration;
     private String theme;
     private Long price;
     private ThemeStatus themeStatus;

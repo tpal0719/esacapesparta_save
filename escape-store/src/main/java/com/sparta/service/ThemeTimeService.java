@@ -1,6 +1,5 @@
 package com.sparta.service;
 
-import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.theme.repository.ThemeRepository;
@@ -10,9 +9,6 @@ import com.sparta.domain.user.entity.UserType;
 import com.sparta.dto.request.ThemeTimeCreateRequestDto;
 import com.sparta.dto.request.ThemeTimeModifyRequestDto;
 import com.sparta.dto.response.ThemeTimeDetailResponseDto;
-import com.sparta.global.exception.customException.ThemeTimeException;
-import com.sparta.global.exception.errorCode.ThemeTimeErrorCode;
-import com.sparta.global.util.LocalDateTimeUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.sparta.global.util.LocalDateTimeUtils.*;
+import static com.sparta.global.util.LocalDateTimeUtil.*;
 
 @Service
 @RequiredArgsConstructor
@@ -38,9 +34,7 @@ public class ThemeTimeService {
         }
 
         LocalDateTime startTime = parseDateTimeStringToLocalDateTime(requestDto.getStartTime());
-        LocalDateTime endTime = parseDateTimeStringToLocalDateTime(requestDto.getEndTime());
-
-        checkValidStartTimeAndEndTime(startTime, endTime);
+        LocalDateTime endTime = calculateEndTime(startTime, theme.getDuration());
 
         ThemeTime themeTime = ThemeTime.builder()
                 .startTime(startTime)
@@ -84,8 +78,7 @@ public class ThemeTimeService {
         }
 
         LocalDateTime startTime = parseDateTimeStringToLocalDateTime(requestDto.getStartTime());
-        LocalDateTime endTime = parseDateTimeStringToLocalDateTime(requestDto.getEndTime());
-        checkValidStartTimeAndEndTime(startTime, endTime);
+        LocalDateTime endTime = calculateEndTime(startTime, themeTime.getTheme().getDuration());
 
         themeTime.updateThemeTime(startTime, endTime);
         themeTimeRepository.save(themeTime);
@@ -104,9 +97,4 @@ public class ThemeTimeService {
         themeTimeRepository.delete(themeTime);
     }
 
-    private void checkValidStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
-        if(startTime.isAfter(endTime)) {
-            throw new ThemeTimeException(ThemeTimeErrorCode.INVALID_START_AND_END_TIME);
-        }
-    }
 }

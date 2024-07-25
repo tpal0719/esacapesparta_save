@@ -1,14 +1,16 @@
 package com.sparta.global.util;
 
 import com.sparta.global.exception.customException.LocalDateTimeException;
+import com.sparta.global.exception.customException.ThemeTimeException;
 import com.sparta.global.exception.errorCode.LocalDateTimeErrorCode;
+import com.sparta.global.exception.errorCode.ThemeTimeErrorCode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class LocalDateTimeUtils {
+public class LocalDateTimeUtil {
 
     private final static DateTimeFormatter defaultFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -43,5 +45,15 @@ public class LocalDateTimeUtils {
         if(localDateTime.isBefore(LocalDateTime.now())) {
             throw new LocalDateTimeException(LocalDateTimeErrorCode.INVALID_PAST_TIME);
         }
+    }
+
+    public static void checkValidStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
+        if(startTime.isAfter(endTime)) {
+            throw new ThemeTimeException(ThemeTimeErrorCode.INVALID_START_AND_END_TIME);
+        }
+    }
+
+    public static LocalDateTime calculateEndTime(LocalDateTime startTime, Integer duration) {
+        return startTime.plusMinutes(duration);
     }
 }

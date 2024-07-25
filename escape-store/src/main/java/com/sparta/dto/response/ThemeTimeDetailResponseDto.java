@@ -1,7 +1,7 @@
 package com.sparta.dto.response;
 
 import com.sparta.domain.theme.entity.ThemeTime;
-import com.sparta.global.util.LocalDateTimeUtils;
+import com.sparta.global.util.LocalDateTimeUtil;
 import lombok.Getter;
 
 @Getter
@@ -14,7 +14,7 @@ public class ThemeTimeDetailResponseDto {
     public ThemeTimeDetailResponseDto(ThemeTime themeTime) {
         this.themeTimeId = themeTime.getId();
         this.themeTitle = themeTime.getTheme().getTitle();
-        this.startTime = LocalDateTimeUtils.parseLocalDateTimeToString(themeTime.getStartTime());
-        this.endTime = LocalDateTimeUtils.parseLocalDateTimeToString(themeTime.getEndTime());
+        this.startTime = LocalDateTimeUtil.parseLocalDateTimeToString(themeTime.getStartTime());
+        this.endTime = LocalDateTimeUtil.parseLocalDateTimeToString(themeTime.getEndTime());
     }
 }

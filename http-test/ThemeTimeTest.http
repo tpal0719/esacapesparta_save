@@ -1,11 +1,10 @@
 ### 테마 예약 시간대 등록
-POST http://localhost:8088/manager/stores/themes/8/theme-time
+POST http://localhost:8088/manager/stores/themes/3/theme-time
 Authorization: {{manager1Auth}}
 Content-Type: application/json
 
 {
-  "startTime": "2024-07-25 16:00",
-  "endTime": "2024-07-25 20:00"
+  "startTime": "2024-07-25 17:00"
 }
 
 ### 테마 예약 시간대 조회
@@ -18,11 +17,10 @@ Authorization: {{manager1Auth}}
 
 
 ### 테마 예약 시간대 수정
-PUT http://localhost:8088/manager/stores/themes/theme-time/6
+PUT http://localhost:8088/manager/stores/themes/theme-time/3
 Authorization: {{manager1Auth}}
 Content-Type: application/json
 
 {
-  "startTime": "2024-07-25 19:00",
-  "endTime": "2024-07-25 20:00"
+  "startTime": "2024-07-25 19:00"
 }
