@@ -12,21 +12,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/review")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
+
+
     /**
-     * 테마 리뷰 수정
+     * 테마 리뷰 등록
      * @param createReviewRequestDto 작성할 리뷰의 데이터 값
      * @param userDetails 로그인 유저
      * @return status.code, message, 작성한 리뷰
      */
-    @PostMapping
+    @PostMapping("/reviews")
     public ResponseEntity<ResponseMessage<CreateReviewResponseDto>> createReview(
             @Valid @RequestBody CreateReviewRequestDto createReviewRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -49,7 +52,7 @@ public class ReviewController {
      * @param userDetails 로그인 유저
      * @return status.code, message, 수정한 리뷰
      */
-    @PutMapping("/{reviewId}")
+    @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<ResponseMessage<UpdateReviewResponseDto>> updateReview(
             @PathVariable Long reviewId,
             @Valid @RequestBody UpdateReviewRequestDto updateReviewRequestDto,
@@ -68,12 +71,32 @@ public class ReviewController {
     }
 
     /**
+     * 리뷰 조회
+     * @param reviewId 조회할 리뷰 id
+     * @return 리뷰
+     */
+    @GetMapping("/reviews/{reviewId}")
+    public ResponseEntity<ResponseMessage<ReviewResponseDto>> getReview(
+            @PathVariable Long reviewId){
+        log.error("asdasda");
+        ReviewResponseDto responseDto = reviewService.getReview(reviewId);
+
+        ResponseMessage<ReviewResponseDto> responseMessage = ResponseMessage.<ReviewResponseDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("리뷰 조회 성공!")
+                .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    /**
      * 테마 리뷰 삭제
      * @param reviewId 수정할 리뷰의 id
      * @param userDetails 로그인 유저
      * @return status.code, message
      */
-    @DeleteMapping("/{reviewId}")
+    @DeleteMapping("/reviews/{reviewId}")
         public ResponseEntity<ResponseMessage<Void>> deleteReview(
                 @PathVariable Long reviewId,
                 @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -89,24 +112,51 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    @PostMapping("/{reviewId}/reaction")
-    public ResponseEntity<ResponseMessage<ReactionResponse>> createReaction(
+    /**
+     * 리액션 등록, 수정, 삭제
+     * @param reviewId 리액션할 리뷰 id
+     * @param reactionRequest 리액션 종류
+     * @param userDetails 로그인 유저
+     * @return status.code, message, 리액션 반환
+     */
+    @PostMapping("/reviews/{reviewId}/reaction")
+    public ResponseEntity<ResponseMessage<ReactionResponseDto>> createReaction(
             @PathVariable Long reviewId,
             @RequestBody ReactionRequest reactionRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        log.error("asdadsad");
-        ReactionResponse reactionResponse = reviewService.createReaction(reviewId, reactionRequest.getReactionType(), userDetails.getUser());
+        ReactionResponseDto reactionResponseDto = reviewService.createReaction(reviewId, reactionRequest.getReactionType(), userDetails.getUser());
 
-        String message = reactionResponse.getReactionStatus() ? "리액션 등록 성공!" : "리액션 취소 성공!";
+        String message = reactionResponseDto.getReactionStatus() ? "리액션 등록 성공!" : "리액션 취소 성공!";
 
-        ResponseMessage<ReactionResponse> responseMessage = ResponseMessage.<ReactionResponse>builder()
+        ResponseMessage<ReactionResponseDto> responseMessage = ResponseMessage.<ReactionResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(message)
-                .data(reactionResponse)
+                .data(reactionResponseDto)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
+
+    /**
+     * 내가 등록한 리뷰 전체 보기
+     * @param userDetail 로그인 유저
+     * @return 등록한 리뷰
+     */
+    @GetMapping("/mypage/reviews")
+    public ResponseEntity<ResponseMessage<List<ReviewResponseDto>>> getMyReviews(
+            @AuthenticationPrincipal UserDetailsImpl userDetail){
+
+        List<ReviewResponseDto> reviewResponseDtoList = reviewService.getMyReviews(userDetail.getUser());
+
+        ResponseMessage<List<ReviewResponseDto>> responseMessage = ResponseMessage.<List<ReviewResponseDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("리뷰 조회 성공!")
+                .data(reviewResponseDtoList)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
 
 
 }

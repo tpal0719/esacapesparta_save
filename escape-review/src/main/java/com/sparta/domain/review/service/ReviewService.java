@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -66,6 +68,17 @@ public class ReviewService {
     }
 
     /**
+     * 리뷰 조회
+     * @param reviewId 조회할 리뷰 id
+     * @return 리뷰
+     */
+    public ReviewResponseDto getReview(Long reviewId) {
+        Review review = reviewRepository.findByReview(reviewId);
+
+        return new ReviewResponseDto(review);
+    }
+
+    /**
      * 테마 리뷰 삭제
      * @param reviewId 수정할 리뷰의 id
      * @param user 로그인 유저
@@ -85,7 +98,7 @@ public class ReviewService {
      * @return 등록 true, 취소 false 반환
      */
     @Transactional
-    public ReactionResponse createReaction(Long reviewId, ReactionType reactionType, User user) {
+    public ReactionResponseDto createReaction(Long reviewId, ReactionType reactionType, User user) {
         Review review = reviewRepository.findByIdOrElse(reviewId);
         Reaction findReaction = reactionRepository.findByReviewAndUser(review, user).orElse(null);
 
@@ -96,20 +109,31 @@ public class ReviewService {
                     .review(review)
                     .build();
             reactionRepository.save(reaction);
-            return new ReactionResponse(reactionType, true);
+            return new ReactionResponseDto(reactionType, true);
         }
         else{
             return changeOrDeleteReaction(findReaction, reactionType);
         }
     }
 
-    private ReactionResponse changeOrDeleteReaction(Reaction findReaction, ReactionType reactionType) {
+    /**
+     * 내가 등록한 리뷰 전체 보기
+     * @param user 로그인 유저
+     * @return 등록한 리뷰
+     */
+    public List<ReviewResponseDto> getMyReviews(User user) {
+        List<Review> reviewList = reviewRepository.findByMyReviews(user);
+        return reviewList.stream().map(ReviewResponseDto::new).toList();
+    }
+
+    private ReactionResponseDto changeOrDeleteReaction(Reaction findReaction, ReactionType reactionType) {
         if (findReaction.getReactionType() != reactionType) {
             findReaction.update(reactionType);
-            return new ReactionResponse(reactionType, true);
+            return new ReactionResponseDto(reactionType, true);
         } else {
             reactionRepository.delete(findReaction);
-            return new ReactionResponse(null, false);
+            return new ReactionResponseDto(null, false);
         }
     }
+
 }
