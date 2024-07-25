@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class StoreRegisterResponseDto {
-    private Long id;
+    private Long storeId;
     private String name;
     private String address;
     private String phoneNumber;
@@ -20,7 +20,7 @@ public class StoreRegisterResponseDto {
 
 
     public StoreRegisterResponseDto(Store store) {
-        this.id = store.getId();
+        this.storeId = store.getId();
         this.name = store.getName();
         this.address = store.getAddress();
         this.phoneNumber = store.getPhoneNumber();
