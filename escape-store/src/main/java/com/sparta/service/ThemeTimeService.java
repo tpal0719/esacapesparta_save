@@ -16,7 +16,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.sparta.global.util.LocalDateTimeUtils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +38,8 @@ public class ThemeTimeService {
             store.checkManager(user);
         }
 
-        LocalDateTime startTime = LocalDateTimeUtils.parseStringToLocalDateTime(requestDto.getStartTime());
-        LocalDateTime endTime = LocalDateTimeUtils.parseStringToLocalDateTime(requestDto.getEndTime());
+        LocalDateTime startTime = parseDateTimeStringToLocalDateTime(requestDto.getStartTime());
+        LocalDateTime endTime = parseDateTimeStringToLocalDateTime(requestDto.getEndTime());
 
         checkValidStartTimeAndEndTime(startTime, endTime);
 
@@ -49,10 +53,30 @@ public class ThemeTimeService {
         return new ThemeTimeDetailResponseDto(themeTime);
     }
 
+    public List<ThemeTimeDetailResponseDto> getThemeTimes(Long themeId, String date, User user) {
+        Theme theme = themeRepository.findByIdOrElseThrow(themeId);
+        Store store = theme.getStore();
+        store.verifyStoreIsActive();
+
+        if(user.getUserType() == UserType.MANAGER) {
+            store.checkManager(user);
+        }
+
+        List<ThemeTime> themeTimes;
+        if(date == null) {
+            // 매니저는 비활성화된 Theme의 예약 시간대도 조회 가능
+            themeTimes = themeTimeRepository.findAllByThemeId(themeId);
+        } else {
+            LocalDate searchDate = parseDateStringToLocalDate(date);
+            themeTimes = themeTimeRepository.findThemeTimesByDate(themeId, searchDate);
+        }
+
+        return themeTimes.stream().map(ThemeTimeDetailResponseDto::new).toList();
+    }
+
     private void checkValidStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
         if(startTime.isAfter(endTime)) {
             throw new ThemeTimeException(ThemeTimeErrorCode.INVALID_START_AND_END_TIME);
         }
     }
-
 }
