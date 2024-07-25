@@ -2,6 +2,7 @@ package com.sparta.controller;
 
 import com.sparta.dto.request.ThemeCreateRequestDto;
 import com.sparta.dto.request.ThemeTimeCreateRequestDto;
+import com.sparta.dto.request.ThemeTimeModifyRequestDto;
 import com.sparta.dto.response.ThemeDetailResponseDto;
 import com.sparta.dto.response.ThemeTimeDetailResponseDto;
 import com.sparta.global.response.ResponseMessage;
@@ -60,4 +61,22 @@ public class ThemeTimeController {
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
+
+//    @PutMapping("theme-time/{themeTimeId}")
+//    public ResponseEntity<ResponseMessage<ThemeTimeDetailResponseDto>> modifyThemeTime(
+//            @PathVariable Long themeTimeId,
+//            @Valid @RequestBody ThemeTimeModifyRequestDto requestDto,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails
+//    ) {
+//        ThemeTimeDetailResponseDto responseDto = themeTimeService.modifyThemeTime(themeTimeId, requestDto, userDetails.getUser());
+//
+//        ResponseMessage<ThemeTimeDetailResponseDto> responseMessage = ResponseMessage.<ThemeTimeDetailResponseDto>builder()
+//                .statusCode(HttpStatus.OK.value())
+//                .message("방탈출 테마 예약 시간대 수정이 완료되었습니다.")
+//                .data(responseDto)
+//                .build();
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+//    }
+
 }

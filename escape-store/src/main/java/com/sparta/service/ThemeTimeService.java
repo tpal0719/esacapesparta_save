@@ -8,6 +8,7 @@ import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.dto.request.ThemeTimeCreateRequestDto;
+import com.sparta.dto.request.ThemeTimeModifyRequestDto;
 import com.sparta.dto.response.ThemeTimeDetailResponseDto;
 import com.sparta.global.exception.customException.ThemeTimeException;
 import com.sparta.global.exception.errorCode.ThemeTimeErrorCode;
@@ -30,12 +31,10 @@ public class ThemeTimeService {
 
     @Transactional
     public ThemeTimeDetailResponseDto createThemeTime(Long themeId, ThemeTimeCreateRequestDto requestDto, User user) {
-        Theme theme = themeRepository.findByIdOrElseThrow(themeId);
-        Store store = theme.getStore();
-        store.verifyStoreIsActive();
+        Theme theme = themeRepository.findThemeOfActiveStore(themeId);
 
         if(user.getUserType() == UserType.MANAGER) {
-            store.checkManager(user);
+            theme.getStore().checkManager(user);
         }
 
         LocalDateTime startTime = parseDateTimeStringToLocalDateTime(requestDto.getStartTime());
@@ -54,12 +53,14 @@ public class ThemeTimeService {
     }
 
     public List<ThemeTimeDetailResponseDto> getThemeTimes(Long themeId, String date, User user) {
-        Theme theme = themeRepository.findByIdOrElseThrow(themeId);
-        Store store = theme.getStore();
-        store.verifyStoreIsActive();
+        Theme theme = themeRepository.findThemeOfActiveStore(themeId);
+
+//        Theme theme = themeRepository.findByIdOrElseThrow(themeId);
+//        Store store = theme.getStore();
+//        store.verifyStoreIsActive();
 
         if(user.getUserType() == UserType.MANAGER) {
-            store.checkManager(user);
+            theme.getStore().checkManager(user);
         }
 
         List<ThemeTime> themeTimes;
@@ -73,6 +74,10 @@ public class ThemeTimeService {
 
         return themeTimes.stream().map(ThemeTimeDetailResponseDto::new).toList();
     }
+
+//    public ThemeTimeDetailResponseDto modifyThemeTime(Long themeTimeId, ThemeTimeModifyRequestDto requestDto, User user) {
+//
+//    }
 
     private void checkValidStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
         if(startTime.isAfter(endTime)) {

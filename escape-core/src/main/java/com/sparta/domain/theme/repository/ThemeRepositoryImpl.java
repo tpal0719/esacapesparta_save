@@ -72,4 +72,20 @@ public class ThemeRepositoryImpl implements ThemeRepositoryCustom {
         return Optional.ofNullable(query.fetchFirst()).orElseThrow(() ->
                 new ThemeException(ThemeErrorCode.THEME_NOT_FOUND));
     }
+
+    @Override
+    public Theme findThemeOfActiveStore(Long themeId) {
+        QTheme theme = QTheme.theme;
+        QStore store = QStore.store;
+
+        JPAQuery<Theme> query = jpaQueryFactory.selectFrom(theme)
+                .leftJoin(theme.store, store).fetchJoin()
+                .where(
+                        theme.id.eq(themeId),
+                        store.storeStatus.eq(StoreStatus.ACTIVE)
+                );
+
+        return Optional.ofNullable(query.fetchFirst()).orElseThrow(() ->
+                new ThemeException(ThemeErrorCode.THEME_NOT_FOUND));
+    }
 }
