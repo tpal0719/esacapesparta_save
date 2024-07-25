@@ -22,13 +22,17 @@ import java.security.NoSuchAlgorithmException;
 @RequiredArgsConstructor
 @RequestMapping("/users/mail")
 public class EmailController {
+
     private final EmailService emailService;
     private final UserService userService;
 
 
+    // TODO : 이메일 인증번호 발송
     @PostMapping
-    public ResponseEntity<ResponseMessage<String>> sendCertificationNumber(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    public ResponseEntity<ResponseMessage<String>> sendCertificationNumber(
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
             throws MessagingException, NoSuchAlgorithmException {
+
         String email = emailService.sendEmailForCertification(userDetails.getUser().getEmail());
 
         ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
@@ -40,9 +44,11 @@ public class EmailController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
+    // TODO : 이메일 인증번호 확인
     @GetMapping
-    public ResponseEntity<ResponseMessage<String>> verifyCertificationNumber(@Valid @RequestBody EmailVerificationRequestDto requestDTO,
-                                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseMessage<String>> verifyCertificationNumber(
+            @Valid @RequestBody EmailVerificationRequestDto requestDTO,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         emailService.verifyEmail(userDetails.getUser().getEmail(), requestDTO.getVerificationCode());
         userService.updateUserActive(userDetails.getUser());
 

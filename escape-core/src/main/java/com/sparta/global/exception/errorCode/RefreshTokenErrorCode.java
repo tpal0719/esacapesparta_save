@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum PageErrorCode implements ErrorCode{
-    PAGE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "페이지를 찾을 수 없습니다.");
+public enum RefreshTokenErrorCode implements ErrorCode{
+
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND.value(),"해당 사용자의 리프레쉬 토큰이 존재하지 않습니다, ");
+
 
     private final int httpStatusCode;
     private final String errorDescription;

@@ -17,13 +17,14 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
+
     private final JavaMailSender mailSender;
     private final EmailRepository emailRepository;
     public static final String MAIL_TITLE_CERTIFICATION = "이메일 인증입니다";
 
 
+    // TODO : 이메일 인증번호 발송 메서드
     public String sendEmailForCertification(String email) throws NoSuchAlgorithmException, MessagingException {
-
         String certificationNumber = createCertificationNumber();
         String content = String.format("인증 번호 : " + certificationNumber + "\n인증코드를 5분 이내에 입력해주세요.");
         emailRepository.saveCertificationNumber(email, certificationNumber);
@@ -31,6 +32,7 @@ public class EmailService {
         return email;
     }
 
+    // TODO : 이메일 발송 메서드
     private void sendMail(String email, String content) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
@@ -40,8 +42,7 @@ public class EmailService {
         mailSender.send(mimeMessage);
     }
 
-
-
+    // TODO : 이메일 인증번호 확인 메서드
     public void verifyEmail(String email, String certificationNumber) {
         if (! emailRepository.getCertificationNumber(email).equals(certificationNumber)) {
             throw new EmailException(EmailErrorCode.EMAIL_VERIFICATION_CODE_MISMATCH);
@@ -49,7 +50,7 @@ public class EmailService {
         emailRepository.removeCertificationNumber(email);
     }
 
-
+    // TODO : 인증번호 생성 메서드
     public String createCertificationNumber() throws NoSuchAlgorithmException {
         String result;
         do {
