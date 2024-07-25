@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public class ThemeDetailResponseDto {
     private Long storeId;
+    private Long themeId;
     private String title;
     private String contents;
     private Long level;
@@ -17,6 +18,7 @@ public class ThemeDetailResponseDto {
 
     public ThemeDetailResponseDto(Theme theme) {
         this.storeId = theme.getStore().getId();
+        this.themeId = theme.getId();
         this.title = theme.getTitle();
         this.contents = theme.getContents();
         this.level = theme.getLevel();
