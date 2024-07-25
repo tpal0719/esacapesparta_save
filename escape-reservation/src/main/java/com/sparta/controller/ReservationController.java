@@ -12,6 +12,6 @@ public class ReservationController {
 
     @GetMapping("/reservations")
     public String getReservation(){
-        return "hello";
+        return "hello!!!";
     }
 }
