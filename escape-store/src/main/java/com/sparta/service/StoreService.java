@@ -12,14 +12,15 @@ import com.sparta.dto.response.StoreRegisterResponseDto;
 import com.sparta.dto.response.StoresGetResponseDto;
 import com.sparta.global.exception.customException.S3Exception;
 import com.sparta.s3.S3Uploader;
-import com.sparta.s3.S3Util;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StoreService {
@@ -35,19 +36,14 @@ public class StoreService {
                 .workHours(requestDto.getWorkHours())
                 .manager(manager)
                 .storeRegion(requestDto.getStoreRegion())
-                .storeStatus(StoreStatus.PENDING)
+                .storeStatus(StoreStatus.ACTIVE)
                 .build();
 
         storeRepository.save(store);
 
-        String storeImage;
-        try {
-            storeImage = s3Uploader.uploadStoreImage(file, store.getId());
-        } catch(S3Exception e) {
-            storeImage = S3Util.DEFAULT_IMAGE_URL;
-        }
-
+        String storeImage = s3Uploader.uploadStoreImage(file, store.getId());
         store.updateStoreImage(storeImage);
+
         return new StoreRegisterResponseDto(store);
     }
 
@@ -77,6 +73,33 @@ public class StoreService {
     }
 
     @Transactional
+    public String modifyStoreImage(Long storeId, MultipartFile file, User user) {
+        Store store = storeRepository.findByActiveStore(storeId);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            store.checkManager(user);
+        }
+
+        s3Uploader.deleteFileFromS3(store.getStoreImage());
+        String storeImage = s3Uploader.uploadStoreImage(file, store.getId());
+        store.updateStoreImage(storeImage);
+
+        return storeImage;
+    }
+
+    @Transactional
+    public void deleteStoreImage(Long storeId, User user) {
+        Store store = storeRepository.findByActiveStore(storeId);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            store.checkManager(user);
+        }
+
+        s3Uploader.deleteFileFromS3(store.getStoreImage());
+        store.deleteStoreImage();
+    }
+
+    @Transactional
     public void deleteStore(Long storeId, User user) {
         Store store = storeRepository.findByActiveStore(storeId);
 
@@ -85,5 +108,4 @@ public class StoreService {
         }
         store.deactivateStore();
     }
-
 }

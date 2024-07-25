@@ -72,6 +72,10 @@ public class Store extends TimeStamped {
         this.storeImage = storeImage;
     }
 
+    public void deleteStoreImage() {
+        this.storeImage = null;
+    }
+
     public void deactivateStore() {
         this.storeStatus = StoreStatus.DEACTIVE;
     }

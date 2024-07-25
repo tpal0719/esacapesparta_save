@@ -36,11 +36,11 @@ public class S3Uploader {
 
     private String uploadImage(MultipartFile file, String imageDir) {
         if(!doesFileExist(file)) {
-            return S3Util.DEFAULT_IMAGE_URL;
+            return null;
         }
-
         String extension = getValidateImageExtension(file.getOriginalFilename());
-//        deleteFilesFromS3(imageDir);
+
+//        deleteFileFromS3(imageDir);
 
         String uploadFileName = imageDir + S3Util.createFileName(extension);
         return uploadFileToS3(file, uploadFileName);
@@ -66,6 +66,9 @@ public class S3Uploader {
      * DB에 저장된 이미지 링크로 S3의 단일 이미지 파일 삭제
      */
     public void deleteFileFromS3(String imagePath) {
+        if(imagePath == null) {
+            return;
+        }
         String splitStr = ".com/";
         String fileName = imagePath.substring(imagePath.lastIndexOf(splitStr) + splitStr.length());
 

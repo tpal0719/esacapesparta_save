@@ -3,6 +3,7 @@ package com.sparta.global.exception.exceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.global.exception.customException.GlobalCustomException;
 import com.sparta.global.exception.errorCode.CommonErrorCode;
+import com.sparta.global.exception.errorCode.S3ErrorCode;
 import com.sparta.global.response.ResponseErrorMessage;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
@@ -49,17 +51,15 @@ public class GlobalExceptionHandler {
                 .body(errorMessage);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ResponseErrorMessage> handleConstraintViolationException(ConstraintViolationException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getConstraintViolations().forEach(violation -> errors.put("parameter", violation.getMessage()));
-
-        ResponseErrorMessage errorMessage = new ResponseErrorMessage(CommonErrorCode.BAD_REQUEST, errors);
-
-        return ResponseEntity.status(CommonErrorCode.BAD_REQUEST.getHttpStatusCode())
-                .body(errorMessage);
+    /**
+     * 파일 크기 초과 예외 처리
+     */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    protected ResponseEntity<ResponseErrorMessage> maxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+        log.error("MaxUploadSizeExceededException 발생");
+        return ResponseEntity.status(S3ErrorCode.FILE_MAX_SIZE_ERROR.getHttpStatusCode())
+                .body(new ResponseErrorMessage(S3ErrorCode.FILE_MAX_SIZE_ERROR));
     }
-
 
     /**
      * CustomException 예외 처리
