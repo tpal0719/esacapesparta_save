@@ -1,5 +1,6 @@
 package com.sparta.domain.user.service;
 
+import com.sparta.domain.user.dto.UserResponseDto;
 import com.sparta.domain.user.dto.request.SignupRequestDto;
 import com.sparta.domain.user.dto.request.WithdrawRequestDto;
 import com.sparta.domain.user.dto.response.SignupResponseDto;
@@ -68,7 +69,7 @@ public class UserService {
     }
 
     // TODO : 로그아웃 전 사용자 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public Long logout(Long userId) {
 
         User user = findByUserId(userId);

@@ -64,4 +64,8 @@ public class User extends TimeStamped {
     public void changeStatus(UserStatus userStatus) {
         this.userStatus = UserStatus.WITHDRAW;
     }
+
+    public void editUser(String name) {
+        this.name = name;
+    }
 }
