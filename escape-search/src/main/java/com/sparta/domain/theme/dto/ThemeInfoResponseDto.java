@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class ThemeInfoResponseDto {
+    private Long themeId;
     private String title;
     private String contents;
     private Integer level;
@@ -15,6 +16,7 @@ public class ThemeInfoResponseDto {
     private Long price;
 
     public ThemeInfoResponseDto(Theme theme){
+        this.themeId = theme.getId();
         this.title = theme.getTitle();
         this.contents = theme.getContents();
         this.level = theme.getLevel();

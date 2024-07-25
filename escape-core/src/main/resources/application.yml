@@ -12,9 +12,6 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
-  redis:
-    port: ${REDIS_MAIL_PORT}
-    host: ${REDIS_MAIL_HOST}
   mail:
     host: ${MAIL_HOST} #smtp 서버 주소
     port: ${MAIL_PORT} # 메일 인증서버 포트
@@ -33,6 +30,10 @@ spring:
           ssl:
             trust: smtp.gmail.com
             enable: true #반드시 필요 -> SSL 필요로 되어있으면
+  data:
+    redis:
+      port: ${REDIS_MAIL_PORT}
+      host: ${REDIS_MAIL_HOST}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
