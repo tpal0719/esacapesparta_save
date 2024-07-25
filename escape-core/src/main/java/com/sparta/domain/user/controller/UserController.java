@@ -4,15 +4,14 @@ import com.sparta.domain.user.dto.request.SignupRequestDto;
 import com.sparta.domain.user.dto.response.SignupResponseDto;
 import com.sparta.domain.user.service.UserService;
 import com.sparta.global.response.ResponseMessage;
+import com.sparta.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -23,12 +22,7 @@ public class UserController {
     private final UserService userService;
 
 
-    /**
-     * 회원 가입
-     *
-     * @param requestDto
-     * @return 유저 정보 + 상태 코드를 반환
-     */
+    // TODO : 회원가입
     @PostMapping("/signup")
     public ResponseEntity<ResponseMessage<SignupResponseDto>> createUser(@Valid @RequestBody SignupRequestDto requestDto) {
         SignupResponseDto signupResponseDto = userService.createUser(requestDto);
@@ -41,4 +35,20 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
+
+    // TODO : 로그아웃
+    @PutMapping("/logout")
+    public ResponseEntity<ResponseMessage<Long>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Long response = userService.logout(userDetails.getUser().getId());
+
+        ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("로그아웃이 완료되었습니다.")
+                .data(response)
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    // TODO :
+
 }
