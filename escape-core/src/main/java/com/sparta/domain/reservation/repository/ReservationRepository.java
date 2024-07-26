@@ -16,7 +16,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>,
 
     Optional<Reservation> findByIdAndUser(Long reservationId, User user);
 
-    List<Reservation> findAllByTheme(Theme theme);
     Optional<Reservation> findByIdAndReservationStatus(Long reservationId, ReservationStatus reservationStatus);
 
     default Reservation findByIdAndUserOrElseThrow(Long reservationId, User user) {

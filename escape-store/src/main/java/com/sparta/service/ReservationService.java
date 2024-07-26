@@ -26,7 +26,7 @@ public class ReservationService {
             theme.getStore().checkManager(user);
         }
 
-        List<Reservation> reservationList = reservationRepository.findAllByTheme(theme);
+        List<Reservation> reservationList = reservationRepository.findByTheme(theme);
         return new ReservationsGetResponseDto(themeId, reservationList);
     }
 
