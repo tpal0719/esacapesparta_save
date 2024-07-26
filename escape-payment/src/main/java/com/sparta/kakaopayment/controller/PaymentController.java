@@ -23,13 +23,10 @@ public class PaymentController {
         return "paymentForm";
     }
 
-    @PostMapping("/prepare")
-    public String preparePayment(@RequestParam String orderId,
-                                 @RequestParam String itemName,
-                                 @RequestParam int quantity,
-                                 @RequestParam int totalAmount,
+    @PostMapping("/prepare/{reservationId}")
+    public String preparePayment(@RequestParam Long reservationId,
                                  Model model) {
-        Map<String, Object> response = kakaoPayService.preparePayment(orderId, itemName, quantity, totalAmount);
+        Map<String, Object> response = kakaoPayService.preparePayment(reservationId);
         model.addAttribute("nextRedirectPcUrl", response.get("next_redirect_pc_url"));
         return "redirect:" + response.get("next_redirect_pc_url");
     }
