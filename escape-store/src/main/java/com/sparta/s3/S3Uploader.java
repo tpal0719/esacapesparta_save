@@ -39,9 +39,7 @@ public class S3Uploader {
             return null;
         }
         String extension = getValidateImageExtension(file.getOriginalFilename());
-
-//        deleteFileFromS3(imageDir);
-
+        
         String uploadFileName = imageDir + S3Util.createFileName(extension);
         return uploadFileToS3(file, uploadFileName);
     }

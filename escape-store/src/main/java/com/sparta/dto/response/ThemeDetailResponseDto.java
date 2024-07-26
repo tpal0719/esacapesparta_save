@@ -12,8 +12,9 @@ public class ThemeDetailResponseDto {
     private String contents;
     private Integer level;
     private Integer duration;
-    private String theme;
+    private String themeType;
     private Long price;
+    private String themeImage;
     private ThemeStatus themeStatus;
 
     public ThemeDetailResponseDto(Theme theme) {
@@ -23,8 +24,9 @@ public class ThemeDetailResponseDto {
         this.contents = theme.getContents();
         this.level = theme.getLevel();
         this.duration = theme.getDuration();
-        this.theme = theme.getThemeType().getName();
+        this.themeType = theme.getThemeType().getName();
         this.price = theme.getPrice();
+        this.themeImage = theme.getThemeImage();
         this.themeStatus = theme.getThemeStatus();
     }
 }

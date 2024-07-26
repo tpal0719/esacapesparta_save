@@ -11,9 +11,11 @@ import com.sparta.dto.request.ThemeCreateRequestDto;
 import com.sparta.dto.request.ThemeModifyRequestDto;
 import com.sparta.dto.response.ThemeDetailResponseDto;
 import com.sparta.dto.response.ThemeGetResponseDto;
+import com.sparta.s3.S3Uploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,9 +24,10 @@ import java.util.List;
 public class ThemeService {
     private final ThemeRepository themeRepository;
     private final StoreRepository storeRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
-    public ThemeDetailResponseDto createTheme(ThemeCreateRequestDto requestDto, User user) {
+    public ThemeDetailResponseDto createTheme(MultipartFile file, ThemeCreateRequestDto requestDto, User user) {
         Store store = storeRepository.findByActiveStore(requestDto.getStoreId());
 
         if(user.getUserType() == UserType.MANAGER) {
@@ -39,13 +42,16 @@ public class ThemeService {
                 .minPlayer(requestDto.getMinPlayer())
                 .maxPlayer(requestDto.getMaxPlayer())
                 .price(requestDto.getPrice())
-                .themeImage("temp")
                 .themeType(requestDto.getThemeType())
                 .themeStatus(ThemeStatus.ACTIVE)
                 .store(store)
                 .build();
 
         themeRepository.save(theme);
+
+        String themeImage = s3Uploader.uploadThemeImage(file, store.getId(),theme.getId());
+        theme.updateThemeImage(themeImage);
+
         return new ThemeDetailResponseDto(theme);
     }
 

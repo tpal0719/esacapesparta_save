@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/manager/stores")
@@ -24,10 +25,11 @@ public class ThemeController {
 
     @PostMapping("/themes")
     public ResponseEntity<ResponseMessage<ThemeDetailResponseDto>> createTheme(
-            @Valid @RequestBody ThemeCreateRequestDto requestDto,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @Valid @RequestPart ThemeCreateRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        ThemeDetailResponseDto responseDto = themeService.createTheme(requestDto, userDetails.getUser());
+        ThemeDetailResponseDto responseDto = themeService.createTheme(file, requestDto, userDetails.getUser());
 
         ResponseMessage<ThemeDetailResponseDto> responseMessage = ResponseMessage.<ThemeDetailResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())

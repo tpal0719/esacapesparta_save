@@ -36,7 +36,7 @@ public class StoreService {
                 .workHours(requestDto.getWorkHours())
                 .manager(manager)
                 .storeRegion(requestDto.getStoreRegion())
-                .storeStatus(StoreStatus.ACTIVE)
+                .storeStatus(StoreStatus.PENDING)
                 .build();
 
         storeRepository.save(store);
