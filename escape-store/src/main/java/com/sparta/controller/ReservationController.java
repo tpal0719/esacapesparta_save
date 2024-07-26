@@ -10,11 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Secured({"MANAGER", "ADMIN"})
@@ -34,6 +30,21 @@ public class ReservationController {
                 .statusCode(HttpStatus.OK.value())
                 .message("해당 방탈출 테마의 예약 내역 조회가 완료되었습니다.")
                 .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    @DeleteMapping("/reservations/{reservationId}")
+    public ResponseEntity<ResponseMessage<Void>> cancelReservation(
+            @PathVariable Long reservationId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        reservationService.cancelReservation(reservationId, userDetails.getUser());
+
+        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("해당 예약 취소가 완료되었습니다.")
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

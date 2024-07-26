@@ -1,12 +1,9 @@
 package com.sparta.service;
 
-import com.sparta.domain.reservation.entity.PaymentStatus;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
-import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.domain.theme.entity.ThemeTime;
-import com.sparta.domain.theme.repository.ThemeRepository;
 import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.domain.user.entity.User;
 import com.sparta.dto.CreateReservationRequestDto;
@@ -64,7 +61,7 @@ public class ReservationService {
     @Transactional
     public void deleteReservation(Long reservationId, User user) {
         Reservation reservation = reservationRepository.findByIdAndUserAndActive(reservationId, user);
-        reservation.reservationUpdateStatus();
+        reservation.updateReservationStatus();
         //환불 하는 기능 추가 해야됨
     }
 

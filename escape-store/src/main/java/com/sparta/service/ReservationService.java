@@ -7,6 +7,7 @@ import com.sparta.domain.theme.repository.ThemeRepository;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.dto.response.ReservationsGetResponseDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,4 +30,16 @@ public class ReservationService {
         return new ReservationsGetResponseDto(themeId, reservationList);
     }
 
+    @Transactional
+    public void cancelReservation(Long reservationId, User user) {
+        Reservation reservation = reservationRepository.findActiveReservation(reservationId);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            reservation.getTheme().getStore().checkManager(user);
+        }
+
+        // 환불 기능 추가 예정
+
+        reservation.updateReservationStatus();
+    }
 }

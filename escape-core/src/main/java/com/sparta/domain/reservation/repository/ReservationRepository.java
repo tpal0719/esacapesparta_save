@@ -1,6 +1,7 @@
 package com.sparta.domain.reservation.repository;
 
 import com.sparta.domain.reservation.entity.Reservation;
+import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.user.entity.User;
@@ -16,9 +17,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>,
     Optional<Reservation> findByIdAndUser(Long reservationId, User user);
 
     List<Reservation> findAllByTheme(Theme theme);
+    Optional<Reservation> findByIdAndReservationStatus(Long reservationId, ReservationStatus reservationStatus);
 
     default Reservation findByIdAndUserOrElseThrow(Long reservationId, User user) {
-        return null;
+        return findByIdAndUser(reservationId, user).orElseThrow(() ->
+                new ReservationException(ReservationErrorCode.RESERVATION_NOT_FOUND));
     }
 
     default void checkReservation(ThemeTime themeTime){
@@ -33,5 +36,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>,
             throw new ReservationException(ReservationErrorCode.RESERVATION_NOT_FOUND);
         }
         return reservation;
+    }
+
+    default Reservation findActiveReservation(Long reservationId) {
+        return findByIdAndReservationStatus(reservationId, ReservationStatus.ACTIVE).orElseThrow(() ->
+                new ReservationException(ReservationErrorCode.RESERVATION_NOT_FOUND));
     }
 }
