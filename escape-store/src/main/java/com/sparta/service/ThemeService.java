@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static com.sparta.domain.store.entity.QStore.store;
+
 @Service
 @RequiredArgsConstructor
 public class ThemeService {
@@ -65,13 +67,10 @@ public class ThemeService {
 
     @Transactional
     public ThemeDetailResponseDto modifyTheme(Long themeId, ThemeModifyRequestDto requestDto, User user) {
-        Theme theme = themeRepository.findByIdOrElseThrow(themeId);
-
-        Store store = theme.getStore();
-        store.verifyStoreIsActive();
+        Theme theme = themeRepository.findThemeOfActiveStore(themeId);
 
         if(user.getUserType() == UserType.MANAGER) {
-            store.checkManager(user);
+            theme.getStore().checkManager(user);
         }
 
         theme.updateTheme(
@@ -90,14 +89,38 @@ public class ThemeService {
     }
 
     @Transactional
-    public void deleteTheme(Long themeId, User user) {
-        Theme theme = themeRepository.findByIdOrElseThrow(themeId);
-
-        Store store = theme.getStore();
-        store.verifyStoreIsActive();
+    public String modifyThemeImage(Long themeId, MultipartFile file, User user) {
+        Theme theme = themeRepository.findThemeOfActiveStore(themeId);
 
         if(user.getUserType() == UserType.MANAGER) {
-            store.checkManager(user);
+            theme.getStore().checkManager(user);
+        }
+
+        s3Uploader.deleteFileFromS3(theme.getThemeImage());
+        String themeImage = s3Uploader.uploadThemeImage(file, theme.getStore().getId(), themeId);
+        theme.updateThemeImage(themeImage);
+
+        return themeImage;
+    }
+
+    @Transactional
+    public void deleteThemeImage(Long themeId, User user) {
+        Theme theme = themeRepository.findThemeOfActiveStore(themeId);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            theme.getStore().checkManager(user);
+        }
+
+        s3Uploader.deleteFileFromS3(theme.getThemeImage());
+        theme.deleteThemeImage();
+    }
+
+    @Transactional
+    public void deleteTheme(Long themeId, User user) {
+        Theme theme = themeRepository.findThemeOfActiveStore(themeId);
+
+        if(user.getUserType() == UserType.MANAGER) {
+            theme.getStore().checkManager(user);
         }
 
         themeRepository.delete(theme);
@@ -105,12 +128,10 @@ public class ThemeService {
 
     @Transactional
     public void changeThemeStatus(Long themeId, User user) {
-        Theme theme = themeRepository.findByIdOrElseThrow(themeId);
-        Store store = theme.getStore();
-        store.verifyStoreIsActive();
+        Theme theme = themeRepository.findThemeOfActiveStore(themeId);
 
         if(user.getUserType() == UserType.MANAGER) {
-            store.checkManager(user);
+            theme.getStore().checkManager(user);
         }
 
         theme.toggleThemeStatus();

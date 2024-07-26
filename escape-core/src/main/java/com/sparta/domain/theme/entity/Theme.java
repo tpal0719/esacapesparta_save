@@ -94,6 +94,10 @@ public class Theme extends TimeStamped {
         this.themeImage = themeImage;
     }
 
+    public void deleteThemeImage() {
+        this.themeImage = null;
+    }
+
     public void toggleThemeStatus() {
         this.themeStatus = this.themeStatus == ThemeStatus.ACTIVE ? ThemeStatus.DEACTIVE : ThemeStatus.ACTIVE;
 

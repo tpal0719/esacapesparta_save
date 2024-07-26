@@ -73,6 +73,49 @@ public class ThemeController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
+    /**
+     * 방탈출 테마 이미지 수정
+     */
+    @PutMapping("/themes/{themeId}/image")
+    @Secured({"MANAGER", "ADMIN"})
+    public ResponseEntity<ResponseMessage<String>> modifyThemeImage(
+            @PathVariable Long themeId,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        String imagePath = themeService.modifyThemeImage(themeId, file, userDetails.getUser());
+
+        ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("방탈출 테마 이미지 수정이 완료되었습니다.")
+                .data(imagePath)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    /**
+     * 방탈출 테마 이미지 삭제
+     */
+    @DeleteMapping("/themes/{themeId}/image")
+    @Secured({"MANAGER", "ADMIN"})
+    public ResponseEntity<ResponseMessage<Void>> deleteThemeImage(
+            @PathVariable Long themeId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        themeService.deleteThemeImage(themeId, userDetails.getUser());
+
+        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("방탈출 카페 이미지 삭제가 완료되었습니다.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    /**
+     * 방탈출 테마 완전히 삭제
+     */
     @DeleteMapping("/themes/{themeId}")
     public ResponseEntity<ResponseMessage<Void>> deleteTheme(
             @PathVariable Long themeId,
@@ -88,6 +131,9 @@ public class ThemeController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
+    /**
+     * 방탈출 테마 상태 변경
+     */
     @PutMapping("themes/{themeId}/status")
     public ResponseEntity<ResponseMessage<Void>> changeThemeStatus(
             @PathVariable Long themeId,
