@@ -1,6 +1,5 @@
 package com.sparta.domain.user.service;
 
-import com.sparta.domain.user.dto.UserResponseDto;
 import com.sparta.domain.user.dto.request.SignupRequestDto;
 import com.sparta.domain.user.dto.request.WithdrawRequestDto;
 import com.sparta.domain.user.dto.response.SignupResponseDto;
@@ -64,7 +63,7 @@ public class UserService {
     @Transactional
     public void updateUserActive(User user) {
 
-        user.ActiveUser();
+        user.activeUser();
         userRepository.save(user);
     }
 
@@ -72,7 +71,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public Long logout(Long userId) {
 
-        User user = findByUserId(userId);
+        User user = userRepository.findByUserId(userId);
         refreshTokenService.deleteToken(user.getEmail());
 
         return user.getId();
@@ -82,7 +81,7 @@ public class UserService {
     @Transactional
     public Long withdraw(WithdrawRequestDto requestDto, Long userId) {
 
-        User user = findByUserId(userId);
+        User user = userRepository.findByUserId(userId);
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new UserException(UserErrorCode.PASSWORD_NOT_MATCH);
@@ -95,9 +94,5 @@ public class UserService {
     }
 
     // TODO : 유저 찾기
-    public User findByUserId(Long userId) {
 
-        return userRepository.findById(userId).orElseThrow(
-                () -> new UserException(UserErrorCode.USER_NOT_FOUND));
-    }
 }

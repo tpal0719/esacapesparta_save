@@ -57,7 +57,8 @@ public class User extends TimeStamped {
         this.userType = userType;
         this.userStatus = userStatus;
     }
-    public void ActiveUser() { // 이메일 인증받은 유저 상태 업데이트
+
+    public void activeUser() { // 이메일 인증받은 유저 상태 업데이트
         this.userStatus = UserStatus.ACTIVE;
     }
 

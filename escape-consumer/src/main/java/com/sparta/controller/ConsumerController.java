@@ -1,12 +1,14 @@
 package com.sparta.controller;
 
 import com.sparta.domain.user.dto.UserResponseDto;
+import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.service.UserService;
 import com.sparta.dto.request.EditPasswordRequestDto;
 import com.sparta.dto.request.EditProfileRequestDto;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.security.UserDetailsImpl;
 import com.sparta.service.ConsumerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +28,8 @@ public class ConsumerController {
     public ResponseEntity<ResponseMessage<UserResponseDto>> getProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        Long userId = userDetails.getUser().getId();
-        UserResponseDto userResponseDto = consumerService.inquiryUser(userId);
+        User user = userDetails.getUser();
+        UserResponseDto userResponseDto = consumerService.inquiryUser(user);
 
         ResponseMessage<UserResponseDto> responseMessage = ResponseMessage.<UserResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -42,10 +44,10 @@ public class ConsumerController {
     @PutMapping("/profile")
     public ResponseEntity<ResponseMessage<UserResponseDto>> modifyProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody EditProfileRequestDto editProfileRequestDto) {
+            @Valid @RequestBody EditProfileRequestDto editProfileRequestDto) {
 
-        Long userId = userDetails.getUser().getId();
-        UserResponseDto responseDto = consumerService.editProfile(userId, editProfileRequestDto, userDetails.getUser());
+        User user = userDetails.getUser();
+        UserResponseDto responseDto = consumerService.editProfile(editProfileRequestDto, user);
 
         ResponseMessage<UserResponseDto> responseMessage = ResponseMessage.<UserResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -60,9 +62,10 @@ public class ConsumerController {
     @PutMapping("/profile/password")
     public ResponseEntity<ResponseMessage<UserResponseDto>> editPassword(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody EditPasswordRequestDto requestDTO) {
+            @Valid @RequestBody EditPasswordRequestDto requestDTO) {
 
-        UserResponseDto responseDto = consumerService.editPassword(requestDTO, userDetails);
+        User user = userDetails.getUser();
+        UserResponseDto responseDto = consumerService.editPassword(requestDTO, user);
 
         ResponseMessage<UserResponseDto> responseMessage = ResponseMessage.<UserResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -73,3 +76,4 @@ public class ConsumerController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 }
+
