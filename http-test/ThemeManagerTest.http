@@ -1,5 +1,5 @@
 ### 방탈출 테마 등록
-POST http://localhost:8088/manager/stores/themes
+POST http://localhost:8081/manager/stores/themes
 Authorization: {{manager1Auth}}
 Content-Type: application/json
 

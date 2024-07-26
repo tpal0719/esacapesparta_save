@@ -1,0 +1,11 @@
+### 예약하기
+POST http://localhost:8089/reservations
+Authorization: {{user1Auth}}
+Content-Type: application/json
+
+{
+  "themeTimeId": 1,
+  "player": 5,
+  "price": 100000,
+  "paymentStatus": "COMPLETE"
+}

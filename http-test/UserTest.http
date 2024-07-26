@@ -1,10 +1,41 @@
+### 매니저 회원가입 (temp code)
+POST http://localhost:8080/users/signup/manager
+
+### 매니저 로그인 (temp code)
+POST http://localhost:8080/users/login
+
+{
+  "email": "manager@email.com",
+  "password": "Test1234!"
+}
+
+> {% client.global.set("manager1Auth", response.headers.valueOf("Authorization")); %}
+
+### 어드민 회원가입 (temp code)
+POST http://localhost:8080/users/signup/admin
+
+
+### 어드민 로그인 (temp code)
+POST http://localhost:8080/users/login
+
+{
+  "email": "admin@email.com",
+  "password": "Test1234!"
+}
+> {% client.global.set("admin1Auth", response.headers.valueOf("Authorization")); %}
+
+
+
+### ====================================================================================
+
+
 ### 회원가입 요청
 POST http://localhost:8080/users/signup
 Content-Type: application/json
 
 {
-  "name": "김윤재",
-  "email": "yooss135@naver.com",
+  "name": "박세미",
+  "email": "tpal0719@naver.com",
   "password": "Test1234!"
 }
 
@@ -14,7 +45,7 @@ Content-Type: application/json
 
 
 {
-  "email": "yooss135@naver.com",
+  "email": "tpal0719@naver.com",
   "password": "Test1234!"
 }
 > {% client.global.set("user1Auth", response.headers.valueOf("Authorization")); %}
@@ -23,12 +54,15 @@ Content-Type: application/json
 POST http://localhost:8080/users/mail
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLquYDsnKTsnqwiLCJhdXRoIjoiVVNFUiIsImV4cCI6MTcyMTgxNjM1NCwiaWF0IjoxNzIxODE0NTU0fQ.rZ7usKXj_0i4xcnmn1x4AsboxSKY8WN_WgdDZMPDC2w
 
+
+
+
 ### 매니저 로그인
 POST http://localhost:8080/users/login
 Content-Type: application/json
 
 {
-  "email": "mmarland0@facebook.com",
+  "email": "manager@email.com",
   "password": "Test1234!"
 }
 > {% client.global.set("manager1Auth", response.headers.valueOf("Authorization")); %}
@@ -48,3 +82,4 @@ Content-Type: application/json
 DELETE http://localhost:8083/follow/stores/6
 Content-Type: application/json
 Authorization: {{user1Auth}}
+

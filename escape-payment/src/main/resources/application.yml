@@ -46,8 +46,6 @@ kakao-payment:
   approve-url:  http://localhost:8089/payment/kakaoPaySuccess
   cancel-url: http://localhost:8089/payment/kakaoPayCancel
   fail-url: http://localhost:8089/payment/kakaoPayFail
-#  ready-request-url:
-#  approve-request-url:
 
 toss:
   payment:

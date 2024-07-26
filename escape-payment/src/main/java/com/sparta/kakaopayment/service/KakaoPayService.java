@@ -42,6 +42,13 @@ public class KakaoPayService {
 
     private static final String KAKAO_PAY_API_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
 
+
+    /**
+     * TODO: 결제할 수 있는 URL 넘겨줌
+     * @param reservationId 예약정보만 넘겨줌
+     * @return key - value format json
+     * @author SEMI
+     */
     public Map<String, Object> preparePayment(Long reservationId) {
         Reservation reservation = reservationRepository.findByIdOrElse(reservationId);
 
@@ -84,8 +91,12 @@ public class KakaoPayService {
 
     /* Utils */
 
-    /*
-
+    /**
+     * TODO: KakaoPayment 테이블에도 결제정보 저장
+     * @param tid kakao가 response 해준 결제정보 id
+     * @param reservation
+     * @return 저장한 KakaoPayment data
+     * @author SEMI
      */
     public KakaoPayment saveKakaoPayment(String tid,Reservation reservation) {
 

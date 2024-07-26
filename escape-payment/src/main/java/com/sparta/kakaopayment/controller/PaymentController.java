@@ -1,22 +1,21 @@
 package com.sparta.kakaopayment.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import com.sparta.kakaopayment.service.KakaoPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/payment")
 public class PaymentController {
 
-    @Autowired
-    private KakaoPayService kakaoPayService;
+
+    private final KakaoPayService kakaoPayService;
 
     @GetMapping
     public String paymentForm() {
@@ -24,7 +23,7 @@ public class PaymentController {
     }
 
     @PostMapping("/prepare/{reservationId}")
-    public String preparePayment(@RequestParam Long reservationId,
+    public String preparePayment(@PathVariable Long reservationId,
                                  Model model) {
         Map<String, Object> response = kakaoPayService.preparePayment(reservationId);
         model.addAttribute("nextRedirectPcUrl", response.get("next_redirect_pc_url"));

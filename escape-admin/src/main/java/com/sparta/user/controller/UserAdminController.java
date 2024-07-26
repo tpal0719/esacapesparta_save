@@ -2,7 +2,7 @@ package com.sparta.user.controller;
 
 import com.sparta.domain.user.dto.UserResponseDto;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.user.service.UserService;
+import com.sparta.user.service.UserAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +16,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-public class UserController {
+public class UserAdminController {
 
-    private final UserService userService;
+    private final UserAdminService userService;
 
     /**
      * TODO : 모든 Manager 조회
