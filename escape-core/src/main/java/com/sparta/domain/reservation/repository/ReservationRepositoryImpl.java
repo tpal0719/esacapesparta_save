@@ -7,6 +7,7 @@ import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.store.entity.QStore;
 import com.sparta.domain.theme.entity.QTheme;
+import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -57,5 +57,18 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom{
                 .where(reservation.user.eq(user));
 
         return query.fetch();
+    }
+
+    @Override
+    public List<Reservation> findByTheme(Theme theme) {
+        QReservation reservation = QReservation.reservation;
+        QTheme qTheme = QTheme.theme;
+        QStore store = QStore.store;
+
+        return jpaQueryFactory.selectFrom(reservation)
+                .leftJoin(reservation.theme, qTheme).fetchJoin()
+                .leftJoin(reservation.theme.store, store).fetchJoin()
+                .where(reservation.theme.eq(theme))
+                .fetch();
     }
 }
