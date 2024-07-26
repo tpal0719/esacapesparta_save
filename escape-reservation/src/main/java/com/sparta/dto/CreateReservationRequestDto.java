@@ -1,0 +1,14 @@
+package com.sparta.dto;
+
+import com.sparta.domain.reservation.entity.PaymentStatus;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public class CreateReservationRequestDto {
+    private Long themeTimeId;
+    private Integer player;
+    private Long price;
+    private PaymentStatus paymentStatus;
+}
