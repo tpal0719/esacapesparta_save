@@ -58,7 +58,19 @@ public class User extends TimeStamped {
         this.userStatus = userStatus;
     }
 
-    public void ActiveUser() { // 이메일 인증받은 유저 상태 업데이트
+    public void activeUser() { // 이메일 인증받은 유저 상태 업데이트
         this.userStatus = UserStatus.ACTIVE;
+    }
+
+    public void changeStatus(UserStatus userStatus) {
+        this.userStatus = UserStatus.WITHDRAW;
+    }
+
+    public void editUser(String name) {
+        this.name = name;
+    }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
     }
 }

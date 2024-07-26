@@ -34,6 +34,26 @@ spring:
     redis:
       port: ${REDIS_MAIL_PORT}
       host: ${REDIS_MAIL_HOST}
+
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+      enabled: true
+
+cloud:
+  aws:
+    s3:
+      bucket: ${BUCKET_NAME}
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    defaultPath: ${DEFAULT_IMAGE_URL}
+
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}

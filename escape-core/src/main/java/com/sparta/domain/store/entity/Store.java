@@ -32,7 +32,7 @@ public class Store extends TimeStamped {
     @Column(nullable = false)
     private String workHours;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String storeImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -66,6 +66,14 @@ public class Store extends TimeStamped {
         this.phoneNumber = phoneNumber;
         this.workHours = workHours;
         this.storeRegion = storeRegion;
+    }
+
+    public void updateStoreImage(String storeImage) {
+        this.storeImage = storeImage;
+    }
+
+    public void deleteStoreImage() {
+        this.storeImage = null;
     }
 
     public void deactivateStore() {

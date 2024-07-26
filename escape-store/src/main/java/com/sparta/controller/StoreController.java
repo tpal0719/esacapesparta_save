@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/manager/stores")
@@ -28,11 +29,12 @@ public class StoreController {
     @PostMapping
     @Secured("MANAGER")
     public ResponseEntity<ResponseMessage<StoreRegisterResponseDto>> registerStore(
-            @Valid @RequestBody StoreRegisterRequestDto requestDto,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @Valid @RequestPart StoreRegisterRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
 
-        StoreRegisterResponseDto responseDto = storeService.registerStore(requestDto, userDetails.getUser());
+        StoreRegisterResponseDto responseDto = storeService.registerStore(file, requestDto, userDetails.getUser());
 
         ResponseMessage<StoreRegisterResponseDto> responseMessage = ResponseMessage.<StoreRegisterResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())
@@ -76,6 +78,46 @@ public class StoreController {
                 .statusCode(HttpStatus.OK.value())
                 .message("방탈출 카페 수정이 완료되었습니다.")
                 .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    /**
+     * 방탈출 카페 이미지 수정
+     */
+    @PutMapping("/{storeId}/image")
+    @Secured({"MANAGER", "ADMIN"})
+    public ResponseEntity<ResponseMessage<String>> modifyStoreImage(
+            @PathVariable Long storeId,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        String imagePath = storeService.modifyStoreImage(storeId, file, userDetails.getUser());
+
+        ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("방탈출 카페 이미지 수정이 완료되었습니다.")
+                .data(imagePath)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    /**
+     * 방탈출 카페 이미지 삭제
+     */
+    @DeleteMapping("/{storeId}/image")
+    @Secured({"MANAGER", "ADMIN"})
+    public ResponseEntity<ResponseMessage<Void>> deleteStoreImage(
+            @PathVariable Long storeId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        storeService.deleteStoreImage(storeId, userDetails.getUser());
+
+        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("방탈출 카페 이미지 삭제가 완료되었습니다.")
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
