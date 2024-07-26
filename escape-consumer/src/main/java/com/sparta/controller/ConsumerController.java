@@ -27,6 +27,7 @@ public class ConsumerController {
 
     private final UserService userService;
     private final ConsumerService consumerService;
+    private final EscapeReservationClient escapeReservationClient;
 
     // TODO : 로그인한 유저 프로필 조회
     @GetMapping("/profile")
@@ -59,13 +60,8 @@ public class ConsumerController {
                 .message("프로필 수정이 완료되었습니다.")
                 .data(responseDto)
                 .build();
-    private final EscapeReservationClient escapeReservationClient;
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    @GetMapping("/reservations")
-    public String getReservation(){
-        log.error("hihihi");
-        return escapeReservationClient.getLost();
     }
 
     // TODO : 비밀번호 수정
@@ -84,6 +80,12 @@ public class ConsumerController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+    @GetMapping("/reservations")
+    public String getReservation(){
+        log.error("hihihi");
+        return escapeReservationClient.getLost();
     }
 }
 
