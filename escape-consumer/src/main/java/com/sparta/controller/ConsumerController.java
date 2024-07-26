@@ -25,7 +25,7 @@ public class ConsumerController {
 
     // TODO : 로그인한 유저 프로필 조회
     @GetMapping("/profile")
-    public ResponseEntity<ResponseMessage<UserResponseDto>> getProfile(
+    public ResponseEntity<ResponseMessage<UserResponseDto>> inquiryProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User user = userDetails.getUser();
