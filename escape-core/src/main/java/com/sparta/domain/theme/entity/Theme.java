@@ -48,7 +48,6 @@ public class Theme extends TimeStamped {
     @Enumerated(EnumType.STRING)
     private ThemeType themeType;
 
-    @Column(nullable = false)
     private String themeImage;
 
     @Column(nullable = false)
@@ -89,6 +88,14 @@ public class Theme extends TimeStamped {
         this.maxPlayer = maxPlayer;
         this.themeType = themeType;
         this.price = price;
+    }
+
+    public void updateThemeImage(String themeImage) {
+        this.themeImage = themeImage;
+    }
+
+    public void deleteThemeImage() {
+        this.themeImage = null;
     }
 
     public void toggleThemeStatus() {
