@@ -67,12 +67,12 @@ public class ReservationController {
         reservationService.deleteReservation(reservationId, userDetails.getUser());
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
-                .statusCode(HttpStatus.CREATED.value())
+                .statusCode(HttpStatus.OK.value())
                 .message("예약을 취소했습니다.")
                 .data(null)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
     /**
@@ -87,12 +87,12 @@ public class ReservationController {
         List<GetReservationResponseDto> responseDtoList = reservationService.getReservations(userDetails.getUser());
 
         ResponseMessage<List<GetReservationResponseDto>> responseMessage = ResponseMessage.<List<GetReservationResponseDto>>builder()
-                .statusCode(HttpStatus.CREATED.value())
+                .statusCode(HttpStatus.OK.value())
                 .message("예약을 조회했습니다.")
                 .data(responseDtoList)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
 }
