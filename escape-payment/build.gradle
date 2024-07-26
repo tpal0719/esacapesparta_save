@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+bootJar {enabled = false}
+jar{enabled = true}
+
+dependencies {
+    implementation project(':escape-core')
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    // Test dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}

@@ -8,4 +8,5 @@ include 'escape-follow'
 include 'escape-store'
 include 'escape-review'
 include 'escape-search'
+include 'escape-payment'
 

@@ -1,0 +1,4 @@
+### 카카오페이 호출
+POST http://localhost:8089/payment/prepare?orderId=1&itemName=아이템이름&quantity=1&totalAmount=1000
+Authorization: {{user1Auth}}
+Content-Type: application/json
