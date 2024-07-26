@@ -63,9 +63,11 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom{
     public List<Reservation> findByTheme(Theme theme) {
         QReservation reservation = QReservation.reservation;
         QTheme qTheme = QTheme.theme;
+        QStore store = QStore.store;
 
         return jpaQueryFactory.selectFrom(reservation)
                 .leftJoin(reservation.theme, qTheme).fetchJoin()
+                .leftJoin(reservation.theme.store, store).fetchJoin()
                 .where(reservation.theme.eq(theme))
                 .fetch();
     }
