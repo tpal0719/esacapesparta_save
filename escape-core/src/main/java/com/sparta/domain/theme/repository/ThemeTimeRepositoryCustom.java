@@ -12,4 +12,6 @@ public interface ThemeTimeRepositoryCustom {
     List<ThemeTime> findThemeTimesByDate(Long themeId, LocalDate date);
 
     ThemeTime findThemeTimeOfActiveStore(Long themeTimeId);
+
+    ThemeTime checkStoreAndThemeActive(Long themeTimeId);
 }
