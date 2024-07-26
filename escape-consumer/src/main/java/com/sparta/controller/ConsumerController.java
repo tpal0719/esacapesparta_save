@@ -47,7 +47,7 @@ public class ConsumerController {
             @Valid @RequestBody EditProfileRequestDto editProfileRequestDto) {
 
         User user = userDetails.getUser();
-        UserResponseDto responseDto = consumerService.editProfile(editProfileRequestDto, user);
+        UserResponseDto responseDto = consumerService.modifyProfile(editProfileRequestDto, user);
 
         ResponseMessage<UserResponseDto> responseMessage = ResponseMessage.<UserResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())

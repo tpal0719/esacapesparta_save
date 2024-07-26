@@ -31,7 +31,7 @@ public class ConsumerService {
 
     // TODO : 유저 프로필 수정
     @Transactional
-    public UserResponseDto editProfile(EditProfileRequestDto request, User user) {
+    public UserResponseDto modifyProfile(EditProfileRequestDto request, User user) {
 
         user.editUser(request.getName());
         userRepository.save(user);
