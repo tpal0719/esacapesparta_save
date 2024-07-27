@@ -4,13 +4,10 @@ import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
-import com.sparta.global.exception.errorCode.ReservationErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -57,7 +54,7 @@ public class Reservation extends TimeStamped {
         this.themeTime = themeTime;
     }
 
-    public void reservationUpdateStatus(){
+    public void updateReservationStatus(){
         this.reservationStatus = ReservationStatus.DEACTIVE;
     }
 }
