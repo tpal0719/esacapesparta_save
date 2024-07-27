@@ -3,7 +3,7 @@ package com.sparta.domain.kakaopayment.service;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
-import com.sparta.domain.kakaopayment.dto.response.KakaoPaymentResponseDto;
+import com.sparta.domain.kakaopayment.dto.response.KakaoPayResponseDto;
 import com.sparta.domain.kakaopayment.entity.KakaoPayment;
 import com.sparta.domain.kakaopayment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,10 +41,8 @@ public class KakaoPayService {
 
     //단건결제
     private static final String KAKAO_PAY_API_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
-    
     //주문조회
     private static final String KAKAO_ORDER_API_URL = "https://open-api.kakaopay.com/online/v1/payment/order";
-
     //결제취소
     private static final String KAKAO_CANCEL_API_URL = "https://open-api.kakaopay.com/online/v1/payment/cancel";
 
@@ -87,11 +85,7 @@ public class KakaoPayService {
         Object tid = response.getBody().get("tid");
         KakaoPayment kakaoPayment = saveKakaoPayment(String.valueOf(tid),reservation);
 
-        //show data
-        log.info(KakaoPaymentResponseDto.KakaoPaymentInfo(kakaoPayment));
-
         reservation.setReservationStatus(ReservationStatus.ACTIVE);
-
 
         return response.getBody();
     }
