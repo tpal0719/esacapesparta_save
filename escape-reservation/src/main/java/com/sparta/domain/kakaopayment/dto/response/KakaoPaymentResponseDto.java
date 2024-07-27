@@ -1,6 +1,6 @@
-package com.sparta.kakaopayment.dto;
+package com.sparta.domain.kakaopayment.dto.response;
 
-import com.sparta.kakaopayment.entity.KakaoPayment;
+import com.sparta.domain.kakaopayment.entity.KakaoPayment;
 import lombok.Getter;
 
 @Getter

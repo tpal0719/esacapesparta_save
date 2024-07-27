@@ -1,14 +1,15 @@
-package com.sparta.service;
+package com.sparta.domain.reservation.service;
 
+import com.sparta.domain.kakaopayment.service.KakaoPayService;
+import com.sparta.domain.reservation.dto.CreateReservationRequestDto;
+import com.sparta.domain.reservation.dto.CreateReservationResponseDto;
+import com.sparta.domain.reservation.dto.GetReservationResponseDto;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.domain.user.entity.User;
-import com.sparta.dto.CreateReservationRequestDto;
-import com.sparta.dto.CreateReservationResponseDto;
-import com.sparta.dto.GetReservationResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ThemeTimeRepository themeTimeRepository;
+    private final KakaoPayService kakaoPayService;
 
 
     /**
@@ -36,21 +38,20 @@ public class ReservationService {
         ThemeTime themeTime = themeTimeRepository.checkStoreAndThemeActive(requestDto.getThemeTimeId());
         reservationRepository.checkReservation(themeTime);
 
-//        if(requestDto.getPaymentStatus() == PaymentStatus.COMPLETE){
-//            //결제 모듈이 중간에 들어가야됨
-//        }
-
         Reservation reservation = Reservation.builder()
                 .player(requestDto.getPlayer())
                 .price(requestDto.getPrice())
                 .paymentStatus(requestDto.getPaymentStatus())
-                .reservationStatus(ReservationStatus.ACTIVE)
+                .reservationStatus(ReservationStatus.DEACTIVE)
                 .user(user)
                 .theme(themeTime.getTheme())
                 .themeTime(themeTime)
                 .build();
 
-        return new CreateReservationResponseDto(reservationRepository.save(reservation));
+        reservationRepository.save(reservation);
+        kakaoPayService.preparePayment(reservation.getId());
+
+        return new CreateReservationResponseDto(reservation);
     }
 
     /**
@@ -67,6 +68,7 @@ public class ReservationService {
 
     /**
      * 예약 내역 조회
+     *
      * @param user 로그인 유저
      * @return 예약 내역
      */

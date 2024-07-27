@@ -1,4 +1,4 @@
-package com.sparta.kakaopayment.entity;
+package com.sparta.domain.kakaopayment.entity;
 
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;

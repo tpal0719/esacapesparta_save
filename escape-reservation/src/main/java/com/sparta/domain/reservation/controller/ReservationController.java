@@ -1,14 +1,13 @@
-package com.sparta.controller;
+package com.sparta.domain.reservation.controller;
 
-import com.sparta.dto.CreateReservationRequestDto;
-import com.sparta.dto.CreateReservationResponseDto;
-import com.sparta.dto.GetReservationResponseDto;
+import com.sparta.domain.reservation.dto.CreateReservationRequestDto;
+import com.sparta.domain.reservation.dto.CreateReservationResponseDto;
+import com.sparta.domain.reservation.dto.GetReservationResponseDto;
+import com.sparta.domain.reservation.service.ReservationService;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.security.UserDetailsImpl;
-import com.sparta.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.type.ListType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

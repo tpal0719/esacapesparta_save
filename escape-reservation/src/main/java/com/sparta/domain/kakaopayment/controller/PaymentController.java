@@ -1,9 +1,8 @@
-package com.sparta.kakaopayment.controller;
+package com.sparta.domain.kakaopayment.controller;
 
+import com.sparta.domain.kakaopayment.service.KakaoPayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
-import com.sparta.kakaopayment.service.KakaoPayService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

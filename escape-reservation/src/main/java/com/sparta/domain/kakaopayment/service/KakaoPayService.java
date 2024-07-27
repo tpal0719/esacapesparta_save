@@ -1,12 +1,11 @@
-package com.sparta.kakaopayment.service;
+package com.sparta.domain.kakaopayment.service;
 
 import com.sparta.domain.reservation.entity.Reservation;
+import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
-import com.sparta.domain.user.entity.User;
-import com.sparta.kakaopayment.dto.KakaoPaymentResponseDto;
-import com.sparta.kakaopayment.entity.KakaoPayment;
-import com.sparta.kakaopayment.repository.PaymentRepository;
-import lombok.NoArgsConstructor;
+import com.sparta.domain.kakaopayment.dto.response.KakaoPaymentResponseDto;
+import com.sparta.domain.kakaopayment.entity.KakaoPayment;
+import com.sparta.domain.kakaopayment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +39,14 @@ public class KakaoPayService {
     private String failURL; //결제완료
 
 
+    //단건결제
     private static final String KAKAO_PAY_API_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
+    
+    //주문조회
+    private static final String KAKAO_ORDER_API_URL = "https://open-api.kakaopay.com/online/v1/payment/order";
+
+    //결제취소
+    private static final String KAKAO_CANCEL_API_URL = "https://open-api.kakaopay.com/online/v1/payment/cancel";
 
 
     /**
@@ -83,6 +89,9 @@ public class KakaoPayService {
 
         //show data
         log.info(KakaoPaymentResponseDto.KakaoPaymentInfo(kakaoPayment));
+
+        reservation.setReservationStatus(ReservationStatus.ACTIVE);
+
 
         return response.getBody();
     }

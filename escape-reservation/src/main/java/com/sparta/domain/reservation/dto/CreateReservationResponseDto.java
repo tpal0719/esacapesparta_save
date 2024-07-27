@@ -1,8 +1,7 @@
-package com.sparta.dto;
+package com.sparta.domain.reservation.dto;
 
 import com.sparta.domain.reservation.entity.PaymentStatus;
 import com.sparta.domain.reservation.entity.Reservation;
-import com.sparta.service.ReservationService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
