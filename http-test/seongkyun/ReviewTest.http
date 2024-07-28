@@ -1,0 +1,27 @@
+### 리뷰 작성
+POST http://localhost:8087/reviews
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+{
+  "reservationId": 2,
+  "title": "제목",
+  "contents": "내용",
+  "rating": 4.5
+}
+
+### 리뷰 수정
+PUT http://localhost:8087/reviews/1
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+{
+  "title": "제목111",
+  "contents": "내용",
+  "rating": 4.3
+}
+
+### 리뷰 삭제
+DELETE http://localhost:8087/reviews/1
+Content-Type: application/json
+Authorization: {{user1Auth}}
