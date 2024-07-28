@@ -42,3 +42,10 @@ jwt:
     key: ${JWT_SECRET_KEY}
 server:
   port: ${RESERVATION_SERVER_PORT}
+
+kakao-payment:
+  admin-key: ${PAY_ADMIN_KEY}
+  cid: TC0ONETIME
+  approve-url:  http://localhost:${RESERVATION_SERVER_PORT}/payments/kakaoPaySuccess
+  cancel-url: http://localhost:${RESERVATION_SERVER_PORT}/payments/kakaoPayCancel
+  fail-url: http://localhost:${RESERVATION_SERVER_PORT}/payments/kakaoPayFail

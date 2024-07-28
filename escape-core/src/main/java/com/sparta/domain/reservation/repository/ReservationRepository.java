@@ -14,6 +14,12 @@ import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long>, ReservationRepositoryCustom{
 
+    default Reservation findByIdOrElse(Long reservationId){
+       return findById(reservationId).orElseThrow(
+               ()->new ReservationException(ReservationErrorCode.RESERVATION_NOT_FOUND));
+    }
+
+
     Optional<Reservation> findByIdAndUser(Long reservationId, User user);
 
     Optional<Reservation> findByIdAndReservationStatus(Long reservationId, ReservationStatus reservationStatus);

@@ -1,4 +1,4 @@
-package com.sparta.dto;
+package com.sparta.domain.reservation.dto;
 
 import com.sparta.domain.reservation.entity.PaymentStatus;
 import com.sparta.domain.reservation.entity.Reservation;
@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class GetReservationResponseDto {
+public class ReservationResponseDto {
     private Long reservationId;
     private String themeImage;
     private String themeTitle;
@@ -19,7 +19,7 @@ public class GetReservationResponseDto {
     private PaymentStatus paymentStatus;
     private ReservationStatus reservationStatus;
 
-    public GetReservationResponseDto(Reservation reservation){
+    public ReservationResponseDto(Reservation reservation){
         this.reservationId = reservation.getId();
         this.themeImage = reservation.getTheme().getThemeImage();
         this.themeTitle = reservation.getTheme().getTitle();

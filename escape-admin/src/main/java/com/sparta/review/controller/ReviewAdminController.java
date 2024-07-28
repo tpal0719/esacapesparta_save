@@ -1,8 +1,6 @@
 package com.sparta.review.controller;
 
-import com.sparta.domain.user.dto.UserResponseDto;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.review.dto.ReviewResponseDto;
 import com.sparta.review.service.ReviewAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,12 +9,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-public class ReviewController {
+public class ReviewAdminController {
 
     private final ReviewAdminService reviewService;
 

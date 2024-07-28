@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -16,6 +17,12 @@ public class Reservation extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // payment 추가
+
+    private String tid; //결제완료시 코드
+
+    private String cid; //가맹점 코드
 
     @Column(nullable = false)
     private Integer player; //플레이 인원
@@ -54,7 +61,17 @@ public class Reservation extends TimeStamped {
         this.themeTime = themeTime;
     }
 
+    public void paymentToReservation(String tid, String cid) {
+        this.tid = tid;
+        this.cid = cid;
+    }
+
     public void updateReservationStatus(){
         this.reservationStatus = ReservationStatus.DEACTIVE;
     }
+
+    public void updatePaymentStatus(PaymentStatus paymentStatus){
+        this.paymentStatus = paymentStatus;
+    }
+
 }

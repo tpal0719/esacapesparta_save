@@ -1,11 +1,12 @@
 package com.sparta.controller;
 
-import com.sparta.dto.ReservationCreateRequestDto;
-import com.sparta.dto.ReservationCreateResponseDto;
-import com.sparta.dto.GetReservationResponseDto;
+
+import com.sparta.domain.reservation.dto.ReservationCreateRequestDto;
+import com.sparta.domain.reservation.dto.ReservationCreateResponseDto;
+import com.sparta.domain.reservation.dto.ReservationResponseDto;
+import com.sparta.domain.reservation.service.ReservationService;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.security.UserDetailsImpl;
-import com.sparta.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -80,12 +81,12 @@ public class ReservationController {
      * @return 예약 내역
      */
     @GetMapping("/reservations")
-    public ResponseEntity<ResponseMessage<List<GetReservationResponseDto>>> getReservations(
+    public ResponseEntity<ResponseMessage<List<ReservationResponseDto>>> getReservations(
             @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        List<GetReservationResponseDto> responseDtoList = reservationService.getReservations(userDetails.getUser());
+        List<ReservationResponseDto> responseDtoList = reservationService.getReservations(userDetails.getUser());
 
-        ResponseMessage<List<GetReservationResponseDto>> responseMessage = ResponseMessage.<List<GetReservationResponseDto>>builder()
+        ResponseMessage<List<ReservationResponseDto>> responseMessage = ResponseMessage.<List<ReservationResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("예약을 조회했습니다.")
                 .data(responseDtoList)
