@@ -1,6 +1,6 @@
 package com.sparta.domain.reservation.service;
 
-import com.sparta.domain.kakaopayment.service.KakaoPayService;
+import com.sparta.domain.kakaopayment.service.PaymentService;
 import com.sparta.domain.reservation.dto.CreateReservationRequestDto;
 import com.sparta.domain.reservation.dto.CreateReservationResponseDto;
 import com.sparta.domain.reservation.dto.GetReservationResponseDto;
@@ -24,7 +24,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ThemeTimeRepository themeTimeRepository;
-    private final KakaoPayService kakaoPayService;
+    private final PaymentService paymentService;
 
 
     /**
@@ -42,16 +42,13 @@ public class ReservationService {
                 .player(requestDto.getPlayer())
                 .price(requestDto.getPrice())
                 .paymentStatus(requestDto.getPaymentStatus())
-                .reservationStatus(ReservationStatus.DEACTIVE)
+                .reservationStatus(ReservationStatus.ACTIVE)
                 .user(user)
                 .theme(themeTime.getTheme())
                 .themeTime(themeTime)
                 .build();
 
-        reservationRepository.save(reservation);
-        kakaoPayService.preparePayment(reservation.getId());
-
-        return new CreateReservationResponseDto(reservation);
+        return new CreateReservationResponseDto( reservationRepository.save(reservation));
     }
 
     /**
@@ -63,7 +60,8 @@ public class ReservationService {
     public void deleteReservation(Long reservationId, User user) {
         Reservation reservation = reservationRepository.findByIdAndUserAndActive(reservationId, user);
         reservation.updateReservationStatus();
-        //환불 하는 기능 추가 해야됨
+
+        paymentService.refundPayment(reservationId);
     }
 
     /**

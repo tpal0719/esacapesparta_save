@@ -1,30 +1,24 @@
 package com.sparta.domain.kakaopayment.controller;
 
-import com.sparta.domain.kakaopayment.service.KakaoPayService;
+
+import com.sparta.domain.kakaopayment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/payment")
+@RequestMapping("/payments")
 public class PaymentController {
 
+    private final PaymentService paymentService;
 
-    private final KakaoPayService kakaoPayService;
-
-    @GetMapping
-    public String paymentForm() {
-        return "paymentForm";
-    }
-
-    @PostMapping("/prepare/{reservationId}")
-    public String preparePayment(@PathVariable Long reservationId,
+    @PostMapping("/reservationId/{reservationId}")
+    public String preparePayment(Long reservationId,
                                  Model model) {
-        Map<String, Object> response = kakaoPayService.preparePayment(reservationId);
+        Map<String, Object> response = paymentService.preparePayment(reservationId);
         model.addAttribute("nextRedirectPcUrl", response.get("next_redirect_pc_url"));
         return "redirect:" + response.get("next_redirect_pc_url");
     }

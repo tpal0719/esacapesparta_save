@@ -18,12 +18,19 @@ public class Reservation extends TimeStamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // payment 추가
+    @Setter
+    private String tid; //결제완료시 코드
+    @Setter
+    private String cid; //가맹점 코드
+
     @Column(nullable = false)
     private Integer player; //플레이 인원
 
     @Column(nullable = false)
     private Long price;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus paymentStatus;

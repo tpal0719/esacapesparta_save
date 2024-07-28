@@ -1,13 +1,10 @@
 package com.sparta.domain.kakaopayment.service;
 
+
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
-import com.sparta.domain.kakaopayment.dto.response.KakaoPayResponseDto;
-import com.sparta.domain.kakaopayment.entity.KakaoPayment;
-import com.sparta.domain.kakaopayment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,14 +15,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
-public class KakaoPayService {
+public class PaymentService {
 
     private final ReservationRepository reservationRepository;
-    private final PaymentRepository paymentRepository;
 
     @Value("${kakao-payment.admin-key}")
     private String kakaoApiKey; //kakao api key
@@ -49,13 +46,15 @@ public class KakaoPayService {
 
     /**
      * TODO: 결제할 수 있는 URL 넘겨줌
-     * @param reservationId 예약정보만 넘겨줌
+     *
+     * @param reservationId 예약 아이디
      * @return key - value format json
      * @author SEMI
      */
     public Map<String, Object> preparePayment(Long reservationId) {
-        Reservation reservation = reservationRepository.findByIdOrElse(reservationId);
 
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+        
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -65,10 +64,13 @@ public class KakaoPayService {
         Map<String, String> params = new HashMap<>();
         params.put("cid", cid);
         params.put("partner_order_id", String.valueOf(reservationId));
-        params.put("partner_user_id", String.valueOf(reservation.getUser().getEmail()));
-        params.put("item_name", reservation.getTheme().getTitle() + " / "+
-                reservation.getPlayer()+"인 / "+
-                reservation.getThemeTime().getStartTime());
+        params.put("partner_user_id", String.valueOf(reservation.getUser().getId()));
+
+        String itemName = reservation.getTheme().getTitle() + " / " +
+                reservation.getPlayer() + "인 / " +
+                reservation.getThemeTime();
+
+        params.put("item_name", itemName);
         params.put("quantity", "1"); //1개의 예약은 1개의 수량 고정
         params.put("total_amount", String.valueOf(reservation.getPrice()));
         params.put("vat_amount", "0");
@@ -81,40 +83,72 @@ public class KakaoPayService {
 
         ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_PAY_API_URL, entity, Map.class);
 
-        //KakaoPayment table save
-        Object tid = response.getBody().get("tid");
-        KakaoPayment kakaoPayment = saveKakaoPayment(String.valueOf(tid),reservation);
+        reservation.setCid(cid);
+        reservation.setTid(Objects.requireNonNull(response.getBody()).get("tid").toString());
 
-        reservation.setReservationStatus(ReservationStatus.ACTIVE);
+        return response.getBody();
+    }
+
+    /**
+     * TODO: 결제 환불
+     *
+     * @param reservationId 예약 고유 id
+     * @return key - value format json
+     * @author SEMI
+     */
+    public Map<String, Object> refundPayment(Long reservationId) {
+
+        Reservation reservation = reservationRepository.findByIdOrElse(reservationId);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "SECRET_KEY " + kakaoApiKey);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cid", cid);
+        params.put("tid", reservation.getTid());
+
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
+
+        reservation.setReservationStatus(ReservationStatus.DEACTIVE);
+        ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_ORDER_API_URL, entity, Map.class);
+
 
         return response.getBody();
     }
 
 
 
-    /* Utils */
-
     /**
-     * TODO: KakaoPayment 테이블에도 결제정보 저장
-     * @param tid kakao가 response 해준 결제정보 id
-     * @param reservation
-     * @return 저장한 KakaoPayment data
+     * TODO: 결제정보 조회
+     *
+     * @param reservationId 결제정보
+     * @return key - value format json
      * @author SEMI
      */
-    public KakaoPayment saveKakaoPayment(String tid,Reservation reservation) {
+    public Map<String, Object> getPaymentInfo(Long reservationId) {
 
-        //우리 테이블에도 저장
-        KakaoPayment kakaoPayment = KakaoPayment.builder()
-                .cid(cid)
-                .tid(tid)
-                .reservationId(String.valueOf(reservation.getId()))
-                .price(String.valueOf(reservation.getPrice()))
-                .themeName(reservation.getTheme().getTitle())
-                .userEmail(String.valueOf(reservation.getUser().getEmail()))
-                .build();
-        paymentRepository.save(kakaoPayment);
+        Reservation reservation = reservationRepository.findByIdOrElse(reservationId);
 
-        return kakaoPayment;
+        RestTemplate restTemplate = new RestTemplate();
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "SECRET_KEY " + kakaoApiKey);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cid", cid);
+        params.put("tid", reservation.getTid());
+        params.put("cancel_amount", String.valueOf(reservation.getPrice()));
+        params.put("cancel_tax_free_amount", "0");
+
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_CANCEL_API_URL, entity, Map.class);
+
+
+        return response.getBody();
     }
 }
