@@ -37,15 +37,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
-    @PostMapping("/signup/admin")
-    public void createAdminUser() {
-        userService.createAdminUser();
-    }
-    @PostMapping("/signup/manager")
-    public void createManagerUser() {
-        userService.createManagerUser();
-    }
-
     // TODO : 로그아웃
     @PutMapping("/logout")
     public ResponseEntity<ResponseMessage<Long>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {

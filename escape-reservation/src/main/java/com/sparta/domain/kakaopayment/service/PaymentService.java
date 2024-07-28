@@ -83,8 +83,8 @@ public class PaymentService {
 
         ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_PAY_API_URL, entity, Map.class);
 
-        reservation.setCid(cid);
-        reservation.setTid(Objects.requireNonNull(response.getBody()).get("tid").toString());
+        reservation.paymentToReservation(cid,
+                                        Objects.requireNonNull(response.getBody()).get("tid").toString());
 
         return response.getBody();
     }
@@ -112,7 +112,7 @@ public class PaymentService {
 
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
 
-        reservation.setReservationStatus(ReservationStatus.DEACTIVE);
+        reservation.updateReservationStatus();
         ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_ORDER_API_URL, entity, Map.class);
 
 

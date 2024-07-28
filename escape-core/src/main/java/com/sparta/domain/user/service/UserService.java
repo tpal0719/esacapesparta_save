@@ -93,34 +93,4 @@ public class UserService {
         return user.getId();
     }
 
-    // TODO : 유저 찾기
-
-
-
-
-    /* Temp TestCode */
-
-    //admin 추가
-    @Transactional
-    public void createAdminUser() {
-        //암호화
-        String encodedPassword = passwordEncoder.encode("Test1234!");
-
-        User user = new User("어드민", "admin@email.com",encodedPassword ,
-                OAuthProvider.ORIGIN, UserType.ADMIN, UserStatus.ACTIVE);
-        // ORIGIN 일단 구현 -> 나중에 @kakao, @google 등으로 이메일 확인해서 swtich case로 구현 생각중
-        userRepository.save(user);
-    }
-
-    //manager 추가
-    @Transactional
-    public void createManagerUser() {
-        //암호화
-        String encodedPassword = passwordEncoder.encode("Test1234!");
-
-        User user = new User("매니저", "manager@email.com", encodedPassword,
-                OAuthProvider.ORIGIN, UserType.MANAGER, UserStatus.ACTIVE);
-        // ORIGIN 일단 구현 -> 나중에 @kakao, @google 등으로 이메일 확인해서 swtich case로 구현 생각중
-        userRepository.save(user);
-    }
 }

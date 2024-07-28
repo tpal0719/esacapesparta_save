@@ -19,9 +19,9 @@ public class Reservation extends TimeStamped {
     private Long id;
 
     // payment 추가
-    @Setter
+
     private String tid; //결제완료시 코드
-    @Setter
+
     private String cid; //가맹점 코드
 
     @Column(nullable = false)
@@ -30,12 +30,10 @@ public class Reservation extends TimeStamped {
     @Column(nullable = false)
     private Long price;
 
-    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
-    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReservationStatus reservationStatus;
@@ -63,7 +61,17 @@ public class Reservation extends TimeStamped {
         this.themeTime = themeTime;
     }
 
+    public void paymentToReservation(String tid, String cid) {
+        this.tid = tid;
+        this.cid = cid;
+    }
+
     public void updateReservationStatus(){
         this.reservationStatus = ReservationStatus.DEACTIVE;
     }
+
+    public void updatePaymentStatus(PaymentStatus paymentStatus){
+        this.paymentStatus = paymentStatus;
+    }
+
 }
