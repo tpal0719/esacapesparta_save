@@ -11,7 +11,7 @@ Authorization: {{user1Auth}}
 }
 
 ### 예약 취소
-DELETE http://localhost:8086/reservations/1
+DELETE http://localhost:8086/reservations/2
 Content-Type: application/json
 Authorization: {{user1Auth}}
 
