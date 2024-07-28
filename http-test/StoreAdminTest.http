@@ -1,10 +1,10 @@
 ### 방탈출 카페 등록 승인
-PUT http://localhost:8083/admin/stores/1/approval
-Authorization: {{admin1Auth}}
+PUT http://localhost:8081/admin/stores/5/approval
+Authorization: {{adminAuth}}
 
-### 방탈출 테마 등록
-POST http://localhost:8083/manager/stores/themes
-Authorization: {{admin1Auth}}
+### 방탈출 테마 등록 -> postman에서 진행
+POST http://localhost:8088/manager/stores/themes
+Authorization: {{user1Auth}}
 Content-Type: application/json
 
 {

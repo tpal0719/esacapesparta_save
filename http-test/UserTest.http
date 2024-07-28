@@ -1,60 +1,75 @@
-### 매니저 회원가입 (temp code)
-POST http://localhost:8080/users/signup/manager
-
-### 매니저 로그인 (temp code)
-POST http://localhost:8080/users/login
-
-{
-  "email": "manager@email.com",
-  "password": "Test1234!"
-}
-
-> {% client.global.set("manager1Auth", response.headers.valueOf("Authorization")); %}
-
-### 어드민 회원가입 (temp code)
-POST http://localhost:8080/users/signup/admin
-
-
-### 어드민 로그인 (temp code)
-POST http://localhost:8080/users/login
-
-{
-  "email": "admin@email.com",
-  "password": "Test1234!"
-}
-> {% client.global.set("admin1Auth", response.headers.valueOf("Authorization")); %}
-
-
-
-### ====================================================================================
-
-
-### 회원가입 요청
+### 회원가입
 POST http://localhost:8080/users/signup
 Content-Type: application/json
 
 {
-  "name": "박세미",
-  "email": "tpal0719@naver.com",
+  "name": "김윤재",
+  "email": "yooss135@naver.com",
   "password": "Test1234!"
 }
 
-### 로그인 요청
+### 로그인
 POST http://localhost:8080/users/login
 Content-Type: application/json
 
 
 {
-  "email": "tpal0719@naver.com",
+  "email": "yooss135@naver.com",
   "password": "Test1234!"
 }
 > {% client.global.set("user1Auth", response.headers.valueOf("Authorization")); %}
 
-### Email Certification Request
+### 로그아웃
+PUT http://localhost:8080/users/logout
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+
+### 회원탈퇴
+PUT http://localhost:8080/users/withdraw
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+{
+  "password": "Test1234!"
+}
+
+
+### 이메일 인증번호 발송
 POST http://localhost:8080/users/mail
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLquYDsnKTsnqwiLCJhdXRoIjoiVVNFUiIsImV4cCI6MTcyMTgxNjM1NCwiaWF0IjoxNzIxODE0NTU0fQ.rZ7usKXj_0i4xcnmn1x4AsboxSKY8WN_WgdDZMPDC2w
+Authorization: {{user1Auth}}
+
+### 이메일 인증
+GET http://localhost:8080/users/mail
+Authorization: {{user1Auth}}
+
+{
+  "verificationCode":340374
+}
+
+### 로그인한 유저 프로필 조회
+GET http://localhost:8081/users/profile
+Authorization: {{user1Auth}}
 
 
+### 프로필 수정
+PUT http://localhost:8081/users/profile
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+{
+  "name": "김윤재"
+}
+
+### 비밀번호 변경
+PUT http://localhost:8081/users/password
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+{
+  "currentPassword": "Test1234!",
+  "newPassword": "Test123!"
+}
 
 
 ### 매니저 로그인
@@ -62,7 +77,7 @@ POST http://localhost:8080/users/login
 Content-Type: application/json
 
 {
-  "email": "manager@email.com",
+  "email": "mmarland0@facebook.com",
   "password": "Test1234!"
 }
 > {% client.global.set("manager1Auth", response.headers.valueOf("Authorization")); %}
@@ -82,4 +97,3 @@ Content-Type: application/json
 DELETE http://localhost:8083/follow/stores/6
 Content-Type: application/json
 Authorization: {{user1Auth}}
-

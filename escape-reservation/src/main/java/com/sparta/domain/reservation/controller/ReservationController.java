@@ -1,8 +1,9 @@
-package com.sparta.domain.reservation.controller;
+package com.sparta.controller;
 
-import com.sparta.domain.reservation.dto.CreateReservationRequestDto;
-import com.sparta.domain.reservation.dto.CreateReservationResponseDto;
-import com.sparta.domain.reservation.dto.GetReservationResponseDto;
+
+import com.sparta.domain.reservation.dto.ReservationCreateRequestDto;
+import com.sparta.domain.reservation.dto.ReservationCreateResponseDto;
+import com.sparta.domain.reservation.dto.ReservationResponseDto;
 import com.sparta.domain.reservation.service.ReservationService;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.security.UserDetailsImpl;
@@ -35,14 +36,14 @@ public class ReservationController {
      * @return status.code, message, 예약
      */
     @PostMapping("/reservations")
-    public ResponseEntity<ResponseMessage<CreateReservationResponseDto>> createReservation(
-            @RequestBody CreateReservationRequestDto requestDto,
+    public ResponseEntity<ResponseMessage<ReservationCreateResponseDto>> createReservation(
+            @RequestBody ReservationCreateRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        CreateReservationResponseDto responseDto =
+        ReservationCreateResponseDto responseDto =
                 reservationService.createReservation(requestDto, userDetails.getUser());
 
-        ResponseMessage<CreateReservationResponseDto> responseMessage = ResponseMessage.<CreateReservationResponseDto>builder()
+        ResponseMessage<ReservationCreateResponseDto> responseMessage = ResponseMessage.<ReservationCreateResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())
                 .message("예약에 성공했습니다.")
                 .data(responseDto)
@@ -80,12 +81,12 @@ public class ReservationController {
      * @return 예약 내역
      */
     @GetMapping("/reservations")
-    public ResponseEntity<ResponseMessage<List<GetReservationResponseDto>>> getReservations(
+    public ResponseEntity<ResponseMessage<List<ReservationResponseDto>>> getReservations(
             @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        List<GetReservationResponseDto> responseDtoList = reservationService.getReservations(userDetails.getUser());
+        List<ReservationResponseDto> responseDtoList = reservationService.getReservations(userDetails.getUser());
 
-        ResponseMessage<List<GetReservationResponseDto>> responseMessage = ResponseMessage.<List<GetReservationResponseDto>>builder()
+        ResponseMessage<List<ReservationResponseDto>> responseMessage = ResponseMessage.<List<ReservationResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("예약을 조회했습니다.")
                 .data(responseDtoList)

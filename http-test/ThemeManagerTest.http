@@ -1,5 +1,5 @@
-### 방탈출 테마 등록
-POST http://localhost:8081/manager/stores/themes
+### 방탈출 테마 등록 -> postman
+POST http://localhost:8088/manager/stores/themes
 Authorization: {{manager1Auth}}
 Content-Type: application/json
 
@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 
 ### 방탈출 카페의 테마 조회
-GET http://localhost:8088/manager/stores/1/themes
+GET http://localhost:8088/manager/stores/4/themes
 Authorization: {{manager1Auth}}
 
 ### 방탈출 테마 수정
@@ -25,15 +25,14 @@ Authorization: {{manager1Auth}}
 Content-Type: application/json
 
 {
-  "storeId": 1,
   "title": "정신병동 살인사건 - 수정",
   "contents": "정신병동에 살인사건 발생. 무슨 일일까?",
   "level": 3,
-  "duration": "120",
+  "duration": 120,
   "minPlayer": 1,
-  "maxPlayer": 4,
+  "maxPlayer": 5,
   "themeType": "MYSTERY",
-  "price": 0
+  "price": 10000
 }
 
 ### 방탈출 테마 삭제

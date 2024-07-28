@@ -1,9 +1,9 @@
 package com.sparta.domain.reservation.service;
 
 import com.sparta.domain.kakaopayment.service.PaymentService;
-import com.sparta.domain.reservation.dto.CreateReservationRequestDto;
-import com.sparta.domain.reservation.dto.CreateReservationResponseDto;
-import com.sparta.domain.reservation.dto.GetReservationResponseDto;
+import com.sparta.domain.reservation.dto.ReservationCreateRequestDto;
+import com.sparta.domain.reservation.dto.ReservationCreateResponseDto;
+import com.sparta.domain.reservation.dto.ReservationResponseDto;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
@@ -34,7 +34,7 @@ public class ReservationService {
      * @return 예약
      */
     @Transactional
-    public CreateReservationResponseDto createReservation(CreateReservationRequestDto requestDto, User user) {
+    public ReservationCreateResponseDto createReservation(ReservationCreateRequestDto requestDto, User user) {
         ThemeTime themeTime = themeTimeRepository.checkStoreAndThemeActive(requestDto.getThemeTimeId());
         reservationRepository.checkReservation(themeTime);
 
@@ -48,7 +48,7 @@ public class ReservationService {
                 .themeTime(themeTime)
                 .build();
 
-        return new CreateReservationResponseDto( reservationRepository.save(reservation));
+        return new ReservationCreateResponseDto( reservationRepository.save(reservation));
     }
 
     /**
@@ -70,9 +70,9 @@ public class ReservationService {
      * @param user 로그인 유저
      * @return 예약 내역
      */
-    public List<GetReservationResponseDto> getReservations(User user) {
+    public List<ReservationResponseDto> getReservations(User user) {
         List<Reservation> reservationList = reservationRepository.findByUser(user);
 
-        return reservationList.stream().map(GetReservationResponseDto::new).toList();
+        return reservationList.stream().map(ReservationResponseDto::new).toList();
     }
 }

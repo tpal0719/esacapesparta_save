@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CreateReservationRequestDto {
+public class ReservationCreateRequestDto {
     private Long themeTimeId;
     private Integer player;
     private Long price;
