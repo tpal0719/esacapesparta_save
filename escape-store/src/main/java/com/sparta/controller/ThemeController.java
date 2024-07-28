@@ -107,7 +107,7 @@ public class ThemeController {
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("방탈출 카페 이미지 삭제가 완료되었습니다.")
+                .message("방탈출 테마 이미지 삭제가 완료되었습니다.")
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

@@ -12,6 +12,8 @@ public class ThemeDetailResponseDto {
     private String contents;
     private Integer level;
     private Integer duration;
+    private Integer minPlayer;
+    private Integer maxPlayer;
     private String themeType;
     private Long price;
     private String themeImage;
@@ -24,6 +26,8 @@ public class ThemeDetailResponseDto {
         this.contents = theme.getContents();
         this.level = theme.getLevel();
         this.duration = theme.getDuration();
+        this.minPlayer = theme.getMinPlayer();
+        this.maxPlayer = theme.getMaxPlayer();
         this.themeType = theme.getThemeType().getName();
         this.price = theme.getPrice();
         this.themeImage = theme.getThemeImage();
