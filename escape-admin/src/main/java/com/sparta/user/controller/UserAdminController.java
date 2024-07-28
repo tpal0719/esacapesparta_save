@@ -2,7 +2,7 @@ package com.sparta.user.controller;
 
 import com.sparta.domain.user.dto.UserResponseDto;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.user.service.UserService;
+import com.sparta.user.service.UserAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +16,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-public class UserController {
+public class UserAdminController {
 
-    private final UserService userService;
+    private final UserAdminService userAdminService;
 
     /**
      * TODO : 모든 Manager 조회
@@ -29,7 +29,7 @@ public class UserController {
     @Secured("ADMIN")
     public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllManagers() {
 
-        List<UserResponseDto> responseDto = userService.getAllManagers();
+        List<UserResponseDto> responseDto = userAdminService.getAllManagers();
 
         ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -48,7 +48,7 @@ public class UserController {
     @Secured("ADMIN")
     public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllConsumers() {
 
-        List<UserResponseDto> responseDto = userService.getAllConsumers();
+        List<UserResponseDto> responseDto = userAdminService.getAllConsumers();
 
         ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
