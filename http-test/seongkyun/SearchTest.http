@@ -1,0 +1,40 @@
+### 방탈출 카페 조회
+GET http://localhost:8083/search/stores
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+### 방탈출 카페 테마 조회
+GET http://localhost:8083/search/stores/1/theme
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+### 방탈출 카페 테마 상세 조회
+GET http://localhost:8083/search/stores/theme/1/info
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+{
+  "storeId": 1
+}
+
+### 방탈출 카페 테마 시간 조회
+GET http://localhost:8083/search/stores/theme/1/time
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+{
+  "storeId": 1
+}
+
+### 방탈출 카페 테마 시간 조회
+GET http://localhost:8083/search/reviews
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+{
+  "storeId": 1,
+  "themeId": 1
+}
+
+
+
