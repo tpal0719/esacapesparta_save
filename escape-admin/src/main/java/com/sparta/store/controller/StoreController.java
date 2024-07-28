@@ -1,9 +1,9 @@
 package com.sparta.store.controller;
 
-import com.sparta.dto.request.StoreCreateRequestDto;
-import com.sparta.dto.response.StoreResponseDto;
+import com.sparta.store.dto.StoreCreateRequestDto;
+import com.sparta.store.dto.StoreResponseDto;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.service.StoreAdminService;
+import com.sparta.store.service.StoreAdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
