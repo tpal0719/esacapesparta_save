@@ -37,4 +37,4 @@ jwt:
   secret:
     key: ${JWT_SECRET_KEY}
 server:
-  port: ${SERVER_PORT}
+  port: ${CORE_SERVER_PORT}

@@ -19,8 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.sparta.domain.store.entity.QStore.store;
-
 @Service
 @RequiredArgsConstructor
 public class ThemeService {

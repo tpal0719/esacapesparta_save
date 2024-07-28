@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/admin")
 public class UserAdminController {
 
-    private final UserAdminService userService;
+    private final UserAdminService userAdminService;
 
     /**
      * TODO : 모든 Manager 조회
@@ -29,7 +29,7 @@ public class UserAdminController {
     @Secured("ADMIN")
     public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllManagers() {
 
-        List<UserResponseDto> responseDto = userService.getAllManagers();
+        List<UserResponseDto> responseDto = userAdminService.getAllManagers();
 
         ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -48,7 +48,7 @@ public class UserAdminController {
     @Secured("ADMIN")
     public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllConsumers() {
 
-        List<UserResponseDto> responseDto = userService.getAllConsumers();
+        List<UserResponseDto> responseDto = userAdminService.getAllConsumers();
 
         ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
