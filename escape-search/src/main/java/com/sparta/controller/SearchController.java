@@ -59,7 +59,7 @@ public class SearchController {
     }
 
     /**
-     * 방탈출 카페 조회
+     * 방탈출 카페 테마 조회
      * @param storeId 방탈출 카페 id
      * @param pageNum 페이지 번호
      * @param pageSize 페이지에 담는 데이터 수
@@ -135,7 +135,7 @@ public class SearchController {
      * @param reviewRequestDto 방탈출 카페 id, 테마 id가 들어있는 dto
      * @return status.code, message, 리뷰 반환
      */
-    @GetMapping("/review")
+    @GetMapping("/reviews")
     public ResponseEntity<ResponseMessage<List<ReviewResponseDto>>> getReview(
                 @Valid @RequestBody ReviewRequestDto reviewRequestDto){
 
