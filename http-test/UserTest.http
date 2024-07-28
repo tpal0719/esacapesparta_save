@@ -22,7 +22,8 @@ Content-Type: application/json
 ### 로그아웃
 PUT http://localhost:8080/users/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGEwMUBuYXZlci5jb20iLCJhdXRoIjoiVVNFUiIsImV4cCI6MTcyMTg5ODE4NCwiaWF0IjoxNzIxODk2Mzg0fQ.jXvXN7xsUWWuTM-OvYnCYYJi2UKEFmSPyVrb-65sa9s
+Authorization: {{user1Auth}}
+
 
 ### 회원탈퇴
 PUT http://localhost:8080/users/withdraw
@@ -36,11 +37,11 @@ Authorization: {{user1Auth}}
 
 ### 이메일 인증번호 발송
 POST http://localhost:8080/users/mail
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLquYDsnKTsnqwiLCJhdXRoIjoiVVNFUiIsImV4cCI6MTcyMTgxNjM1NCwiaWF0IjoxNzIxODE0NTU0fQ.rZ7usKXj_0i4xcnmn1x4AsboxSKY8WN_WgdDZMPDC2w
+Authorization: {{user1Auth}}
 
 ### 이메일 인증
 GET http://localhost:8080/users/mail
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLquYDsnKTsnqwiLCJhdXRoIjoiVVNFUiIsImV4cCI6MTcyMTgxNjM1NCwiaWF0IjoxNzIxODE0NTU0fQ.rZ7usKXj_0i4xcnmn1x4AsboxSKY8WN_WgdDZMPDC2w
+Authorization: {{user1Auth}}
 
 {
   "verificationCode":340374
@@ -48,7 +49,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLquYDsnKTsnqwiLCJhdXRoIjoiV
 
 ### 로그인한 유저 프로필 조회
 GET http://localhost:8081/users/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLquYDsnKTsnqwiLCJhdXRoIjoiVVNFUiIsImV4cCI6MTcyMTgxNjM1NCwiaWF0IjoxNzIxODE0NTU0fQ.rZ7usKXj_0i4xcnmn1x4AsboxSKY8WN_WgdDZMPDC2w
+Authorization: {{user1Auth}}
+
 
 ### 프로필 수정
 PUT http://localhost:8081/users/profile
