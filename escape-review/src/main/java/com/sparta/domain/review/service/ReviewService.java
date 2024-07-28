@@ -28,43 +28,43 @@ public class ReviewService {
 
     /**
      * 테마 리뷰 작성
-     * @param createReviewRequestDto 작성할 리뷰의 데이터 값
+     * @param reviewCreateRequestDto 작성할 리뷰의 데이터 값
      * @param user 로그인 유저
      * @return 작성한 리뷰 반환
      */
     @Transactional
-    public CreateReviewResponseDto createReview(CreateReviewRequestDto createReviewRequestDto, User user) {
+    public ReviewCreateResponseDto createReview(ReviewCreateRequestDto reviewCreateRequestDto, User user) {
         //데이터 재활용 가능
 //        Store store = storeRepository.findByActiveStore(createReviewRequestDto.getStoreId());
 //        Theme theme = themeRepository.findByActiveTheme(createReviewRequestDto.getThemeId());
-        Reservation reservation = reservationRepository.findByIdAndUserOrElseThrow(createReviewRequestDto.getReservationId(), user);
+        Reservation reservation = reservationRepository.findByIdAndUserOrElseThrow(reviewCreateRequestDto.getReservationId(), user);
 
         reviewRepository.checkIfAlreadyReview(user, reservation);
 
         Review review = Review.builder()
-                .rating(createReviewRequestDto.getRating())
-                .title(createReviewRequestDto.getTitle())
-                .contents(createReviewRequestDto.getContents())
+                .rating(reviewCreateRequestDto.getRating())
+                .title(reviewCreateRequestDto.getTitle())
+                .contents(reviewCreateRequestDto.getContents())
                 .user(user)
                 .theme(reservation.getTheme())
                 .reservation(reservation)
                 .build();
 
-        return new CreateReviewResponseDto(reviewRepository.save(review));
+        return new ReviewCreateResponseDto(reviewRepository.save(review));
 
     }
 
     /**
      * 테마 리뷰 수정
-     * @param updateReviewRequestDto 수정할 리뷰의 데이터 값
+     * @param reviewUpdateRequestDto 수정할 리뷰의 데이터 값
      * @param user 로그인 유저
      * @return 수정한 리뷰 반환
      */
     @Transactional
-    public UpdateReviewResponseDto updateReview(Long reviewId, UpdateReviewRequestDto updateReviewRequestDto, User user) {
+    public ReviewUpdateResponseDto updateReview(Long reviewId, ReviewUpdateRequestDto reviewUpdateRequestDto, User user) {
         Review review = reviewRepository.findByIdAndUserOrElse(reviewId, user);
-        review.update(updateReviewRequestDto.getTitle(), updateReviewRequestDto.getContents(), updateReviewRequestDto.getRating());
-        return new UpdateReviewResponseDto(review);
+        review.update(reviewUpdateRequestDto.getTitle(), reviewUpdateRequestDto.getContents(), reviewUpdateRequestDto.getRating());
+        return new ReviewUpdateResponseDto(review);
     }
 
     /**

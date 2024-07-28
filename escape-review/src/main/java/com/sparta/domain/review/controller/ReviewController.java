@@ -25,21 +25,21 @@ public class ReviewController {
 
     /**
      * 테마 리뷰 등록
-     * @param createReviewRequestDto 작성할 리뷰의 데이터 값
+     * @param reviewCreateRequestDto 작성할 리뷰의 데이터 값
      * @param userDetails 로그인 유저
      * @return status.code, message, 작성한 리뷰
      */
     @PostMapping("/reviews")
-    public ResponseEntity<ResponseMessage<CreateReviewResponseDto>> createReview(
-            @Valid @RequestBody CreateReviewRequestDto createReviewRequestDto,
+    public ResponseEntity<ResponseMessage<ReviewCreateResponseDto>> createReview(
+            @Valid @RequestBody ReviewCreateRequestDto reviewCreateRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        CreateReviewResponseDto createReviewResponseDto = reviewService.createReview(createReviewRequestDto, userDetails.getUser());
+        ReviewCreateResponseDto reviewCreateResponseDto = reviewService.createReview(reviewCreateRequestDto, userDetails.getUser());
 
-        ResponseMessage<CreateReviewResponseDto> responseMessage = ResponseMessage.<CreateReviewResponseDto>builder()
+        ResponseMessage<ReviewCreateResponseDto> responseMessage = ResponseMessage.<ReviewCreateResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())
                 .message("리뷰 등록 성공!")
-                .data(createReviewResponseDto)
+                .data(reviewCreateResponseDto)
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
@@ -48,23 +48,23 @@ public class ReviewController {
     /**
      * 테마 리뷰 수정
      * @param reviewId 수정할 리뷰의 id
-     * @param updateReviewRequestDto 수정할 리뷰의 데이터 값
+     * @param reviewUpdateRequestDto 수정할 리뷰의 데이터 값
      * @param userDetails 로그인 유저
      * @return status.code, message, 수정한 리뷰
      */
     @PutMapping("/reviews/{reviewId}")
-    public ResponseEntity<ResponseMessage<UpdateReviewResponseDto>> updateReview(
+    public ResponseEntity<ResponseMessage<ReviewUpdateResponseDto>> updateReview(
             @PathVariable Long reviewId,
-            @Valid @RequestBody UpdateReviewRequestDto updateReviewRequestDto,
+            @Valid @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        UpdateReviewResponseDto updateReviewResponseDto = reviewService.updateReview(reviewId, updateReviewRequestDto,
+        ReviewUpdateResponseDto reviewUpdateResponseDto = reviewService.updateReview(reviewId, reviewUpdateRequestDto,
                                                                                                 userDetails.getUser());
 
-        ResponseMessage<UpdateReviewResponseDto> responseMessage = ResponseMessage.<UpdateReviewResponseDto>builder()
+        ResponseMessage<ReviewUpdateResponseDto> responseMessage = ResponseMessage.<ReviewUpdateResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("리뷰 수정 성공!")
-                .data(updateReviewResponseDto)
+                .data(reviewUpdateResponseDto)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

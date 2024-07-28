@@ -4,7 +4,7 @@ import com.sparta.domain.review.entity.Review;
 import lombok.Getter;
 
 @Getter
-public class UpdateReviewResponseDto {
+public class ReviewCreateResponseDto {
     private Long reviewId;
 //    private String storeName;
 //    private String themeName;
@@ -12,7 +12,7 @@ public class UpdateReviewResponseDto {
     private String contents;
     private Double rating;
 
-    public UpdateReviewResponseDto(Review review){
+    public ReviewCreateResponseDto(Review review){
         this.reviewId = review.getId();
 //        this.storeName = review.getTheme().getStore().getName();
 //        this.themeName = review.getTheme().getTitle();
