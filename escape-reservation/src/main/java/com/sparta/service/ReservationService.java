@@ -6,8 +6,8 @@ import com.sparta.domain.reservation.repository.ReservationRepository;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.domain.user.entity.User;
-import com.sparta.dto.CreateReservationRequestDto;
-import com.sparta.dto.CreateReservationResponseDto;
+import com.sparta.dto.ReservationCreateRequestDto;
+import com.sparta.dto.ReservationCreateResponseDto;
 import com.sparta.dto.GetReservationResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class ReservationService {
      * @return 예약
      */
     @Transactional
-    public CreateReservationResponseDto createReservation(CreateReservationRequestDto requestDto, User user) {
+    public ReservationCreateResponseDto createReservation(ReservationCreateRequestDto requestDto, User user) {
         ThemeTime themeTime = themeTimeRepository.checkStoreAndThemeActive(requestDto.getThemeTimeId());
         reservationRepository.checkReservation(themeTime);
 
@@ -50,7 +50,7 @@ public class ReservationService {
                 .themeTime(themeTime)
                 .build();
 
-        return new CreateReservationResponseDto(reservationRepository.save(reservation));
+        return new ReservationCreateResponseDto(reservationRepository.save(reservation));
     }
 
     /**
