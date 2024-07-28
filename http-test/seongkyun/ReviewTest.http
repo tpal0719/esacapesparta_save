@@ -22,6 +22,25 @@ Authorization: {{user1Auth}}
 }
 
 ### 리뷰 삭제
-DELETE http://localhost:8087/reviews/1
+DELETE http://localhost:8087/reviews/2
 Content-Type: application/json
 Authorization: {{user1Auth}}
+
+### 리뷰 상세 조회
+GET http://localhost:8087/reviews/2
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+### 내가 쓴 리뷰 조회
+GET http://localhost:8087/mypage/reviews
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+### 리뷰 리액션 등록
+POST http://localhost:8087/reviews/2/reaction
+Content-Type: application/json
+Authorization: {{user1Auth}}
+
+{
+  "reactionType": "GOOD"
+}
