@@ -33,6 +33,11 @@ spring:
           ssl:
             trust: smtp.gmail.com
             enable: true #반드시 필요 -> SSL 필요로 되어있으면
+  aws:
+    ses:
+      accessKey: ${ACCESS_KEY}
+      secretKey: ${SECRET_KEY}
+      region: ${REGION}
   data:
     redis:
       port: ${REDIS_MAIL_PORT}
