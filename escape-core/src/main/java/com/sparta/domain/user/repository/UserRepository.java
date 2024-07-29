@@ -12,18 +12,24 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     default User findByIdOrElseThrow(Long userId) {
-        return findById(userId).orElseThrow(()->new UserException(UserErrorCode.USER_NOT_FOUND));
+        return findById(userId).orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
     }
+
     List<User> findByUserType(UserType userType);
 
     default User findByEmailOrElseThrow(String email) {
-        return findByEmail(email).orElseThrow(()->new UserException(UserErrorCode.USER_NOT_FOUND));
+        return findByEmail(email).orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
     }
-    Optional<User> findByEmail(String email); // 고민중
+
+    Optional<User> findByEmail(String email);
 
     default User findByUserId(Long userId) {
+        return findById(userId).orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+    }
 
-        return findById(userId).orElseThrow(
-                () -> new UserException(UserErrorCode.USER_NOT_FOUND));
+    Optional<User> findByInviteCode(String code);
+
+    default User findByInviteCodeOrElseThrow(String code) {
+        return findByInviteCode(code).orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
     }
 }
