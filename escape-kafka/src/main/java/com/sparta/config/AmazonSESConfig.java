@@ -23,7 +23,6 @@ public class AmazonSESConfig {
 
     @Bean
     public AmazonSimpleEmailService amazonSimpleEmailService() {
-        log.error("{}!!!!!!!", accessKey);
         BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
         return AmazonSimpleEmailServiceClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
