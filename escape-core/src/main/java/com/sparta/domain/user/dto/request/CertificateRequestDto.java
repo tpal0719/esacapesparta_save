@@ -11,6 +11,6 @@ public class CertificateRequestDto {
     @NotBlank(message = "인증 코드를 받을 이메일을 입력해주세요.")
     private String email;
 
-    @NotNull(message = "ADMIN,MANAGER 중 한가지를 입력해주세요.")
+    @NotNull(message = "USER, ADMIN, MANAGER 중 한가지를 입력해주세요.")
     private UserType userType;
 }
