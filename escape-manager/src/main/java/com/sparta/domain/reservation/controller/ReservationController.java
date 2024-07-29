@@ -1,10 +1,9 @@
-package com.sparta.controller;
+package com.sparta.domain.reservation.controller;
 
-import com.sparta.dto.response.ReservationsGetResponseDto;
-import com.sparta.dto.response.StoresGetResponseDto;
+import com.sparta.domain.reservation.dto.ReservationsGetResponseDto;
+import com.sparta.domain.reservation.service.ReservationService;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.security.UserDetailsImpl;
-import com.sparta.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Secured({"MANAGER", "ADMIN"})
+@Secured("MANAGER")
 @RequestMapping("/manager/stores/themes")
 @RequiredArgsConstructor
 public class ReservationController {

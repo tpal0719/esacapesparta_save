@@ -1,12 +1,11 @@
-package com.sparta.controller;
+package com.sparta.domain.theme.controller;
 
-import com.sparta.dto.request.ThemeCreateRequestDto;
-import com.sparta.dto.request.ThemeTimeCreateRequestDto;
-import com.sparta.dto.request.ThemeTimeModifyRequestDto;
-import com.sparta.dto.response.ThemeTimeDetailResponseDto;
+import com.sparta.domain.theme.dto.request.ThemeTimeCreateRequestDto;
+import com.sparta.domain.theme.dto.request.ThemeTimeModifyRequestDto;
+import com.sparta.domain.theme.dto.response.ThemeTimeDetailResponseDto;
+import com.sparta.domain.theme.service.ThemeTimeAdminService;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.security.UserDetailsImpl;
-import com.sparta.service.ThemeTimeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Secured({"MANAGER", "ADMIN"})
-@RequestMapping("/manager/stores/themes")
+@Secured("ADMIN")
+@RequestMapping("/admin/stores/themes")
 @RequiredArgsConstructor
-public class ThemeTimeController {
-    private final ThemeTimeService themeTimeService;
+public class ThemeTimeAdminController {
+    private final ThemeTimeAdminService themeTimeService;
 
     @PostMapping("/{themeId}/theme-time")
     public ResponseEntity<ResponseMessage<ThemeTimeDetailResponseDto>> createThemeTime(
@@ -30,7 +29,7 @@ public class ThemeTimeController {
             @Valid @RequestBody ThemeTimeCreateRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        ThemeTimeDetailResponseDto responseDto = themeTimeService.createThemeTime(themeId, requestDto, userDetails.getUser());
+        ThemeTimeDetailResponseDto responseDto = themeTimeService.createThemeTime(themeId, requestDto);
 
         ResponseMessage<ThemeTimeDetailResponseDto> responseMessage = ResponseMessage.<ThemeTimeDetailResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())
@@ -44,12 +43,10 @@ public class ThemeTimeController {
     @GetMapping("/{themeId}/theme-time")
     public ResponseEntity<ResponseMessage<List<ThemeTimeDetailResponseDto>>> getThemeTimes(
             @PathVariable Long themeId,
-            @RequestParam(value = "date", required = false)
-//            @Pattern(message = "yyyy-MM-dd 형식으로 작성해주세요.", regexp = "^(19|20)\\d\\d-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$")
-            String date,
+            @RequestParam(value = "date", required = false) String date,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        List<ThemeTimeDetailResponseDto> responseDto = themeTimeService.getThemeTimes(themeId, date, userDetails.getUser());
+        List<ThemeTimeDetailResponseDto> responseDto = themeTimeService.getThemeTimes(themeId, date);
 
         ResponseMessage<List<ThemeTimeDetailResponseDto>> responseMessage = ResponseMessage.<List<ThemeTimeDetailResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -66,7 +63,7 @@ public class ThemeTimeController {
             @Valid @RequestBody ThemeTimeModifyRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        ThemeTimeDetailResponseDto responseDto = themeTimeService.modifyThemeTime(themeTimeId, requestDto, userDetails.getUser());
+        ThemeTimeDetailResponseDto responseDto = themeTimeService.modifyThemeTime(themeTimeId, requestDto);
 
         ResponseMessage<ThemeTimeDetailResponseDto> responseMessage = ResponseMessage.<ThemeTimeDetailResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -82,7 +79,7 @@ public class ThemeTimeController {
             @PathVariable Long themeTimeId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        themeTimeService.deleteThemeTime(themeTimeId, userDetails.getUser());
+        themeTimeService.deleteThemeTime(themeTimeId);
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.OK.value())
