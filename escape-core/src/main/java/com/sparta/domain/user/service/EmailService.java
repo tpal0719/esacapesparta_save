@@ -71,28 +71,54 @@ public class EmailService {
         return result;
     }
 
+
     // TODO : 초대코드 생성 메서드
-    public String createInviteCode(UserType role) {
-        String prefix = switch (role) {
-            case ADMIN -> "1";
-            case MANAGER -> "2";
-            default -> "0";
-        };
+    public String createInviteCode(UserType userType) {
+        String prefix;
+        switch (userType) {
+            case ADMIN:
+                prefix = "1";
+                break;
+            case MANAGER:
+                prefix = "2";
+                break;
+            default:
+                prefix = "0";
+                break;
+        }
         return prefix + UUID.randomUUID().toString().substring(1);
     }
 
     // TODO : 권한을 결정하는 초대코드 이메일 발송 메서드
-    public void sendInviteCode(String channel, String inviteCode) {
-        String message = "초대 코드: " + " " + inviteCode;
-        redisTemplate.convertAndSend("spartaproject13@gmail.com"+ "ata01@naver.com", channel + ":" + message);
+    public void sendInviteCode(String email, String inviteCode) throws MessagingException {
+        // 실제 이메일 발송
+        sendInviteCodeEmail(email, inviteCode);
+
+        // Redis 메세지 브로커
+        String message = "초대 코드: " + inviteCode;
+        redisTemplate.convertAndSend("spartaprocject13@gmail.com", email + ":" + message);
+    }
+
+    // 실제 이메일 발송 메서드
+    private void sendInviteCodeEmail(String email, String inviteCode) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setFrom("spartaproject13@gmail.com");
+        helper.setTo(email);
+        helper.setSubject("초대 코드");
+        helper.setText("초대 코드: " + inviteCode);
+
+        mailSender.send(message);
     }
 
     // TODO : 초대코드 검증 메서드
     public UserType validateInviteCode(String code) {
-        User user = userRepository.findByInviteCodeOrElseThrow(code);
-        if (user.getInviteCodeExpirationTime().isBefore(LocalDateTime.now())) {
-            throw new UserException(EmailErrorCode.EMAIL_VERIFICATION_CODE_MISMATCH);
-        }
-        return user.getUserType();
+        String prefix = code.substring(0, 1);
+        return switch (prefix) {
+            case "1" -> UserType.ADMIN;
+            case "2" -> UserType.MANAGER;
+            default -> UserType.USER;
+        };
     }
 }

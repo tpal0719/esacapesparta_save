@@ -25,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
+    private final EmailService emailService;
 
 
     /**
@@ -40,11 +41,21 @@ public class UserService {
         // 이메일로 유저 중복검사
         duplicateUserEmail(requestDto.getEmail());
 
+        // 초대코드 검증 (null값 혹은 빈칸일시 UserType User로 설정)
+        UserType userType;
+        if (requestDto.getInviteCode() == null || requestDto.getInviteCode().isBlank()) {
+            userType = UserType.USER;
+        } else {
+            userType = emailService.validateInviteCode(requestDto.getInviteCode());
+        }
+
+
+
         //암호화
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         User user = new User(requestDto.getName(), requestDto.getEmail(), encodedPassword,
-                OAuthProvider.ORIGIN, UserType.USER, UserStatus.ACTIVE);
+                OAuthProvider.ORIGIN, userType, UserStatus.DEACTIVE);
         // ORIGIN 일단 구현 -> 나중에 @kakao, @google 등으로 이메일 확인해서 swtich case로 구현 생각중
         userRepository.save(user);
 
@@ -92,7 +103,4 @@ public class UserService {
 
         return user.getId();
     }
-
-    // TODO : 유저 찾기
-
 }
