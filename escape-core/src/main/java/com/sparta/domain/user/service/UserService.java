@@ -1,6 +1,5 @@
 package com.sparta.domain.user.service;
 
-import com.sparta.config.EmailConfig;
 import com.sparta.domain.user.dto.request.SignupRequestDto;
 import com.sparta.domain.user.dto.request.WithdrawRequestDto;
 import com.sparta.domain.user.dto.response.SignupResponseDto;
@@ -17,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -27,8 +25,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
-    private final EmailService emailService;
-    private final EmailConfig emailConfig;
 
 
     /**
@@ -47,15 +43,8 @@ public class UserService {
         //암호화
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        //회원가입시 기본 권한을 User로 설정
-        UserType role = UserType.USER;
-
-        if (requestDto.getInviteCode() != null) {
-            role = emailService.validateInviteCode(requestDto.getInviteCode());
-        }
-
         User user = new User(requestDto.getName(), requestDto.getEmail(), encodedPassword,
-                OAuthProvider.ORIGIN, role, UserStatus.DEACTIVE);
+                OAuthProvider.ORIGIN, UserType.USER, UserStatus.ACTIVE);
         // ORIGIN 일단 구현 -> 나중에 @kakao, @google 등으로 이메일 확인해서 swtich case로 구현 생각중
         userRepository.save(user);
 
@@ -69,22 +58,6 @@ public class UserService {
             throw new UserException(UserErrorCode.USER_DUPLICATION);
         }
     }
-
-    @Transactional
-    public String createInviteCode(UserType role) {
-        String code = emailService.createInviteCode(role);
-        LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(3);
-
-        User user = new User();
-        user.sendInviteCode(code, expirationTime);
-        userRepository.save(user);
-
-        String inviteEmail = emailConfig.getInviteEmail();
-        emailService.sendInviteCode(inviteEmail, code);
-
-        return code;
-    }
-
 
     // TODO : 이메일 인증받은 유저 상태 업데이트
     @Transactional
@@ -120,5 +93,6 @@ public class UserService {
         return user.getId();
     }
 
+    // TODO : 유저 찾기
 
 }

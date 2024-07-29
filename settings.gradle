@@ -4,8 +4,6 @@ include 'escape-admin'
 include 'escape-manager'
 include 'escape-consumer'
 include 'escape-reservation'
-include 'escape-follow'
 include 'escape-store'
-include 'escape-review'
 include 'escape-search'
 
