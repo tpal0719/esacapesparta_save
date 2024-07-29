@@ -1,10 +1,10 @@
-package com.sparta.service;
+package com.sparta.domain.consumer.service;
 
 import com.sparta.domain.user.dto.UserResponseDto;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.repository.UserRepository;
-import com.sparta.dto.request.EditPasswordRequestDto;
-import com.sparta.dto.request.EditProfileRequestDto;
+import com.sparta.domain.consumer.dto.request.EditPasswordRequestDto;
+import com.sparta.domain.consumer.dto.request.EditProfileRequestDto;
 import com.sparta.global.exception.customException.UserException;
 import com.sparta.global.exception.errorCode.UserErrorCode;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.sparta.dto;
+package com.sparta.domain.consumer.dto;
 
 public class CreateReservationRequestDto {
 }

@@ -1,13 +1,13 @@
-package com.sparta.controller;
+package com.sparta.domain.consumer.controller;
 
 import com.sparta.domain.user.dto.UserResponseDto;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.service.UserService;
-import com.sparta.dto.request.EditPasswordRequestDto;
-import com.sparta.dto.request.EditProfileRequestDto;
+import com.sparta.domain.consumer.dto.request.EditPasswordRequestDto;
+import com.sparta.domain.consumer.dto.request.EditProfileRequestDto;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.security.UserDetailsImpl;
-import com.sparta.service.ConsumerService;
+import com.sparta.domain.consumer.service.ConsumerService;
 import jakarta.validation.Valid;
 import com.sparta.feign.EscapeReservationClient;
 import lombok.RequiredArgsConstructor;
