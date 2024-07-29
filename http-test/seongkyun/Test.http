@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name": "박성균",
-  "email": "yooss1355@naver.com",
+  "email": "yooss135@naver.com",
   "password": "Test1234!"
 }
 
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 
 {
-  "email": "yooss1355@naver.com",
+  "email": "yooss135@naver.com",
   "password": "Test1234!"
 }
 > {% client.global.set("user1Auth", response.headers.valueOf("Authorization")); %}

@@ -48,6 +48,8 @@ spring:
       accessKey: ${ACCESS_KEY}
       secretKey: ${SECRET_KEY}
       region: ${REGION}
+  invite:
+    email: ${ROLE_EMAIL}
 
 jwt:
   secret:
