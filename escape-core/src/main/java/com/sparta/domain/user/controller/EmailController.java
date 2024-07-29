@@ -1,7 +1,7 @@
 package com.sparta.domain.user.controller;
 
-import ch.qos.logback.classic.Logger;
 import com.sparta.domain.user.dto.request.EmailVerificationRequestDto;
+import com.sparta.domain.user.dto.request.InviteRequestDto;
 import com.sparta.domain.user.service.EmailService;
 import com.sparta.domain.user.service.UserService;
 import com.sparta.global.response.ResponseMessage;
@@ -61,4 +61,18 @@ public class EmailController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
+    // TODO : 초대 코드 이메일 발송
+    @PostMapping("/invite")
+    public ResponseEntity<ResponseMessage<String>> sendInviteCode(@RequestBody InviteRequestDto requestDto) throws MessagingException {
+        String inviteCode = emailService.createInviteCode(requestDto.getUserType());
+        emailService.sendInviteCode(requestDto.getEmail(), inviteCode);
+
+        ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("초대 코드가 생성되어 발송되었습니다.")
+                .data(requestDto.getEmail())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
 }

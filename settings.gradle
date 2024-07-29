@@ -4,7 +4,6 @@ include 'escape-admin'
 include 'escape-manager'
 include 'escape-consumer'
 include 'escape-reservation'
-include 'escape-store'
 include 'escape-search'
 include 'escape-kafka'
 
