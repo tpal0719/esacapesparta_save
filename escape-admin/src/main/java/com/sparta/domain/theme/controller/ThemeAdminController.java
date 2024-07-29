@@ -10,13 +10,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/admin/stores")
-@Secured("ADMIN")
 @RequiredArgsConstructor
 public class ThemeAdminController {
     private final ThemeAdminService themeService;

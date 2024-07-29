@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/manager/stores")
-@Secured("MANAGER")
 @RequiredArgsConstructor
 public class ThemeController {
     private final ThemeService themeService;

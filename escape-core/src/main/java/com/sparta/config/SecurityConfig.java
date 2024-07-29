@@ -72,6 +72,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST,"/users/signup/**").permitAll() // non-user 접근허용
                 .requestMatchers(HttpMethod.GET,"/search/**").permitAll() // non-user 접근허용 + 차후 리팩토링
                 .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll() //리뷰 조회 접근허용
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                .requestMatchers("/manager/**").hasAuthority("MANAGER")
                 .anyRequest().authenticated()
         );
 

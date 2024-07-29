@@ -26,7 +26,6 @@ public class UserAdminController {
      * @author SEMI
      */
     @GetMapping("/managers")
-    @Secured("ADMIN")
     public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllManagers() {
 
         List<UserResponseDto> responseDto = userAdminService.getAllManagers();
@@ -45,7 +44,6 @@ public class UserAdminController {
      * @author SEMI
      */
     @GetMapping("/consumers")
-    @Secured("ADMIN")
     public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllConsumers() {
 
         List<UserResponseDto> responseDto = userAdminService.getAllConsumers();
