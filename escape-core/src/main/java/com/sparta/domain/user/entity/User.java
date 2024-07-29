@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,12 @@ public class User extends TimeStamped {
 
     @Column(nullable = false)
     private Long point = 0L;
+
+    @Column(nullable = true)
+    private String inviteCode;
+
+    // 초대 코드 만료시간
+    private LocalDateTime inviteCodeExpirationTime;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -73,4 +80,10 @@ public class User extends TimeStamped {
     public void changePassword(String newPassword) {
         this.password = newPassword;
     }
+
+    public void sendInviteCode(String inviteCode, LocalDateTime expirationTime) { // 초대 코드에 따라 권한이 결정되는 코드
+        this.inviteCode = inviteCode;
+        this.inviteCodeExpirationTime = expirationTime;
+    }
+
 }

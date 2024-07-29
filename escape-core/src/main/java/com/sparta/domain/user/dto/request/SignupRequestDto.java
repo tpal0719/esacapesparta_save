@@ -1,5 +1,6 @@
 package com.sparta.domain.user.dto.request;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -21,6 +22,8 @@ public class SignupRequestDto {
             message = "비밀번호는 대문자 1개, 특수문자 1개, 영문 및 숫자를 포함한 7자 이상이어야 합니다.")
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
     private String password;
+
+    private String inviteCode;
 
 
 }
