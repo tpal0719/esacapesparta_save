@@ -1,6 +1,5 @@
 package com.sparta.domain.user.dto.request;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -23,7 +22,8 @@ public class SignupRequestDto {
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
     private String password;
 
-    private String inviteCode;
+    @NotBlank(message = "인증 코드는 필수 입력 값입니다.")
+    private String certificateCode;
 
-
+    private String adminKey;
 }

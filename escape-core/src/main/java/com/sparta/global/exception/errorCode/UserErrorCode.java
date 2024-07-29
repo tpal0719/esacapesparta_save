@@ -14,7 +14,9 @@ public enum UserErrorCode implements ErrorCode {
     USER_DUPLICATION(HttpStatus.BAD_REQUEST.value(), "이미 등록된 이메일 입니다."),
     USER_WITHDRAW(HttpStatus.BAD_REQUEST.value(), "해당 사용자는 탈퇴한 사용자입니다."),
     PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST.value(), "비밀번호가 일치하지 않습니다."),
-    PASSWORD_NOT_MIXMATCH(HttpStatus.BAD_REQUEST.value(), "현재 비밀번호와 동일한 비밀번호 입니다");
+    PASSWORD_NOT_MIXMATCH(HttpStatus.BAD_REQUEST.value(), "현재 비밀번호와 동일한 비밀번호 입니다."),
+    EMPTY_ADMIN_KEY(HttpStatus.BAD_REQUEST.value(), "관리자 키값을 입력해주세요."),
+    INVALID_ADMIN_KEY(HttpStatus.BAD_REQUEST.value(), "관리자 키값이 유효하지 않습니다.");
 
 
     private final int httpStatusCode;

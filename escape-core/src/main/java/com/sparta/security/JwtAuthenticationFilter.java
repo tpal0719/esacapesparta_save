@@ -2,6 +2,8 @@ package com.sparta.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.user.dto.request.LoginRequestDto;
+import com.sparta.domain.user.entity.User;
+import com.sparta.domain.user.entity.UserStatus;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.jwt.JwtProvider;
@@ -61,23 +63,29 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
-        UserType role = userDetails.getUser().getUserType();
+        User loginUser = userDetails.getUser();
 
-        String username = userDetails.getUserEmail();
-        String accessToken = jwtProvider.createToken(username, TOKEN_TIME, role);
-        String refreshToken = jwtProvider.createToken(username, REFRESH_TOKEN_TIME, role);
+        if(loginUser.getUserStatus() == UserStatus.ACTIVE) {
+            UserType role = loginUser.getUserType();
 
-        //refresh토큰 저장메서드 추가
-        refreshTokenService.saveRefreshToken(userDetails.getUser(), refreshToken.substring(BEAR.length()));
+            String username = userDetails.getUserEmail();
+            String accessToken = jwtProvider.createToken(username, TOKEN_TIME, role);
+            String refreshToken = jwtProvider.createToken(username, REFRESH_TOKEN_TIME, role);
 
-        // 응답 헤더에 토큰 추가
-        response.addHeader(JwtProvider.AUTHORIZATION_HEADER, accessToken);
-        response.addHeader(JwtProvider.REFRESH_HEADER, refreshToken);
+            //refresh 토큰 저장메서드 추가
+            refreshTokenService.saveRefreshToken(userDetails.getUser(), refreshToken.substring(BEAR.length()));
 
-        // JSON 응답 작성
-        writeJsonResponse(response, HttpStatus.OK, "로그인에 성공했습니다.", authResult.getName());
+            // 응답 헤더에 토큰 추가
+            response.addHeader(JwtProvider.AUTHORIZATION_HEADER, accessToken);
+            response.addHeader(JwtProvider.REFRESH_HEADER, refreshToken);
 
-        log.info("User = {}, message = {}", username, "로그인에 성공했습니다.");
+            // JSON 응답 작성
+            writeJsonResponse(response, HttpStatus.OK, "로그인에 성공했습니다.", authResult.getName());
+
+            log.info("User = {}, message = {}", username, "로그인에 성공했습니다.");
+        } else {
+            writeJsonResponse(response, HttpStatus.BAD_REQUEST, "탈퇴한 유저입니다.", authResult.getName());
+        }
     }
 
     /**

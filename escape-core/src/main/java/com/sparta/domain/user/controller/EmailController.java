@@ -1,18 +1,16 @@
 package com.sparta.domain.user.controller;
 
 import com.sparta.domain.user.dto.request.EmailVerificationRequestDto;
-import com.sparta.domain.user.dto.request.InviteRequestDto;
+import com.sparta.domain.user.dto.request.CertificateRequestDto;
 import com.sparta.domain.user.service.EmailService;
 import com.sparta.domain.user.service.UserService;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -30,10 +28,10 @@ public class EmailController {
     // TODO : 이메일 인증번호 발송
     @PostMapping
     public ResponseEntity<ResponseMessage<String>> sendCertificationNumber(
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
+            @Valid @RequestBody CertificateRequestDto requestDto)
             throws MessagingException, NoSuchAlgorithmException {
 
-        String email = emailService.sendEmailForCertification(userDetails.getUser().getEmail());
+        String email = emailService.sendEmailForCertification(requestDto);
 
         ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -44,35 +42,34 @@ public class EmailController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    // TODO : 이메일 인증번호 확인
-    @GetMapping
-    public ResponseEntity<ResponseMessage<String>> verifyCertificationNumber(
-            @Valid @RequestBody EmailVerificationRequestDto requestDTO,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        emailService.verifyEmail(userDetails.getUser().getEmail(), requestDTO.getVerificationCode());
-        userService.updateUserActive(userDetails.getUser());
+//    // TODO : 이메일 인증번호 확인
+//    @GetMapping
+//    public ResponseEntity<ResponseMessage<String>> verifyCertificationNumber(
+//            @Valid @RequestBody EmailVerificationRequestDto requestDTO
+//    ) {
+//        emailService.verifyEmail(requestDTO.getEmail(), requestDTO.getVerificationCode());
+//
+//        ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
+//                .statusCode(HttpStatus.OK.value())
+//                .message("이메일 인증이 완료되었습니다.")
+//                .data(requestDTO.getEmail())
+//                .build();
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+//    }
 
-        ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("이메일 인증이 완료되었습니다.")
-                .data(userDetails.getUser().getEmail())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
-
-    // TODO : 초대 코드 이메일 발송
-    @PostMapping("/invite")
-    public ResponseEntity<ResponseMessage<String>> sendInviteCode(@RequestBody InviteRequestDto requestDto) throws MessagingException {
-        String inviteCode = emailService.createInviteCode(requestDto.getUserType());
-        emailService.sendInviteCode(requestDto.getEmail(), inviteCode);
-
-        ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("초대 코드가 생성되어 발송되었습니다.")
-                .data(requestDto.getEmail())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+//    // TODO : 초대 코드 이메일 발송
+//    @PostMapping("/invite")
+//    public ResponseEntity<ResponseMessage<String>> sendInviteCode(@RequestBody InviteRequestDto requestDto) throws MessagingException {
+//        String inviteCode = emailService.createInviteCode(requestDto.getUserType());
+//        emailService.sendInviteCode(requestDto.getEmail(), inviteCode);
+//
+//        ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
+//                .statusCode(HttpStatus.OK.value())
+//                .message("초대 코드가 생성되어 발송되었습니다.")
+//                .data(requestDto.getEmail())
+//                .build();
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+//    }
 }
