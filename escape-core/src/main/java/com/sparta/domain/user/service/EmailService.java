@@ -1,5 +1,6 @@
 package com.sparta.domain.user.service;
 
+import java.security.SecureRandom;
 import java.util.UUID;
 
 import com.sparta.domain.user.dto.request.CertificateRequestDto;
@@ -71,7 +72,9 @@ public class EmailService {
                 prefix = "0";
                 break;
         }
-        return prefix + UUID.randomUUID().toString().substring(1);
+        SecureRandom secureRandom = new SecureRandom();
+        int randomNumber = secureRandom.nextInt(900000) + 10000; // 100000 ~ 999999 범위의 6자리 난수 생성
+        return prefix + randomNumber;
     }
 
     public UserType determineUserTypeFromCertificateCode(String code) {

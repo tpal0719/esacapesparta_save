@@ -33,7 +33,7 @@ Content-Type: application/json
   "name": "이서연",
   "email": "0817frog@naver.com",
   "password": "Test1234!",
-  "certificateCode": "06acbf0e-6e2b-453b-883d-f54ede47e032"
+  "certificateCode": "011545"
 }
 
 ### 회원가입 - 매니저
@@ -44,7 +44,7 @@ Content-Type: application/json
   "name": "이서연",
   "email": "0817frog@gmail.com",
   "password": "Test1234!",
-  "certificateCode": "276bc042-7204-484e-85ca-891b9dd76139"
+  "certificateCode": "22824"
 }
 
 ### 회원가입 - admin
