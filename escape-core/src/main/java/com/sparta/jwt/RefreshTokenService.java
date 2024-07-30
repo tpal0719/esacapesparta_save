@@ -1,11 +1,9 @@
 package com.sparta.jwt;
 
-import com.sparta.domain.user.entity.User;
-import com.sparta.domain.user.repository.UserRepository;
+import com.sparta.global.exception.customException.AuthException;
+import com.sparta.global.exception.errorCode.AuthErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +36,18 @@ public class RefreshTokenService {
         }
 
         return true;
+    }
+
+    public void checkValidRefreshToken(String email, String refreshToken) {
+        RefreshToken tokenInfo = (RefreshToken) redisTemplate.opsForValue().get(makeRefreshTokenKey(email));
+
+        if(tokenInfo != null) {
+            if(!refreshToken.equals(tokenInfo.getRefreshToken())) {
+                throw new AuthException(AuthErrorCode.REFRESH_TOKEN_MISMATCH);
+            }
+        } else {
+            throw new AuthException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
+        }
     }
 
     public void deleteRefreshTokenInfo(String email) {

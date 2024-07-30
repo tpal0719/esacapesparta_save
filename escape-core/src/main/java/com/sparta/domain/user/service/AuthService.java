@@ -34,10 +34,7 @@ public class AuthService {
         if(jwtProvider.validateTokenInternal(request, refreshToken)) {
             String userEmail = jwtProvider.getUserInfoFromClaims(refreshToken).getSubject();
 
-            // 해당 리프레시 토큰이 데이터베이스에 존재하는지 확인
-            if(!refreshTokenService.isRefreshTokenPresent(userEmail)) {
-                throw new AuthException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
-            }
+            refreshTokenService.checkValidRefreshToken(userEmail, refreshToken);
 
             // 리프레시 토큰 기반으로 유저 찾기
             User findUser = userRepository.findByEmailOrElseThrow(userEmail);
