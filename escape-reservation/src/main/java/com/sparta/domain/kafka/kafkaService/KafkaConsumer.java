@@ -1,6 +1,6 @@
-package com.sparta.kafkaService;
+package com.sparta.domain.kafka.kafkaService;
 
-import com.sparta.global.KafkaTopic;
+import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,6 +15,7 @@ public class KafkaConsumer {
 
     @KafkaListener(topics = KafkaTopic.PAYMENT_TOPIC, groupId = "${GROUP_ID}")
     public void consume(String message) {
+        log.error("{} 2", message);
 //        Reservation reservation = parseMessage(message);
 
         if (message != null) {

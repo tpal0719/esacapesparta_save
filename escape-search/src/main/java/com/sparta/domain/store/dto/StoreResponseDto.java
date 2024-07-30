@@ -2,8 +2,10 @@ package com.sparta.domain.store.dto;
 
 import com.sparta.domain.store.entity.Store;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class StoreResponseDto {
     private Long storeId;
     private String storeImage;

@@ -1,4 +1,4 @@
-package com.sparta.kafkaService;
+package com.sparta.domain.kafka.kafkaService;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.model.*;
@@ -13,6 +13,7 @@ public class AmazonSESService {
     private final AmazonSimpleEmailService amazonSimpleEmailService;
 
     public void sendEmail(String email, String subject, String body) {
+        log.error(email);
         SendEmailRequest request = new SendEmailRequest()
                 .withDestination(new Destination().withToAddresses(email))
                 .withMessage(new Message()

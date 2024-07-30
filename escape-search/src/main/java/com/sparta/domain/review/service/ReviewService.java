@@ -1,21 +1,19 @@
 package com.sparta.domain.review.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.review.dto.KafkaReviewRequestDto;
 import com.sparta.domain.review.dto.KafkaReviewResponseDto;
 import com.sparta.domain.review.dto.ReviewResponseDto;
-import com.sparta.domain.review.entity.Review;
-import com.sparta.domain.review.repository.ReviewRepository;
-import com.sparta.domain.store.repository.StoreRepository;
-import com.sparta.domain.theme.entity.Theme;
-import com.sparta.domain.theme.repository.ThemeRepository;
-import com.sparta.global.KafkaTopic;
+import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,6 +26,7 @@ public class ReviewService {
 
     private final KafkaTemplate<String, KafkaReviewRequestDto> kafkaTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<List<ReviewResponseDto>>> responseFutures = new ConcurrentHashMap<>();
+    private final ObjectMapper objectMapper;
 
     /**
      * 방탈출 카페 테마 리뷰 조회
@@ -40,14 +39,13 @@ public class ReviewService {
         String requestId = UUID.randomUUID().toString();
         CompletableFuture<List<ReviewResponseDto>> future = new CompletableFuture<>();
         responseFutures.put(requestId, future);
-
         sendReviewRequest(requestId, storeId, themeId);
 
         // Kafka로 요청을 전송하고 응답을 비동기적으로 기다림
         try {
             return future.get(); // 응답을 기다림
         } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException("Failed to get review response", e);
+            throw new RuntimeException("리뷰 response 실패", e);
         }
     }
 
@@ -57,10 +55,20 @@ public class ReviewService {
     }
 
     @KafkaListener(topics = KafkaTopic.REVIEW_RESPONSE_TOPIC, groupId = "${GROUP_ID}")
-    public void handleReviewResponse(KafkaReviewResponseDto reviewResponse) {
-        CompletableFuture<List<ReviewResponseDto>> future = responseFutures.remove(reviewResponse.getRequestId());
+    public void handleReviewResponse(String reviewResponse) {
+        KafkaReviewResponseDto responseDto = parseMessage(reviewResponse);
+        CompletableFuture<List<ReviewResponseDto>> future = responseFutures.remove(Objects.requireNonNull(responseDto).getRequestId());
         if (future != null) {
-            future.complete(reviewResponse.getReviewResponses());
+            future.complete(responseDto.getReviewResponses());
+        }
+    }
+
+        private KafkaReviewResponseDto parseMessage(String message) {
+        try {
+            return objectMapper.readValue(message, KafkaReviewResponseDto.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

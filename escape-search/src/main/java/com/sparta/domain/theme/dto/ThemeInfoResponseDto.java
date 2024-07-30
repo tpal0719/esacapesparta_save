@@ -2,8 +2,10 @@ package com.sparta.domain.theme.dto;
 
 import com.sparta.domain.theme.entity.Theme;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ThemeInfoResponseDto {
     private Long themeId;
     private String title;

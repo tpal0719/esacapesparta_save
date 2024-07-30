@@ -1,4 +1,4 @@
-package com.sparta.config;
+package com.sparta.config;//package com.sparta.config;
 
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -42,20 +42,19 @@ public class KafkaConfig {
     }
 
     @Bean
-    public <T> ConsumerFactory<String, T> consumerFactory(Class<T> valueType) {
+    public <T> ConsumerFactory<String, T> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId);
         configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-
-        return new DefaultKafkaConsumerFactory<>(configProps, new StringDeserializer(), new JsonDeserializer<>(valueType));
+        return new DefaultKafkaConsumerFactory<>(configProps);
     }
 
     @Bean
-    public <T> ConcurrentKafkaListenerContainerFactory<String, T> kafkaListenerContainerFactory(ConsumerFactory<String, T> consumerFactory) {
+    public <T> ConcurrentKafkaListenerContainerFactory<String, T> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, T> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory);
+        factory.setConsumerFactory(consumerFactory());
         return factory;
     }
 }

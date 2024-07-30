@@ -1,5 +1,6 @@
 package com.sparta.domain.reservation.service;
 
+import com.sparta.domain.kafka.kafkaService.KafkaProducer;
 import com.sparta.domain.kakaopayment.service.PaymentService;
 import com.sparta.domain.reservation.dto.ReservationCreateRequestDto;
 import com.sparta.domain.reservation.dto.ReservationCreateResponseDto;
@@ -10,8 +11,7 @@ import com.sparta.domain.reservation.repository.ReservationRepository;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.domain.user.entity.User;
-import com.sparta.global.KafkaTopic;
-import com.sparta.kafkaService.KafkaProducer;
+import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

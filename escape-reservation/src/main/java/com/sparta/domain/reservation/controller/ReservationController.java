@@ -23,12 +23,6 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    //feign 예시
-    @GetMapping("/lost")
-    public String getLost(){
-        return "hello!!!";
-    }
-
     /**
      * 예약 생성
      * @param requestDto 예약 생성에 필요한 데이터

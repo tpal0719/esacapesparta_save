@@ -1,7 +1,6 @@
-package com.sparta.kafkaService;
+package com.sparta.domain.kafka.kafkaService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.domain.review.dto.KafkaReviewRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,12 +12,12 @@ import org.springframework.stereotype.Service;
 public class KafkaProducer {
 
     private final KafkaTemplate<String, String> kafkaEmailTemplate;
-    private final KafkaTemplate<String, KafkaReviewRequestDto> kafkaReviewSearchTemplate;
 
     private final ObjectMapper objectMapper;
 
     public void sendEmail(String topic, String email){
         try{
+            log.error("{} 1", email);
             kafkaEmailTemplate.send(topic, email);
         } catch (Exception e){
             log.error("error");
@@ -34,9 +33,5 @@ public class KafkaProducer {
 //            e.printStackTrace();
 //        }
 //    }
-
-    public void ReviewSearch(String topic, KafkaReviewRequestDto requestDto){
-        kafkaReviewSearchTemplate.send(topic, requestDto);
-    }
 
 }
