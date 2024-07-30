@@ -2,6 +2,8 @@ package com.sparta.domain.user.repository;
 
 import java.time.Duration;
 
+import com.sparta.global.exception.customException.EmailException;
+import com.sparta.global.exception.errorCode.EmailErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,7 +24,10 @@ public class EmailRepository {
 
     public String getCertificationNumber(String email) {
         String str = redisTemplate.opsForValue().get(email);
-        log.error(str);
+        if(str == null) {
+//            log.error(str);
+            throw new EmailException(EmailErrorCode.INVALID_VERIFICATION_CODE);
+        }
         return str;
     }
 

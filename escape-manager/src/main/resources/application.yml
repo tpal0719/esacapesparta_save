@@ -15,6 +15,8 @@ spring:
   redis:
     port: ${REDIS_MAIL_PORT}
     host: ${REDIS_MAIL_HOST}
+  invite:
+    email: ${ROLE_EMAIL}
   mail:
     host: ${MAIL_HOST} #smtp 서버 주소
     port: ${MAIL_PORT} # 메일 인증서버 포트

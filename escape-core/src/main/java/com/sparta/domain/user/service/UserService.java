@@ -12,6 +12,7 @@ import com.sparta.global.exception.customException.UserException;
 import com.sparta.global.exception.errorCode.UserErrorCode;
 import com.sparta.jwt.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,8 @@ public class UserService {
     private final RefreshTokenService refreshTokenService;
     private final EmailService emailService;
 
+    @Value("${admin.key}")
+    private String adminKey;
 
     /**
      * 회원가입
@@ -41,21 +44,23 @@ public class UserService {
         // 이메일로 유저 중복검사
         duplicateUserEmail(requestDto.getEmail());
 
-        // 초대코드 검증 (null값 혹은 빈칸일시 UserType User로 설정)
-        UserType userType;
-        if (requestDto.getInviteCode() == null || requestDto.getInviteCode().isBlank()) {
-            userType = UserType.USER;
-        } else {
-            userType = emailService.validateInviteCode(requestDto.getInviteCode());
+        // 인증 코드로 회원가입할 Role 체크
+        UserType userType = emailService.determineUserTypeFromCertificateCode(requestDto.getCertificateCode());
+
+        // 이메일 인증
+        emailService.verifyEmail(requestDto.getEmail(), requestDto.getCertificateCode());
+
+        if(userType == UserType.ADMIN) {
+            if(!requestDto.getAdminKey().equals(adminKey)) {
+                throw new UserException(UserErrorCode.INVALID_ADMIN_KEY);
+            }
         }
 
-
-
-        //암호화
+        // 암호화
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         User user = new User(requestDto.getName(), requestDto.getEmail(), encodedPassword,
-                OAuthProvider.ORIGIN, userType, UserStatus.DEACTIVE);
+                OAuthProvider.ORIGIN, userType, UserStatus.ACTIVE);
         // ORIGIN 일단 구현 -> 나중에 @kakao, @google 등으로 이메일 확인해서 swtich case로 구현 생각중
         userRepository.save(user);
 
@@ -70,13 +75,13 @@ public class UserService {
         }
     }
 
-    // TODO : 이메일 인증받은 유저 상태 업데이트
-    @Transactional
-    public void updateUserActive(User user) {
-
-        user.activeUser();
-        userRepository.save(user);
-    }
+//    // TODO : 이메일 인증받은 유저 상태 업데이트
+//    @Transactional
+//    public void updateUserActive(User user) {
+//
+//        user.activeUser();
+//        userRepository.save(user);
+//    }
 
     // TODO : 로그아웃 전 사용자 조회
     @Transactional(readOnly = true)

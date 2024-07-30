@@ -1,3 +1,65 @@
+### 회원가입 전 이메일 인증
+POST http://localhost:8080/users/mail
+Content-Type: application/json
+
+{
+  "email": "0817frog@naver.com",
+  "userType": "USER"
+}
+
+### 회원가입 전 이메일 인증 - 매니저
+POST http://localhost:8080/users/mail
+Content-Type: application/json
+
+{
+  "email": "0817frog@gmail.com",
+  "userType": "MANAGER"
+}
+
+### 회원가입 전 이메일 인증 - admin
+POST http://localhost:8080/users/mail
+Content-Type: application/json
+
+{
+  "email": "0817frog@gmail.com",
+  "userType": "ADMIN"
+}
+
+### 회원가입
+POST http://localhost:8080/users/signup
+Content-Type: application/json
+
+{
+  "name": "이서연",
+  "email": "0817frog@naver.com",
+  "password": "Test1234!",
+  "certificateCode": "011545"
+}
+
+### 회원가입 - 매니저
+POST http://localhost:8080/users/signup
+Content-Type: application/json
+
+{
+  "name": "이서연",
+  "email": "0817frog@gmail.com",
+  "password": "Test1234!",
+  "certificateCode": "22824"
+}
+
+### 회원가입 - admin
+POST http://localhost:8080/users/signup
+Content-Type: application/json
+
+{
+  "name": "이서연",
+  "email": "0817frog@gmail.com",
+  "password": "Test1234!",
+  "certificateCode": "1db5b075-8a3e-457e-8c1c-d5c0b831c5d2",
+  "adminKey": "asknd0enfdlvzn0a9wer2je09f8ashdnojff23g"
+}
+
+
 ### 회원가입
 POST http://localhost:8080/users/signup
 Content-Type: application/json
