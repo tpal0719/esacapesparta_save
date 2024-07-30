@@ -50,7 +50,7 @@ public class ReservationService {
                 .themeTime(themeTime)
                 .build();
 
-        kafkaProducer.sendEmail(KafkaTopic.PAYMENT_TOPIC, user.getEmail());
+        kafkaProducer.sendCreateReservationEmail(KafkaTopic.PAYMENT_TOPIC, user.getEmail());
 
         return new ReservationCreateResponseDto( reservationRepository.save(reservation));
     }
@@ -65,6 +65,7 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findByIdAndUserAndActive(reservationId, user);
         reservation.updateReservationStatus();
 
+        kafkaProducer.sendDeleteReservationEmail(KafkaTopic.PAYMENT_DELETE_TOPIC, user.getEmail());
         paymentService.refundPayment(reservationId);
     }
 

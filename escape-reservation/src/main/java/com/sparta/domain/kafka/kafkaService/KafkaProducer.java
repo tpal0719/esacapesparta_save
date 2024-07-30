@@ -15,9 +15,16 @@ public class KafkaProducer {
 
     private final ObjectMapper objectMapper;
 
-    public void sendEmail(String topic, String email){
+    public void sendCreateReservationEmail(String topic, String email){
         try{
-            log.error("{} 1", email);
+            kafkaEmailTemplate.send(topic, email);
+        } catch (Exception e){
+            log.error("error");
+        }
+    }
+
+    public void sendDeleteReservationEmail(String topic, String email){
+        try{
             kafkaEmailTemplate.send(topic, email);
         } catch (Exception e){
             log.error("error");
