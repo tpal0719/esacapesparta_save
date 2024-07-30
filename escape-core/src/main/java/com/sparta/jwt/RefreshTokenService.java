@@ -20,20 +20,20 @@ public class RefreshTokenService {
     private static final long refreshTokenTTL = 7 * 24 * 60 * 60 * 1000L;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public void saveRefreshTokenInfo(String email, String newRefreshToken) {
-        String parsedRefreshToken = newRefreshToken.substring(BEARER_PREFIX.length());
+    public void saveRefreshTokenInfo(String email, String refreshToken) {
+        String parsedRefreshToken = refreshToken.substring(BEARER_PREFIX.length());
         String key = makeRefreshTokenKey(email);
 
-        RefreshToken refreshToken = RefreshToken.builder()
+        RefreshTokenInfo refreshTokenInfo = RefreshTokenInfo.builder()
                 .refreshToken(parsedRefreshToken)
                 .expiration(refreshTokenTTL)
                 .build();
 
-        redisTemplate.opsForValue().set(key, refreshToken, refreshTokenTTL, TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set(key, refreshTokenInfo, refreshTokenTTL, TimeUnit.MILLISECONDS);
     }
 
     public boolean isRefreshTokenPresent(String email) {
-        RefreshToken tokenInfo = (RefreshToken) redisTemplate.opsForValue().get(makeRefreshTokenKey(email));
+        RefreshTokenInfo tokenInfo = (RefreshTokenInfo) redisTemplate.opsForValue().get(makeRefreshTokenKey(email));
 
         if(tokenInfo == null) {
             return false;
@@ -43,7 +43,7 @@ public class RefreshTokenService {
     }
 
     public void checkValidRefreshToken(String email, String refreshToken) {
-        RefreshToken tokenInfo = (RefreshToken) redisTemplate.opsForValue().get(makeRefreshTokenKey(email));
+        RefreshTokenInfo tokenInfo = (RefreshTokenInfo) redisTemplate.opsForValue().get(makeRefreshTokenKey(email));
 
         if(tokenInfo != null) {
             if(!refreshToken.equals(tokenInfo.getRefreshToken())) {

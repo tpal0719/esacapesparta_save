@@ -7,7 +7,6 @@ import com.sparta.domain.user.entity.UserStatus;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.global.exception.errorCode.SecurityErrorCode;
 import com.sparta.jwt.JwtProvider;
-import com.sparta.jwt.RefreshToken;
 import com.sparta.jwt.RefreshTokenService;
 import com.sparta.security.ResponseUtil;
 import com.sparta.security.UserDetailsImpl;
