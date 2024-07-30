@@ -168,7 +168,7 @@ Content-Type: application/json
 Authorization: {{user1Auth}}
 
 ### 토큰 재발급
-POST http://localhost:8080/users/reissue
+POST http://localhost:8080/auth/reissue
 Authorization: {{manager1Auth}}
 RefreshToken: {{manager1Refresh}}
 

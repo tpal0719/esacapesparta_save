@@ -2,12 +2,9 @@ package com.sparta.domain.user.service;
 
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.repository.UserRepository;
-import com.sparta.global.exception.customException.CustomSecurityException;
-import com.sparta.global.exception.customException.RefreshTokenException;
-import com.sparta.global.exception.errorCode.RefreshTokenErrorCode;
-import com.sparta.global.exception.errorCode.SecurityErrorCode;
+import com.sparta.global.exception.customException.AuthException;
+import com.sparta.global.exception.errorCode.AuthErrorCode;
 import com.sparta.jwt.JwtProvider;
-import com.sparta.jwt.RefreshToken;
 import com.sparta.jwt.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +27,7 @@ public class AuthService {
 
         // 액세스가 만료되었는지 확인
         if(!jwtProvider.isExpiredAccessToken(accessToken)) {
-            throw new CustomSecurityException(SecurityErrorCode.NOT_EXPIRED_ACCESS_TOKEN);
+            throw new AuthException(AuthErrorCode.NOT_EXPIRED_ACCESS_TOKEN);
         }
 
         // 리프레시 토큰 검증
@@ -39,7 +36,7 @@ public class AuthService {
 
             // 해당 리프레시 토큰이 데이터베이스에 존재하는지 확인
             if(!refreshTokenService.isRefreshTokenPresent(userEmail)) {
-                throw new RefreshTokenException(RefreshTokenErrorCode.REFRESH_TOKEN_NOT_FOUND);
+                throw new AuthException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
             }
 
             // 리프레시 토큰 기반으로 유저 찾기
@@ -55,7 +52,7 @@ public class AuthService {
             response.addHeader(JwtProvider.REFRESH_HEADER, newRefreshToken);
 
         } else {
-            throw new CustomSecurityException(SecurityErrorCode.INVALID_REFRESH_TOKEN);
+            throw new AuthException(AuthErrorCode.INVALID_REFRESH_TOKEN);
         }
     }
 }

@@ -2,8 +2,6 @@ package com.sparta.jwt;
 
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.repository.UserRepository;
-import com.sparta.global.exception.customException.RefreshTokenException;
-import com.sparta.global.exception.errorCode.RefreshTokenErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

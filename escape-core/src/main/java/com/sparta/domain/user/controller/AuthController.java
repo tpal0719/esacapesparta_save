@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/users/reissue")
+    @PostMapping("/auth/reissue")
     public ResponseEntity<ResponseMessage<Void>> reissue(HttpServletRequest request, HttpServletResponse response) {
         authService.reissue(request, response);
 
