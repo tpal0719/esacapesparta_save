@@ -1,8 +1,10 @@
-package com.sparta.security;
+package com.sparta.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.global.exception.errorCode.CommonErrorCode;
+import com.sparta.global.exception.errorCode.SecurityErrorCode;
 import com.sparta.global.response.ResponseErrorMessage;
+import com.sparta.security.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +20,9 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
-    private final ObjectMapper objectMapper;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-        ResponseErrorMessage errorMessage = new ResponseErrorMessage(CommonErrorCode.USER_FORBIDDEN);
-
-        String body = objectMapper.writeValueAsString(errorMessage);
-
-        response.setStatus(HttpStatus.FORBIDDEN.value());
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(body);
+        ResponseUtil.writeJsonErrorResponse(response, SecurityErrorCode.USER_FORBIDDEN);
     }
 }

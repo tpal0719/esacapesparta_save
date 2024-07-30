@@ -3,9 +3,10 @@ package com.sparta.config;
 import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.jwt.JwtProvider;
 import com.sparta.jwt.RefreshTokenService;
-import com.sparta.security.CustomAccessDeniedHandler;
-import com.sparta.security.JwtAuthenticationFilter;
-import com.sparta.security.JwtAuthorizationFilter;
+import com.sparta.security.filter.CustomAccessDeniedHandler;
+import com.sparta.security.filter.CustomAuthenticationEntryPoint;
+import com.sparta.security.filter.JwtAuthenticationFilter;
+import com.sparta.security.filter.JwtAuthorizationFilter;
 import com.sparta.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -33,9 +34,9 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,7 +57,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtProvider, userDetailsService);
+        return new JwtAuthorizationFilter(jwtProvider, refreshTokenService, userDetailsService);
     }
 
     @Bean
@@ -71,6 +72,7 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //resource 접근 허용 설정
                 .requestMatchers(HttpMethod.POST,"/users/signup/**").permitAll() // non-user 접근허용
                 .requestMatchers(HttpMethod.POST,"/users/mail/**").permitAll() // non-user 접근허용
+                .requestMatchers(HttpMethod.POST,"/auth/reissue").permitAll()
                 .requestMatchers(HttpMethod.GET,"/search/**").permitAll() // non-user 접근허용 + 차후 리팩토링
                 .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll() //리뷰 조회 접근허용
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
@@ -83,6 +85,7 @@ public class SecurityConfig {
 
         http.exceptionHandling(exceptionHandling ->
                 exceptionHandling
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler)
         );
 

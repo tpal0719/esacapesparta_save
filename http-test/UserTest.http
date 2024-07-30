@@ -33,7 +33,7 @@ Content-Type: application/json
   "name": "이서연",
   "email": "0817frog@naver.com",
   "password": "Test1234!",
-  "certificateCode": "011545"
+  "certificateCode": "0718874"
 }
 
 ### 회원가입 - 매니저
@@ -142,7 +142,10 @@ Content-Type: application/json
   "email": "mmarland0@facebook.com",
   "password": "Test1234!"
 }
-> {% client.global.set("manager1Auth", response.headers.valueOf("Authorization")); %}
+> {%
+    client.global.set("manager1Auth", response.headers.valueOf("Authorization"));
+    client.global.set("manager1Refresh", response.headers.valueOf("RefreshToken"));
+%}
 
 
 ### 관리자 로그인
@@ -155,7 +158,17 @@ Content-Type: application/json
 }
 > {% client.global.set("adminAuth", response.headers.valueOf("Authorization")); %}
 
+### 로그아웃
+PUT http://localhost:8080/users/logout
+Authorization: {{manager1Auth}}
+
 ### 팔로우 요청
 DELETE http://localhost:8083/follow/stores/6
 Content-Type: application/json
 Authorization: {{user1Auth}}
+
+### 토큰 재발급
+POST http://localhost:8080/auth/reissue
+Authorization: {{manager1Auth}}
+RefreshToken: {{manager1Refresh}}
+

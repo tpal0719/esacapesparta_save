@@ -1,41 +1,90 @@
 package com.sparta.jwt;
 
-import com.sparta.domain.user.entity.User;
-import com.sparta.global.exception.customException.RefreshTokenException;
-import com.sparta.global.exception.errorCode.RefreshTokenErrorCode;
+import com.sparta.global.exception.customException.AuthException;
+import com.sparta.global.exception.errorCode.AuthErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import static com.sparta.jwt.JwtProvider.BEARER_PREFIX;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RefreshTokenService {
+    private static final String REFRESH_TOKEN_PREFIX = "refreshToken:";
+    // 만료 시간 7일
+    private static final long refreshTokenTTL = 7 * 24 * 60 * 60 * 1000L;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    private final RefreshTokenRepository refreshTokenRepository;
+    public void saveRefreshTokenInfo(String email, String refreshToken) {
+        String parsedRefreshToken = refreshToken.substring(BEARER_PREFIX.length());
+        String key = makeRefreshTokenKey(email);
 
-    public Optional<RefreshToken> findByEmail(String email) {
-        return refreshTokenRepository.findByEmail(email); //
+        RefreshTokenInfo refreshTokenInfo = RefreshTokenInfo.builder()
+                .refreshToken(parsedRefreshToken)
+                .expiration(refreshTokenTTL)
+                .build();
+
+        redisTemplate.opsForValue().set(key, refreshTokenInfo, refreshTokenTTL, TimeUnit.MILLISECONDS);
     }
 
-    @Transactional
-    public void saveRefreshToken(User user, String refreshToken) {
-        Optional<RefreshToken> existToken = findByEmail(user.getEmail());
+    public boolean isRefreshTokenPresent(String email) {
+        RefreshTokenInfo tokenInfo = (RefreshTokenInfo) redisTemplate.opsForValue().get(makeRefreshTokenKey(email));
 
-        if (existToken.isPresent()) {
-            existToken.get().update(refreshToken);
+        if(tokenInfo == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void checkValidRefreshToken(String email, String refreshToken) {
+        RefreshTokenInfo tokenInfo = (RefreshTokenInfo) redisTemplate.opsForValue().get(makeRefreshTokenKey(email));
+
+        if(tokenInfo != null) {
+            if(!refreshToken.equals(tokenInfo.getRefreshToken())) {
+                throw new AuthException(AuthErrorCode.REFRESH_TOKEN_MISMATCH);
+            }
         } else {
-            refreshTokenRepository.save(new RefreshToken(user.getEmail(), refreshToken));
+            throw new AuthException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
         }
     }
 
-    @Transactional
-    public void deleteToken(String email) {
-        RefreshToken refreshToken = refreshTokenRepository.findByEmail(email).orElseThrow( //
-                () -> new RefreshTokenException(RefreshTokenErrorCode.REFRESH_TOKEN_NOT_FOUND)
-        );
-        refreshTokenRepository.delete(refreshToken);
+    public void deleteRefreshTokenInfo(String email) {
+        redisTemplate.delete(makeRefreshTokenKey(email));
     }
+
+    private String makeRefreshTokenKey(String email) {
+        return REFRESH_TOKEN_PREFIX + email;
+    }
+
+    //    public void updateRefreshToken(RefreshToken refreshToken) {
+//        redisTemplate.opsForValue().set(refreshToken.getEmail(), refreshToken, refreshToken.getExpiration(), TimeUnit.MILLISECONDS);
+//    }
+//    @Transactional
+//    public void saveRefreshToken(User user, String refreshToken) {
+//        Optional<RefreshToken> existToken = findByEmail(user.getEmail());
+//
+//        if (existToken.isPresent()) {
+//            existToken.get().update(refreshToken);
+//        } else {
+//            refreshTokenRepository.save(new RefreshToken(user.getEmail(), refreshToken));
+//        }
+//    }
+//
+//    @Transactional
+//    public void deleteToken(String email) {
+//        RefreshToken refreshToken = refreshTokenRepository.findByEmail(email).orElseThrow( //
+//                () -> new RefreshTokenException(RefreshTokenErrorCode.REFRESH_TOKEN_NOT_FOUND)
+//        );
+//        refreshTokenRepository.delete(refreshToken);
+//    }
+//
+//    public String createRefreshToken() {
+//        return UUID.randomUUID().toString();
+//    }
 }
