@@ -142,7 +142,10 @@ Content-Type: application/json
   "email": "mmarland0@facebook.com",
   "password": "Test1234!"
 }
-> {% client.global.set("manager1Auth", response.headers.valueOf("Authorization")); %}
+> {%
+    client.global.set("manager1Auth", response.headers.valueOf("Authorization"));
+    client.global.set("manager1Refresh", response.headers.valueOf("RefreshToken"));
+%}
 
 
 ### 관리자 로그인
@@ -159,3 +162,9 @@ Content-Type: application/json
 DELETE http://localhost:8083/follow/stores/6
 Content-Type: application/json
 Authorization: {{user1Auth}}
+
+### 토큰 재발급
+POST http://localhost:8080/users/reissue
+Authorization: {{manager1Auth}}
+RefreshToken: {{manager1Refresh}}
+

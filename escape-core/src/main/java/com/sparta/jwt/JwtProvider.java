@@ -1,6 +1,8 @@
 package com.sparta.jwt;
 
 import com.sparta.domain.user.entity.UserType;
+import com.sparta.global.exception.customException.CustomSecurityException;
+import com.sparta.global.exception.errorCode.SecurityErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -28,9 +30,13 @@ public class JwtProvider {
     // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
     // Token 식별자
-    public static final String BEAR = "Bearer ";
+    public static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료시간 (30분)
-    public static final long TOKEN_TIME = 30 * 60 * 1000L;
+//    public static final long ACCESS_TOKEN_TIME = 30 * 60 * 1000L;
+
+    // 1분
+    public static final long ACCESS_TOKEN_TIME = 60 * 1000L;
+
     // 리프레시 토큰 만료시간 (7일)
     public static final long REFRESH_TOKEN_TIME = 7 * 24 * 60 * 60 * 1000L;
 
@@ -47,11 +53,11 @@ public class JwtProvider {
     }
 
     // 토큰 생성
-    public String createToken(String username, long expiredTime, UserType role) {
+    public String createToken(String userEmail, long expiredTime, UserType role) {
         Date date = new Date();
 
-        return BEAR + Jwts.builder()
-                .setSubject(username)
+        return BEARER_PREFIX + Jwts.builder()
+                .setSubject(userEmail)
                 .claim(AUTHORIZATION_KEY, role)
                 .setExpiration(new Date(date.getTime() + expiredTime))
                 .setIssuedAt(date)
@@ -62,28 +68,51 @@ public class JwtProvider {
     // header에서 JWT value 가져오기
     public String getJwtFromHeader(HttpServletRequest request, String header) {
         String bearerToken = request.getHeader(header);
-        if (bearerToken != null && bearerToken.startsWith(BEAR)) {
-            return bearerToken.substring(BEAR.length());
+        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
         }
         return null;
     }
 
     // 토큰 검증
-    public boolean validateTokenInternal(String token, String type) {
+//    public boolean validateTokenInternal(HttpServletRequest request, String token, String type) {
+//        try {
+//            if("refresh".equals(type)){
+//                Claims info = getUsernameFromClaims(token);
+//
+//                RefreshToken refreshToken = refreshTokenService.findByEmail(info.getSubject()).orElse(null);
+//
+//                if(refreshToken == null) {
+//                    return false;
+//                }else {
+//                    if(!token.equals(refreshToken.getRefreshToken())) {
+//                        return false;
+//                    }
+//                }
+//            }
+//            Jwts.parserBuilder()
+//                    .setSigningKey(key)
+//                    .build()
+//                    .parseClaimsJws(token);
+//            return true;
+//        } catch (SecurityException | MalformedJwtException | SignatureException e) {
+//            log.error("Invalid JWT signature, 유효하지 않은 JWT 서명 입니다.");
+//            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_TOKEN));
+//        } catch (ExpiredJwtException e) {
+//            log.error("Expired JWT token, 만료된 JWT token 입니다.");
+//            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.EXPIRED_TOKEN));
+//        } catch (UnsupportedJwtException e) {
+//            log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
+//            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_TOKEN));
+//        } catch (IllegalArgumentException e) {
+//            log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+//            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_TOKEN));
+//        }
+//        return false;
+//    }
+
+    public boolean validateTokenInternal(HttpServletRequest request, String token) {
         try {
-            if("refresh".equals(type)){
-                Claims info = getUsernameFromClaims(token);
-
-                RefreshToken refreshToken = refreshTokenService.findByEmail(info.getSubject()).orElse(null);
-
-                if(refreshToken == null) {
-                    return false;
-                }else {
-                    if(!token.equals(refreshToken.getRefreshToken())) {
-                        return false;
-                    }
-                }
-            }
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
@@ -91,18 +120,31 @@ public class JwtProvider {
             return true;
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
             log.error("Invalid JWT signature, 유효하지 않은 JWT 서명 입니다.");
+            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_TOKEN));
         } catch (ExpiredJwtException e) {
             log.error("Expired JWT token, 만료된 JWT token 입니다.");
+            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.EXPIRED_TOKEN));
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
+            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_TOKEN));
         } catch (IllegalArgumentException e) {
             log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_TOKEN));
+        }
+        return false;
+    }
+
+    public boolean isExpiredAccessToken(String accessToken){
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
+        } catch(ExpiredJwtException e) {
+            return true;
         }
         return false;
     }
 
     // 토큰에서 Claims 불러오기
-    public Claims getUsernameFromClaims(String token) {
+    public Claims getUserInfoFromClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 }
