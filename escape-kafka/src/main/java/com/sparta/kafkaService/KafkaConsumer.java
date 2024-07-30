@@ -1,13 +1,10 @@
-package com.sparta.service;
+package com.sparta.kafkaService;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.domain.reservation.entity.Reservation;
+import com.sparta.global.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 @Slf4j
@@ -16,7 +13,7 @@ public class KafkaConsumer {
 
     private final AmazonSESService emailService;
 
-    @KafkaListener(topics = KafkaProducer.PAYMENT_TOPIC, groupId = "${GROUP_ID}")
+    @KafkaListener(topics = KafkaTopic.PAYMENT_TOPIC, groupId = "${GROUP_ID}")
     public void consume(String message) {
 //        Reservation reservation = parseMessage(message);
 

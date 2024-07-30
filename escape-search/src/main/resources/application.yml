@@ -37,6 +37,15 @@ spring:
     redis:
       port: ${REDIS_MAIL_PORT}
       host: ${REDIS_MAIL_HOST}
+  aws:
+    ses:
+      accessKey: ${ACCESS_KEY}
+      secretKey: ${SECRET_KEY}
+      region: ${REGION}
+  invite:
+    email: ${ROLE_EMAIL}
+admin:
+  key: ${ADMIN_KEY}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}

@@ -10,7 +10,8 @@ import com.sparta.domain.reservation.repository.ReservationRepository;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.domain.user.entity.User;
-import com.sparta.service.KafkaProducer;
+import com.sparta.global.KafkaTopic;
+import com.sparta.kafkaService.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class ReservationService {
                 .themeTime(themeTime)
                 .build();
 
-        kafkaProducer.sendMessage(KafkaProducer.PAYMENT_TOPIC, user.getEmail());
+        kafkaProducer.sendEmail(KafkaTopic.PAYMENT_TOPIC, user.getEmail());
 
         return new ReservationCreateResponseDto( reservationRepository.save(reservation));
     }

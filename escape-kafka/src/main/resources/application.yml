@@ -39,10 +39,10 @@ spring:
       group-id: ${GROUP_ID}
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   aws:
     ses:
       accessKey: ${ACCESS_KEY}
@@ -50,7 +50,8 @@ spring:
       region: ${REGION}
   invite:
     email: ${ROLE_EMAIL}
-
+admin:
+  key: ${ADMIN_KEY}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}

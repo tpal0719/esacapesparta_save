@@ -7,5 +7,7 @@ jar{enabled = true}
 
 dependencies {
     implementation project(':escape-core')
-
+    implementation project(':escape-kafka')
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
 }

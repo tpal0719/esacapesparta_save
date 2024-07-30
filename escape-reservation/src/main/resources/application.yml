@@ -33,16 +33,6 @@ spring:
           ssl:
             trust: smtp.gmail.com
             enable: true #반드시 필요 -> SSL 필요로 되어있으면
-#  kafka:
-#    bootstrap-servers: ${BOOTSTRAP_SERVER}
-#    consumer:
-#      group-id: ${GROUP_ID}
-#      auto-offset-reset: earliest
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
   aws:
     ses:
       accessKey: ${ACCESS_KEY}
@@ -54,6 +44,8 @@ spring:
     redis:
       port: ${REDIS_MAIL_PORT}
       host: ${REDIS_MAIL_HOST}
+admin:
+  key: ${ADMIN_KEY}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
