@@ -33,7 +33,7 @@ Content-Type: application/json
   "name": "이서연",
   "email": "0817frog@naver.com",
   "password": "Test1234!",
-  "certificateCode": "011545"
+  "certificateCode": "0718874"
 }
 
 ### 회원가입 - 매니저
@@ -157,6 +157,10 @@ Content-Type: application/json
   "password": "Test1234!"
 }
 > {% client.global.set("adminAuth", response.headers.valueOf("Authorization")); %}
+
+### 로그아웃
+PUT http://localhost:8080/users/logout
+Authorization: {{manager1Auth}}
 
 ### 팔로우 요청
 DELETE http://localhost:8083/follow/stores/6

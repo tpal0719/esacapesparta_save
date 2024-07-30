@@ -5,34 +5,31 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.TimeToLive;
+
+import java.io.Serializable;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Getter
-@Entity
 @NoArgsConstructor(access =  AccessLevel.PROTECTED)
-public class RefreshToken {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String email;
+public class RefreshToken implements Serializable {
 
     private String refreshToken;
+
+    @TimeToLive(unit = TimeUnit.MILLISECONDS)
+    private Long expiration;
 
     /**
      * 토큰 생성자
      */
-    public RefreshToken(String email, String refreshToken) {
-        this.email = email;
+    @Builder
+    public RefreshToken(String refreshToken, Long expiration) {
         this.refreshToken = refreshToken;
+        this.expiration = expiration;
     }
 
-    /**
-     * 토큰 업데이트
-     */
-    public void update(String newToken) {
-        this.refreshToken = newToken;
-    }
 }

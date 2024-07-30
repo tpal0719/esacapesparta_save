@@ -3,6 +3,8 @@ package com.sparta.security.filter;
 import com.sparta.global.exception.customException.CustomSecurityException;
 import com.sparta.global.exception.errorCode.SecurityErrorCode;
 import com.sparta.jwt.JwtProvider;
+import com.sparta.jwt.RefreshTokenService;
+import com.sparta.security.ResponseUtil;
 import com.sparta.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -28,7 +30,7 @@ import static com.sparta.jwt.JwtProvider.*;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
-
+    private final RefreshTokenService refreshTokenService;
     private final UserDetailsServiceImpl userDetailsService;
 
     /**
@@ -37,14 +39,19 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = jwtProvider.getJwtFromHeader(req, AUTHORIZATION_HEADER);
-        String refreshToken = jwtProvider.getJwtFromHeader(req, REFRESH_HEADER);
 
         if(StringUtils.hasText(accessToken)) {
             if(jwtProvider.validateTokenInternal(req, accessToken)) {
                 log.info("Access Token 검증 성공");
                 // 해당 유저의 리프레시 토큰이 존재하는지 검증 필요..?
                 Claims info = jwtProvider.getUserInfoFromClaims(accessToken);
-                setAuthentication(info.getSubject());
+                String userEmail = info.getSubject();
+
+                if(refreshTokenService.isRefreshTokenPresent(userEmail)) {
+                    setAuthentication(info.getSubject());
+                } else{
+                    req.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_ACCESS_TOKEN));
+                }
             }
         }
         filterChain.doFilter(req, res);
@@ -69,19 +76,4 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-//    /**
-//     * HttpResponse에 Json 형태로 응답
-//     */
-//    private void writeJsonResponse(HttpServletResponse response, HttpStatus status, String message, String data) throws IOException {
-//        ResponseMessage<String>responseMessage = ResponseMessage.<String>builder()
-//                .statusCode(status.value())
-//                .message(message)
-//                .data(data)
-//                .build();
-//
-//        String jsonResponse = new ObjectMapper().writeValueAsString(responseMessage);
-//        response.setCharacterEncoding("UTF-8");
-//        response.setContentType("application/json; charset=UTF-8");
-//        response.getWriter().write(jsonResponse);
-//    }
 }

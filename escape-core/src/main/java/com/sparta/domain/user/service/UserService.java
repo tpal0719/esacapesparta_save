@@ -75,20 +75,12 @@ public class UserService {
         }
     }
 
-//    // TODO : 이메일 인증받은 유저 상태 업데이트
-//    @Transactional
-//    public void updateUserActive(User user) {
-//
-//        user.activeUser();
-//        userRepository.save(user);
-//    }
-
     // TODO : 로그아웃 전 사용자 조회
     @Transactional(readOnly = true)
     public Long logout(Long userId) {
 
         User user = userRepository.findByUserId(userId);
-        refreshTokenService.deleteToken(user.getEmail());
+        refreshTokenService.deleteRefreshTokenInfo(user.getEmail());
 
         return user.getId();
     }
@@ -105,6 +97,7 @@ public class UserService {
 
         user.changeStatus(UserStatus.WITHDRAW);
         userRepository.save(user);
+        refreshTokenService.deleteRefreshTokenInfo(user.getEmail());
 
         return user.getId();
     }

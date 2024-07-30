@@ -74,43 +74,6 @@ public class JwtProvider {
         return null;
     }
 
-    // 토큰 검증
-//    public boolean validateTokenInternal(HttpServletRequest request, String token, String type) {
-//        try {
-//            if("refresh".equals(type)){
-//                Claims info = getUsernameFromClaims(token);
-//
-//                RefreshToken refreshToken = refreshTokenService.findByEmail(info.getSubject()).orElse(null);
-//
-//                if(refreshToken == null) {
-//                    return false;
-//                }else {
-//                    if(!token.equals(refreshToken.getRefreshToken())) {
-//                        return false;
-//                    }
-//                }
-//            }
-//            Jwts.parserBuilder()
-//                    .setSigningKey(key)
-//                    .build()
-//                    .parseClaimsJws(token);
-//            return true;
-//        } catch (SecurityException | MalformedJwtException | SignatureException e) {
-//            log.error("Invalid JWT signature, 유효하지 않은 JWT 서명 입니다.");
-//            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_TOKEN));
-//        } catch (ExpiredJwtException e) {
-//            log.error("Expired JWT token, 만료된 JWT token 입니다.");
-//            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.EXPIRED_TOKEN));
-//        } catch (UnsupportedJwtException e) {
-//            log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
-//            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_TOKEN));
-//        } catch (IllegalArgumentException e) {
-//            log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
-//            request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_TOKEN));
-//        }
-//        return false;
-//    }
-
     public boolean validateTokenInternal(HttpServletRequest request, String token) {
         try {
             Jwts.parserBuilder()

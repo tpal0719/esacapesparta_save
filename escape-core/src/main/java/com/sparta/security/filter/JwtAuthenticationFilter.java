@@ -7,6 +7,7 @@ import com.sparta.domain.user.entity.UserStatus;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.global.exception.errorCode.SecurityErrorCode;
 import com.sparta.jwt.JwtProvider;
+import com.sparta.jwt.RefreshToken;
 import com.sparta.jwt.RefreshTokenService;
 import com.sparta.security.ResponseUtil;
 import com.sparta.security.UserDetailsImpl;
@@ -70,12 +71,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         if(loginUser.getUserStatus() == UserStatus.ACTIVE) {
             UserType role = loginUser.getUserType();
 
-            String userEmail = userDetails.getUserEmail();
+            String userEmail = loginUser.getEmail();
             String accessToken = jwtProvider.createToken(userEmail, ACCESS_TOKEN_TIME, role);
             String refreshToken = jwtProvider.createToken(userEmail, REFRESH_TOKEN_TIME, role);
 
             //refresh 토큰 저장메서드 추가
-            refreshTokenService.saveRefreshToken(userDetails.getUser(), refreshToken.substring(BEARER_PREFIX.length()));
+            refreshTokenService.saveRefreshTokenInfo(userEmail, refreshToken);
 
             // 응답 헤더에 토큰 추가
             response.addHeader(JwtProvider.AUTHORIZATION_HEADER, accessToken);
@@ -100,19 +101,4 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ResponseUtil.writeJsonErrorResponse(response, SecurityErrorCode.LOGIN_FAILED);
     }
 
-//    /**
-//     * HttpResponse에 JSON 형태로 응답하기
-//     */
-//    private void writeJsonResponse(HttpServletResponse response, HttpStatus status, String message, String data) throws IOException {
-//        ResponseMessage responseMessage = ResponseMessage.<String>builder()
-//                .statusCode(status.value())
-//                .message(message)
-//                .data(data)
-//                .build();
-//
-//        String jsonResponse = new ObjectMapper().writeValueAsString(responseMessage);
-//        response.setCharacterEncoding("UTF-8");
-//        response.setContentType("application/json; charset=UTF-8");
-//        response.getWriter().write(jsonResponse);
-//    }
 }
