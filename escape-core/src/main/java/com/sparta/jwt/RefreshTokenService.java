@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.sparta.jwt.JwtProvider.BEARER_PREFIX;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -19,9 +21,11 @@ public class RefreshTokenService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     public void saveRefreshTokenInfo(String email, String newRefreshToken) {
+        String parsedRefreshToken = newRefreshToken.substring(BEARER_PREFIX.length());
         String key = makeRefreshTokenKey(email);
+
         RefreshToken refreshToken = RefreshToken.builder()
-                .refreshToken(newRefreshToken)
+                .refreshToken(parsedRefreshToken)
                 .expiration(refreshTokenTTL)
                 .build();
 

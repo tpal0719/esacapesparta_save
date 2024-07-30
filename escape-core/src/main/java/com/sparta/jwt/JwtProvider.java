@@ -21,8 +21,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtProvider {
 
-    private final RefreshTokenService refreshTokenService;
-
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
     // 리프레시 헤더 값
@@ -32,10 +30,10 @@ public class JwtProvider {
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료시간 (30분)
-//    public static final long ACCESS_TOKEN_TIME = 30 * 60 * 1000L;
+    public static final long ACCESS_TOKEN_TIME = 30 * 60 * 1000L;
 
     // 1분
-    public static final long ACCESS_TOKEN_TIME = 60 * 1000L;
+//    public static final long ACCESS_TOKEN_TIME = 60 * 1000L;
 
     // 리프레시 토큰 만료시간 (7일)
     public static final long REFRESH_TOKEN_TIME = 7 * 24 * 60 * 60 * 1000L;
