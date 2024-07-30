@@ -2,8 +2,8 @@ package com.sparta.global.exception.customException;
 
 import com.sparta.global.exception.errorCode.ErrorCode;
 
-public class RefreshTokenException extends GlobalCustomException {
-    public RefreshTokenException(ErrorCode errorCode) {
+public class AuthException extends GlobalCustomException {
+    public AuthException(ErrorCode errorCode) {
         super(errorCode);
     }
 }

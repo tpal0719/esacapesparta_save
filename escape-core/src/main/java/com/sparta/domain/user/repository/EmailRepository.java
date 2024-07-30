@@ -14,24 +14,29 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class EmailRepository {
+    private static final String EMAIL_PREFIX = "certificate:";
     private final StringRedisTemplate redisTemplate;
     static final int EMAIL_VERIFICATION_LIMIT_IN_SECONDS = 300;
 
     public void saveCertificationNumber(String email, String certificationNumber) {
+        String key = makeEmailPrefix(email);
         redisTemplate.opsForValue()
-                .set(email, certificationNumber, Duration.ofSeconds(EMAIL_VERIFICATION_LIMIT_IN_SECONDS));
+                .set(key, certificationNumber, Duration.ofSeconds(EMAIL_VERIFICATION_LIMIT_IN_SECONDS));
     }
 
     public String getCertificationNumber(String email) {
-        String str = redisTemplate.opsForValue().get(email);
+        String str = redisTemplate.opsForValue().get(makeEmailPrefix(email));
         if(str == null) {
-//            log.error(str);
             throw new EmailException(EmailErrorCode.INVALID_VERIFICATION_CODE);
         }
         return str;
     }
 
     public void removeCertificationNumber(String email) {
-        redisTemplate.delete(email);
+        redisTemplate.delete(makeEmailPrefix(email));
+    }
+
+    private String makeEmailPrefix(String email) {
+        return EMAIL_PREFIX + email;
     }
 }

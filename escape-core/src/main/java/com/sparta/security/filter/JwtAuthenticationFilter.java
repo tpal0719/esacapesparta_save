@@ -1,13 +1,15 @@
-package com.sparta.security;
+package com.sparta.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.user.dto.request.LoginRequestDto;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserStatus;
 import com.sparta.domain.user.entity.UserType;
-import com.sparta.global.response.ResponseMessage;
+import com.sparta.global.exception.errorCode.SecurityErrorCode;
 import com.sparta.jwt.JwtProvider;
 import com.sparta.jwt.RefreshTokenService;
+import com.sparta.security.ResponseUtil;
+import com.sparta.security.UserDetailsImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,7 +60,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     /**
-     * 로그인 성공 및 JWT생성
+     * 로그인 성공 및 JWT 생성
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
@@ -68,23 +70,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         if(loginUser.getUserStatus() == UserStatus.ACTIVE) {
             UserType role = loginUser.getUserType();
 
-            String username = userDetails.getUserEmail();
-            String accessToken = jwtProvider.createToken(username, TOKEN_TIME, role);
-            String refreshToken = jwtProvider.createToken(username, REFRESH_TOKEN_TIME, role);
+            String userEmail = loginUser.getEmail();
+            String accessToken = jwtProvider.createToken(userEmail, ACCESS_TOKEN_TIME, role);
+            String refreshToken = jwtProvider.createToken(userEmail, REFRESH_TOKEN_TIME, role);
 
             //refresh 토큰 저장메서드 추가
-            refreshTokenService.saveRefreshToken(userDetails.getUser(), refreshToken.substring(BEAR.length()));
+            refreshTokenService.saveRefreshTokenInfo(userEmail, refreshToken);
 
             // 응답 헤더에 토큰 추가
             response.addHeader(JwtProvider.AUTHORIZATION_HEADER, accessToken);
             response.addHeader(JwtProvider.REFRESH_HEADER, refreshToken);
 
             // JSON 응답 작성
-            writeJsonResponse(response, HttpStatus.OK, "로그인에 성공했습니다.", authResult.getName());
+            ResponseUtil.writeJsonResponse(response, HttpStatus.OK, "로그인에 성공했습니다.", authResult.getName());
 
-            log.info("User = {}, message = {}", username, "로그인에 성공했습니다.");
+            log.info("User = {}, message = {}", userEmail, "로그인에 성공했습니다.");
         } else {
-            writeJsonResponse(response, HttpStatus.BAD_REQUEST, "탈퇴한 유저입니다.", authResult.getName());
+            ResponseUtil.writeJsonErrorResponse(response, SecurityErrorCode.WITHDRAWAL_USER);
         }
     }
 
@@ -95,22 +97,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         log.info("로그인 실패 : {}", failed.getMessage());
 
-        writeJsonResponse(response, HttpStatus.BAD_REQUEST, "로그인에 실패했습니다.", "");
+        ResponseUtil.writeJsonErrorResponse(response, SecurityErrorCode.LOGIN_FAILED);
     }
 
-    /**
-     * HttpResponse에 JSON 형태로 응답하기
-     */
-    private void writeJsonResponse(HttpServletResponse response, HttpStatus status, String message, String data) throws IOException {
-        ResponseMessage responseMessage = ResponseMessage.<String>builder()
-                .statusCode(status.value())
-                .message(message)
-                .data(data)
-                .build();
-
-        String jsonResponse = new ObjectMapper().writeValueAsString(responseMessage);
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json; charset=UTF-8");
-        response.getWriter().write(jsonResponse);
-    }
 }

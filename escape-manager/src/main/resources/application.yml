@@ -53,3 +53,5 @@ jwt:
     key: ${JWT_SECRET_KEY}
 server:
   port: ${MANAGER_SERVER_PORT}
+admin:
+  key: ${ADMIN_KEY}
