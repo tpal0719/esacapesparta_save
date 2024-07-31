@@ -1,15 +1,15 @@
 package com.sparta.controller;
 
-import com.sparta.domain.review.dto.ReviewRequestDto;
 import com.sparta.domain.review.dto.ReviewResponseDto;
 import com.sparta.domain.review.service.ReviewService;
 import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.entity.StoreRegion;
 import com.sparta.domain.store.service.StoreService;
-import com.sparta.domain.theme.dto.*;
+import com.sparta.domain.theme.dto.ThemeInfoResponseDto;
+import com.sparta.domain.theme.dto.ThemeResponseDto;
+import com.sparta.domain.theme.dto.ThemeTimeResponseDto;
 import com.sparta.domain.theme.service.ThemeService;
 import com.sparta.global.response.ResponseMessage;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -89,15 +89,15 @@ public class SearchController {
     /**
      * 방탈출 카페 테마 상세 조회
      * @param themeId 해당 카페의 테마 id
-     * @param themeInfoRequestDto 검색할 테마의 스토어 id를 가지고 있는 dto
+     * @param storeId 카페 id
      * @return status.code, message, theme 반환
      */
     @GetMapping("/stores/theme/{themeId}/info")
     public ResponseEntity<ResponseMessage<ThemeInfoResponseDto>> getThemeInfo(
-            @Valid @RequestBody ThemeInfoRequestDto themeInfoRequestDto,
+            @RequestParam(value = "storeId") Long storeId,
             @PathVariable Long themeId) {
 
-        ThemeInfoResponseDto responseDto = themeService.getThemeInfo(themeInfoRequestDto.getStoreId(), themeId);
+        ThemeInfoResponseDto responseDto = themeService.getThemeInfo(storeId, themeId);
 
         ResponseMessage<ThemeInfoResponseDto> responseMessage = ResponseMessage.<ThemeInfoResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -111,15 +111,15 @@ public class SearchController {
     /**
      * 방탈출 카페 테마 시간 조회
      * @param themeId 해당 카페의 테마 id
-     * @param themeTimeRequestDto 검색할 테마의 스토어 id를 가지고 있는 dto
+     * @param storeId 카페 id
      * @return status.code, message, theme 시간 반환
      */
     @GetMapping("/stores/theme/{themeId}/time")
     public ResponseEntity<ResponseMessage<List<ThemeTimeResponseDto>>> getThemeTime(
-            @Valid @RequestBody ThemeTimeRequestDto themeTimeRequestDto,
+            @RequestParam(value = "storeId") Long storeId,
             @PathVariable Long themeId){
 
-        List<ThemeTimeResponseDto> responseDtoList = themeService.getThemeTime(themeTimeRequestDto.getStoreId(), themeId);
+        List<ThemeTimeResponseDto> responseDtoList = themeService.getThemeTime(storeId, themeId);
 
         ResponseMessage<List<ThemeTimeResponseDto>> responseMessage = ResponseMessage.<List<ThemeTimeResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -132,15 +132,16 @@ public class SearchController {
 
     /**
      * 방탈출 카페 테마 리뷰 조회
-     * @param reviewRequestDto 방탈출 카페 id, 테마 id가 들어있는 dto
+     * @param storeId 방탈출 카페 id
+     * @param themeId , 테마 id가 들어있는 dto
      * @return status.code, message, 리뷰 반환
      */
     @GetMapping("/reviews")
     public ResponseEntity<ResponseMessage<List<ReviewResponseDto>>> getReview(
-                @Valid @RequestBody ReviewRequestDto reviewRequestDto){
+            @RequestParam(value = "storeId") Long storeId,
+            @RequestParam(value = "themeId") Long themeId){
 
-        List<ReviewResponseDto> reviewResponseDtoList = reviewService.getReview(reviewRequestDto.getStoreId()
-                , reviewRequestDto.getThemeId());
+        List<ReviewResponseDto> reviewResponseDtoList = reviewService.getReview(storeId, themeId);
 
         ResponseMessage<List<ReviewResponseDto>> responseMessage = ResponseMessage.<List<ReviewResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())

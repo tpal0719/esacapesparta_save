@@ -1,6 +1,5 @@
-package config;
+package com.sparta.config;
 
-import com.sparta.config.AppConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 

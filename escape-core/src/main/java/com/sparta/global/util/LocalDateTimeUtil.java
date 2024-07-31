@@ -1,9 +1,7 @@
 package com.sparta.global.util;
 
 import com.sparta.global.exception.customException.LocalDateTimeException;
-import com.sparta.global.exception.customException.ThemeTimeException;
 import com.sparta.global.exception.errorCode.LocalDateTimeErrorCode;
-import com.sparta.global.exception.errorCode.ThemeTimeErrorCode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

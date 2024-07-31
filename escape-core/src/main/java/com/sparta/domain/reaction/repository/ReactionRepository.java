@@ -3,8 +3,6 @@ package com.sparta.domain.reaction.repository;
 import com.sparta.domain.reaction.entity.Reaction;
 import com.sparta.domain.review.entity.Review;
 import com.sparta.domain.user.entity.User;
-import com.sparta.global.exception.customException.ReactionException;
-import com.sparta.global.exception.customException.ReservationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

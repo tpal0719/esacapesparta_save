@@ -78,7 +78,6 @@ public class ReviewController {
     @GetMapping("/reviews/{reviewId}")
     public ResponseEntity<ResponseMessage<ReviewResponseDto>> getReview(
             @PathVariable Long reviewId){
-        log.error("asdasda");
         ReviewResponseDto responseDto = reviewService.getReview(reviewId);
 
         ResponseMessage<ReviewResponseDto> responseMessage = ResponseMessage.<ReviewResponseDto>builder()

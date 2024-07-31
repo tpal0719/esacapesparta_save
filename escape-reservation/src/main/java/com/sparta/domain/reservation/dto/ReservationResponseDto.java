@@ -4,10 +4,12 @@ import com.sparta.domain.reservation.entity.PaymentStatus;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class ReservationResponseDto {
     private Long reservationId;
     private String themeImage;

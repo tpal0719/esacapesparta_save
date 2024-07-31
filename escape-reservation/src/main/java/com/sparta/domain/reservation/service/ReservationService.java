@@ -1,31 +1,32 @@
 package com.sparta.domain.reservation.service;
 
-import com.sparta.domain.kakaopayment.service.PaymentService;
-import com.sparta.domain.reservation.dto.ReservationCreateRequestDto;
-import com.sparta.domain.reservation.dto.ReservationCreateResponseDto;
-import com.sparta.domain.reservation.dto.ReservationResponseDto;
-import com.sparta.domain.reservation.entity.Reservation;
-import com.sparta.domain.reservation.entity.ReservationStatus;
-import com.sparta.domain.reservation.repository.ReservationRepository;
-import com.sparta.domain.theme.entity.ThemeTime;
-import com.sparta.domain.theme.repository.ThemeTimeRepository;
+import com.sparta.domain.reservation.dto.*;
 import com.sparta.domain.user.entity.User;
+import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ReservationService {
 
-    private final ReservationRepository reservationRepository;
-    private final ThemeTimeRepository themeTimeRepository;
-    private final PaymentService paymentService;
+    public static final ConcurrentHashMap<String, CompletableFuture<ReservationCreateResponseDto>> responseCreateFutures = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, CompletableFuture<Void>> responseDeleteFutures = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, CompletableFuture<List<ReservationResponseDto>>> responseGetFutures = new ConcurrentHashMap<>();
 
+    private final KafkaTemplate<String, KafkaReservationCreateRequestDto> kafkaReservationCreateTemplate;
+    private final KafkaTemplate<String, KafkaReservationDeleteRequestDto> kafkaReservationDeleteTemplate;
+    private final KafkaTemplate<String, KafkaReservationGetRequestDto> kafkaReservationGetTemplate;
 
     /**
      * 예약 생성
@@ -35,20 +36,22 @@ public class ReservationService {
      */
     @Transactional
     public ReservationCreateResponseDto createReservation(ReservationCreateRequestDto requestDto, User user) {
-        ThemeTime themeTime = themeTimeRepository.checkStoreAndThemeActive(requestDto.getThemeTimeId());
-        reservationRepository.checkReservation(themeTime);
+        String requestId = UUID.randomUUID().toString();
+        CompletableFuture<ReservationCreateResponseDto> future = new CompletableFuture<>();
+        responseCreateFutures.put(requestId, future);
+        sendReservationCreateRequest(requestId, requestDto, user.getId());
 
-        Reservation reservation = Reservation.builder()
-                .player(requestDto.getPlayer())
-                .price(requestDto.getPrice())
-                .paymentStatus(requestDto.getPaymentStatus())
-                .reservationStatus(ReservationStatus.ACTIVE)
-                .user(user)
-                .theme(themeTime.getTheme())
-                .themeTime(themeTime)
-                .build();
+        // Kafka로 요청을 전송하고 응답을 비동기적으로 기다림
+        try {
+            return future.get(); // 응답을 기다림
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("리뷰 response 실패", e);
+        }
+    }
 
-        return new ReservationCreateResponseDto( reservationRepository.save(reservation));
+    private void sendReservationCreateRequest(String requestId, ReservationCreateRequestDto requestDto, Long userId) {
+        KafkaReservationCreateRequestDto createRequest = new KafkaReservationCreateRequestDto(requestId, requestDto, userId);
+        kafkaReservationCreateTemplate.send(KafkaTopic.RESERVATION_CREATE_REQUEST_TOPIC, createRequest);
     }
 
     /**
@@ -58,10 +61,16 @@ public class ReservationService {
      */
     @Transactional
     public void deleteReservation(Long reservationId, User user) {
-        Reservation reservation = reservationRepository.findByIdAndUserAndActive(reservationId, user);
-        reservation.updateReservationStatus();
 
-        paymentService.refundPayment(reservationId);
+        String requestId = UUID.randomUUID().toString();
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        responseDeleteFutures.put(requestId, future);
+        sendReservationDeleteRequest(requestId, reservationId, user.getId());
+    }
+
+    private void sendReservationDeleteRequest(String requestId, Long reservationId, Long userId) {
+        KafkaReservationDeleteRequestDto createRequest = new KafkaReservationDeleteRequestDto(requestId, reservationId, userId);
+        kafkaReservationDeleteTemplate.send(KafkaTopic.RESERVATION_DELETE_REQUEST_TOPIC, createRequest);
     }
 
     /**
@@ -71,8 +80,22 @@ public class ReservationService {
      * @return 예약 내역
      */
     public List<ReservationResponseDto> getReservations(User user) {
-        List<Reservation> reservationList = reservationRepository.findByUser(user);
 
-        return reservationList.stream().map(ReservationResponseDto::new).toList();
+        String requestId = UUID.randomUUID().toString();
+        CompletableFuture<List<ReservationResponseDto>> future = new CompletableFuture<>();
+        responseGetFutures.put(requestId, future);
+        sendReservationGetRequest(requestId, user.getId());
+
+        // Kafka로 요청을 전송하고 응답을 비동기적으로 기다림
+        try {
+            return future.get(); // 응답을 기다림
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("리뷰 response 실패", e);
+        }
+    }
+
+    private void sendReservationGetRequest(String requestId, Long userId) {
+        KafkaReservationGetRequestDto createRequest = new KafkaReservationGetRequestDto(requestId, userId);
+        kafkaReservationGetTemplate.send(KafkaTopic.RESERVATION_GET_REQUEST_TOPIC, createRequest);
     }
 }

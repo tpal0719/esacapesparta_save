@@ -1,31 +1,35 @@
 package com.sparta.domain.theme.service;
 
-import com.sparta.domain.store.entity.Store;
-import com.sparta.domain.store.repository.StoreRepository;
-import com.sparta.domain.theme.dto.ThemeInfoResponseDto;
-import com.sparta.domain.theme.dto.ThemeResponseDto;
-import com.sparta.domain.theme.dto.ThemeTimeResponseDto;
-import com.sparta.domain.theme.entity.Theme;
-import com.sparta.domain.theme.entity.ThemeTime;
-import com.sparta.domain.theme.repository.ThemeRepository;
-import com.sparta.domain.theme.repository.ThemeTimeRepository;
-import com.sparta.global.util.PageUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.domain.theme.dto.*;
+import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ThemeService {
 
-    private final ThemeRepository themeRepository;
-    private final StoreRepository storeRepository;
-    private final ThemeTimeRepository themeTimeRepository;
+    private final KafkaTemplate<String, KafkaThemeRequestDto> kafkaThemeTemplate;
+    private final KafkaTemplate<String, KafkaThemeInfoRequestDto> kafkaThemeInfoTemplate;
+    private final KafkaTemplate<String, KafkaThemeTimeRequestDto> kafkaThemeTimeTemplate;
+    private final ConcurrentHashMap<String, CompletableFuture<Page<ThemeResponseDto>>> responseThemeFutures = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, CompletableFuture<ThemeInfoResponseDto>> responseThemeInfoFutures = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, CompletableFuture<List<ThemeTimeResponseDto>>> responseThemeTimeFutures = new ConcurrentHashMap<>();
+    private final ObjectMapper objectMapper;
 
     /**
      * 방탈출 카페 테마 전체 조회
@@ -37,12 +41,39 @@ public class ThemeService {
      * @return EscapeRoom 리스트
      */
     public Page<ThemeResponseDto> getTheme(Long storeId, int pageNum, int pageSize, boolean isDesc, String sort) {
-        Store store = storeRepository.findByIdOrElseThrow(storeId);
+        String requestId = UUID.randomUUID().toString();
+        CompletableFuture<Page<ThemeResponseDto>> future = new CompletableFuture<>();
+        responseThemeFutures.put(requestId, future);
+        sendReviewRequest(requestId, storeId, pageNum, pageSize, isDesc, sort);
 
-        Pageable pageable = PageUtil.createPageable(pageNum, pageSize, isDesc, sort);
-        Page<Theme> themes = themeRepository.findByStore(store, pageable);
+        try {
+            return future.get(); // 응답을 기다림
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("방탈출 카페 response 실패", e);
+        }
+    }
 
-        return themes.map(ThemeResponseDto::new);
+    private void sendReviewRequest(String requestId, Long storeId, int pageNum, int pageSize, boolean isDesc, String sort) {
+        KafkaThemeRequestDto reviewRequest = new KafkaThemeRequestDto(requestId, storeId, pageNum, pageSize, isDesc, sort);
+        kafkaThemeTemplate.send(KafkaTopic.THEME_REQUEST_TOPIC, reviewRequest);
+    }
+
+    @KafkaListener(topics = KafkaTopic.THEME_RESPONSE_TOPIC, groupId = "${GROUP_ID}")
+    public void handleThemeResponse(String response) {
+        KafkaThemeResponseDto responseDto = parseThemeMessage(response);
+        CompletableFuture<Page<ThemeResponseDto>> future = responseThemeFutures.remove(Objects.requireNonNull(responseDto).getRequestId());
+        if (future != null) {
+            future.complete(responseDto.getResponseDtos());
+        }
+    }
+
+    private KafkaThemeResponseDto parseThemeMessage(String message) {
+        try {
+            return objectMapper.readValue(message, KafkaThemeResponseDto.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -52,10 +83,29 @@ public class ThemeService {
      * @return theme 정보 반환
      */
     public ThemeInfoResponseDto getThemeInfo(Long storeId, Long themeId) {
-        storeRepository.findByActiveStore(storeId);
-        Theme theme = themeRepository.findByActiveTheme(themeId);
+        String requestId = UUID.randomUUID().toString();
+        CompletableFuture<ThemeInfoResponseDto> future = new CompletableFuture<>();
+        responseThemeInfoFutures.put(requestId, future);
+        sendThemeInfoRequest(requestId, storeId, themeId);
 
-        return new ThemeInfoResponseDto(theme);
+        try {
+            return future.get(); // 응답을 기다림
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("방탈출 카페 response 실패", e);
+        }
+    }
+
+    private void sendThemeInfoRequest(String requestId, Long storeId, Long themeId) {
+        KafkaThemeInfoRequestDto reviewRequest = new KafkaThemeInfoRequestDto(requestId, storeId, themeId);
+        kafkaThemeInfoTemplate.send(KafkaTopic.THEME_INFO_REQUEST_TOPIC, reviewRequest);
+    }
+
+    @KafkaListener(topics = KafkaTopic.THEME_INFO_RESPONSE_TOPIC, groupId = "${GROUP_ID}")
+    public void handleThemeInfoResponse(KafkaThemeInfoResponseDto response) {
+        CompletableFuture<ThemeInfoResponseDto> future = responseThemeInfoFutures.remove(Objects.requireNonNull(response).getRequestId());
+        if (future != null) {
+            future.complete(response.getResponseDto());
+        }
     }
 
     /**
@@ -65,10 +115,30 @@ public class ThemeService {
      * @return theme 시간 반환
      */
     public List<ThemeTimeResponseDto> getThemeTime(Long storeId, Long themeId) {
-        storeRepository.findByActiveStore(storeId);
-        Theme theme = themeRepository.findByActiveTheme(themeId);
-        List<ThemeTime> themeTimeList = themeTimeRepository.findByTheme(theme);
+        String requestId = UUID.randomUUID().toString();
+        CompletableFuture<List<ThemeTimeResponseDto>> future = new CompletableFuture<>();
+        responseThemeTimeFutures.put(requestId, future);
+        sendThemeTimeRequest(requestId, storeId, themeId);
 
-        return themeTimeList.stream().map(ThemeTimeResponseDto::new).toList();
+        try {
+            return future.get(); // 응답을 기다림
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("방탈출 카페 시간 response 실패", e);
+        }
+
+
+    }
+
+    private void sendThemeTimeRequest(String requestId, Long storeId, Long themeId) {
+        KafkaThemeTimeRequestDto Request = new KafkaThemeTimeRequestDto(requestId, storeId, themeId);
+        kafkaThemeTimeTemplate.send(KafkaTopic.THEME_TIME_REQUEST_TOPIC, Request);
+    }
+
+    @KafkaListener(topics = KafkaTopic.THEME_TIME_RESPONSE_TOPIC, groupId = "${GROUP_ID}")
+    public void handleThemeTimeResponse(KafkaThemeTimeResponseDto response) {
+        CompletableFuture<List<ThemeTimeResponseDto>> future = responseThemeTimeFutures.remove(Objects.requireNonNull(response).getRequestId());
+        if (future != null) {
+            future.complete(response.getResponseDtoList());
+        }
     }
 }

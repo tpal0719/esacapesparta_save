@@ -37,6 +37,20 @@ spring:
     redis:
       port: ${REDIS_MAIL_PORT}
       host: ${REDIS_MAIL_HOST}
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
+    consumer:
+      group-id: ${GROUP_ID}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  invite:
+    email: ${ROLE_EMAIL}
+admin:
+  key: ${ADMIN_KEY}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}

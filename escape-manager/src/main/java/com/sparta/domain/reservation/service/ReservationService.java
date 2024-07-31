@@ -6,7 +6,6 @@ import com.sparta.domain.reservation.repository.ReservationRepository;
 import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.repository.ThemeRepository;
 import com.sparta.domain.user.entity.User;
-import com.sparta.domain.user.entity.UserType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

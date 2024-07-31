@@ -2,10 +2,6 @@ package com.sparta.domain.review.service;
 
 import com.sparta.domain.review.entity.Review;
 import com.sparta.domain.review.repository.ReviewRepository;
-import com.sparta.domain.user.entity.User;
-import com.sparta.domain.user.entity.UserType;
-import com.sparta.global.exception.customException.UserException;
-import com.sparta.global.exception.errorCode.UserErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

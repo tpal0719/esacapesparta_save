@@ -2,7 +2,6 @@ package com.sparta.domain.kakaopayment.service;
 
 
 import com.sparta.domain.reservation.entity.Reservation;
-import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

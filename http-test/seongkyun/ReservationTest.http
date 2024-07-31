@@ -1,5 +1,5 @@
 ### 예약 등록
-POST http://localhost:8086/reservations
+POST http://localhost:8085/reservations
 Content-Type: application/json
 Authorization: {{user1Auth}}
 
@@ -7,16 +7,16 @@ Authorization: {{user1Auth}}
   "themeTimeId": 1,
   "player": 4,
   "price": 50000,
-  "PaymentStatus": "COMPLETE"
+  "paymentStatus": "COMPLETE"
 }
 
 ### 예약 취소
-DELETE http://localhost:8086/reservations/2
+DELETE http://localhost:8085/reservations/65
 Content-Type: application/json
 Authorization: {{user1Auth}}
 
 ### 예약 내역 조회
-GET http://localhost:8086/reservations
+GET http://localhost:8085/reservations
 Content-Type: application/json
 Authorization: {{user1Auth}}
 

@@ -2,10 +2,12 @@ package com.sparta.domain.review.dto;
 
 import com.sparta.domain.review.entity.Review;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class ReviewResponseDto {
     private Long reviewId;
     private Double rating;
