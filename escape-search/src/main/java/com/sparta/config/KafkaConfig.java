@@ -60,26 +60,6 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, KafkaStoreRequestDto> storeRequestKafkaListenerContainerFactory() {
-        return kafkaListenerContainerFactory(KafkaStoreRequestDto.class);
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, KafkaStoreResponseDto> storeResponseKafkaListenerContainerFactory() {
-        return kafkaListenerContainerFactory(KafkaStoreResponseDto.class);
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, KafkaThemeRequestDto> themeRequestKafkaListenerContainerFactory() {
-        return kafkaListenerContainerFactory(KafkaThemeRequestDto.class);
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, KafkaThemeResponseDto> themeResponseKafkaListenerContainerFactory() {
-        return kafkaListenerContainerFactory(KafkaThemeResponseDto.class);
-    }
-
-    @Bean
     public ConcurrentKafkaListenerContainerFactory<String, KafkaThemeInfoRequestDto> themeInfoRequestKafkaListenerContainerFactory() {
         return kafkaListenerContainerFactory(KafkaThemeInfoRequestDto.class);
     }
@@ -121,39 +101,4 @@ public class KafkaConfig {
 
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
-
-
-
-//    @Bean
-//    public <T> ConsumerFactory<String, T> consumerFactory(Class<T> targetType) {
-//        Map<String, Object> configProps = new HashMap<>();
-//        configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-//        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId);
-//        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class.getName());
-//        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class.getName());
-//        configProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
-//        configProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
-//        configProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, targetType.getName());
-//        configProps.put(JsonDeserializer.TRUSTED_PACKAGES, "com.sparta.domain.review.dto");
-//
-//        return new DefaultKafkaConsumerFactory<>(configProps);
-//    }
-//
-//    @Bean
-//    public ConcurrentKafkaListenerContainerFactory<String, KafkaReviewRequestDto> reviewRequestKafkaListenerContainerFactory() {
-//        return kafkaListenerContainerFactory(KafkaReviewRequestDto.class);
-//    }
-//
-//    @Bean
-//    public ConcurrentKafkaListenerContainerFactory<String, KafkaReviewResponseDto> reviewResponseKafkaListenerContainerFactory() {
-//        return kafkaListenerContainerFactory(KafkaReviewResponseDto.class);
-//    }
-//
-//    @Bean
-//    public <T> ConcurrentKafkaListenerContainerFactory<String, T> kafkaListenerContainerFactory(Class<T> targetType) {
-//        ConcurrentKafkaListenerContainerFactory<String, T> factory = new ConcurrentKafkaListenerContainerFactory<>();
-//        factory.setConsumerFactory(consumerFactory(targetType));
-//        return factory;
-//    }
-
 }

@@ -30,6 +30,8 @@ public class ThemeConsumerService {
     private final ThemeTimeRepository themeTimeRepository;
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, KafkaThemeInfoResponseDto> kafkaThemeInfoTemplate;
+    private final KafkaTemplate<String, KafkaThemeTimeResponseDto> kafkaThemeTimeTemplate;
 
     @KafkaListener(topics = KafkaTopic.THEME_REQUEST_TOPIC, groupId = "${GROUP_ID}")
     public void handleThemeRequest(KafkaThemeRequestDto request) {
@@ -55,13 +57,7 @@ public class ThemeConsumerService {
         Theme theme = themeRepository.findByActiveTheme(request.getThemeId());
         ThemeInfoResponseDto themeInfoResponseDto = new ThemeInfoResponseDto(theme);
         KafkaThemeInfoResponseDto responseDto = new KafkaThemeInfoResponseDto(request.getRequestId(), themeInfoResponseDto);
-
-        try {
-            String message = objectMapper.writeValueAsString(responseDto);
-            kafkaTemplate.send(KafkaTopic.THEME_INFO_RESPONSE_TOPIC, message);
-        } catch (Exception e) {
-            log.error("직열화 에러: {}", e.getMessage());
-        }
+        kafkaThemeInfoTemplate.send(KafkaTopic.THEME_INFO_RESPONSE_TOPIC, responseDto);
     }
 
     @KafkaListener(topics = KafkaTopic.THEME_TIME_REQUEST_TOPIC, groupId = "${GROUP_ID}")
@@ -72,13 +68,7 @@ public class ThemeConsumerService {
         List<ThemeTimeResponseDto> themeTimeResponseDtoList = themeTimeList.stream().map(ThemeTimeResponseDto::new).toList();
 
         KafkaThemeTimeResponseDto responseDto = new KafkaThemeTimeResponseDto(request.getRequestId(), themeTimeResponseDtoList);
-
-        try {
-            String message = objectMapper.writeValueAsString(responseDto);
-            kafkaTemplate.send(KafkaTopic.THEME_TIME_RESPONSE_TOPIC, message);
-        } catch (Exception e) {
-            log.error("직열화 에러: {}", e.getMessage());
-        }
+        kafkaThemeTimeTemplate.send(KafkaTopic.THEME_TIME_RESPONSE_TOPIC, responseDto);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.sparta.domain.kafka.kafkaService;
+package com.sparta.domain.kafka.kafkaEmailService;
 
 import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class KafkaConsumer {
+public class KafkaEmailConsumer {
 
     private final AmazonSESService emailService;
 

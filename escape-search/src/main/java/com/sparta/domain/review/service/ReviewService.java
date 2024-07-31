@@ -26,7 +26,6 @@ public class ReviewService {
 
     private final KafkaTemplate<String, KafkaReviewRequestDto> kafkaTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<List<ReviewResponseDto>>> responseFutures = new ConcurrentHashMap<>();
-    private final ObjectMapper objectMapper;
 
     /**
      * 방탈출 카페 테마 리뷰 조회
@@ -55,35 +54,11 @@ public class ReviewService {
     }
 
     @KafkaListener(topics = KafkaTopic.REVIEW_RESPONSE_TOPIC, groupId = "${GROUP_ID}")
-    public void handleReviewResponse(String reviewResponse) {
-        KafkaReviewResponseDto responseDto = parseMessage(reviewResponse);
-        CompletableFuture<List<ReviewResponseDto>> future = responseFutures.remove(Objects.requireNonNull(responseDto).getRequestId());
+    public void handleReviewResponse(KafkaReviewResponseDto reviewResponse) {
+        CompletableFuture<List<ReviewResponseDto>> future = responseFutures.remove(Objects.requireNonNull(reviewResponse).getRequestId());
         if (future != null) {
-            future.complete(responseDto.getReviewResponses());
-        }
-    }
-
-        private KafkaReviewResponseDto parseMessage(String message) {
-        try {
-            return objectMapper.readValue(message, KafkaReviewResponseDto.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            future.complete(reviewResponse.getReviewResponses());
         }
     }
 }
-
-    /**
-     * 방탈출 카페 테마 리뷰 조회
-     * @param storeId 방탈출 카페 id
-     * @param themeId 테마 id가 들어있는 dto
-     * @return 리뷰 반환
-     */
-//    public List<ReviewResponseDto> getReview(Long storeId, Long themeId) {
-//        storeRepository.findByActiveStore(storeId);
-//        Theme theme = themeRepository.findByActiveTheme(themeId);
-//        List<Review> reviewList = reviewRepository.findByThemeReview(theme);
-//
-//        return reviewList.stream().map(ReviewResponseDto::new).toList();
-//    }
 

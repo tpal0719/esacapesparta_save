@@ -1,4 +1,4 @@
-package com.sparta.domain.kafka.kafkaService;
+package com.sparta.domain.kafka.kafkaEmailService;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.model.*;

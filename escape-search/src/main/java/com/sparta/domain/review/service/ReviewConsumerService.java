@@ -25,8 +25,7 @@ public class ReviewConsumerService {
     private final ReviewRepository reviewRepository;
     private final ThemeRepository themeRepository;
     private final StoreRepository storeRepository;
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private final ObjectMapper objectMapper;
+    private final KafkaTemplate<String, KafkaReviewResponseDto> kafkaTemplate;
 
     @KafkaListener(topics = KafkaTopic.REVIEW_REQUEST_TOPIC, groupId = "${GROUP_ID}")
     public void handleReviewRequest(KafkaReviewRequestDto reviewRequest) {
@@ -37,12 +36,6 @@ public class ReviewConsumerService {
         List<ReviewResponseDto> responseDtoList = reviewList.stream().map(ReviewResponseDto::new).toList();
 
         KafkaReviewResponseDto reviewResponse = new KafkaReviewResponseDto(reviewRequest.getRequestId(), responseDtoList);
-        try {
-            String message = objectMapper.writeValueAsString(reviewResponse);
-            kafkaTemplate.send(KafkaTopic.REVIEW_RESPONSE_TOPIC, message);
-        } catch (Exception e) {
-            log.error("직열화 에러: {}", e.getMessage());
-        }
-
+        kafkaTemplate.send(KafkaTopic.REVIEW_RESPONSE_TOPIC, reviewResponse);
     }
 }

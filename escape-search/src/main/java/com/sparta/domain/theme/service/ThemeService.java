@@ -36,10 +36,6 @@ public class ThemeService {
     private final ConcurrentHashMap<String, CompletableFuture<List<ThemeTimeResponseDto>>> responseThemeTimeFutures = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
 
-    private final ThemeRepository themeRepository;
-    private final StoreRepository storeRepository;
-    private final ThemeTimeRepository themeTimeRepository;
-
     /**
      * 방탈출 카페 테마 전체 조회
      * @param storeId 방탈출 카페 id
@@ -110,20 +106,10 @@ public class ThemeService {
     }
 
     @KafkaListener(topics = KafkaTopic.THEME_INFO_RESPONSE_TOPIC, groupId = "${GROUP_ID}")
-    public void handleThemeInfoResponse(String response) {
-        KafkaThemeInfoResponseDto responseDto = parseThemeInfoMessage(response);
-        CompletableFuture<ThemeInfoResponseDto> future = responseThemeInfoFutures.remove(Objects.requireNonNull(responseDto).getRequestId());
+    public void handleThemeInfoResponse(KafkaThemeInfoResponseDto response) {
+        CompletableFuture<ThemeInfoResponseDto> future = responseThemeInfoFutures.remove(Objects.requireNonNull(response).getRequestId());
         if (future != null) {
-            future.complete(responseDto.getResponseDto());
-        }
-    }
-
-    private KafkaThemeInfoResponseDto parseThemeInfoMessage(String message) {
-        try {
-            return objectMapper.readValue(message, KafkaThemeInfoResponseDto.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            future.complete(response.getResponseDto());
         }
     }
 
@@ -154,20 +140,10 @@ public class ThemeService {
     }
 
     @KafkaListener(topics = KafkaTopic.THEME_TIME_RESPONSE_TOPIC, groupId = "${GROUP_ID}")
-    public void handleThemeTimeResponse(String response) {
-        KafkaThemeTimeResponseDto responseDto = parseThemeTimeMessage(response);
-        CompletableFuture<List<ThemeTimeResponseDto>> future = responseThemeTimeFutures.remove(Objects.requireNonNull(responseDto).getRequestId());
+    public void handleThemeTimeResponse(KafkaThemeTimeResponseDto response) {
+        CompletableFuture<List<ThemeTimeResponseDto>> future = responseThemeTimeFutures.remove(Objects.requireNonNull(response).getRequestId());
         if (future != null) {
-            future.complete(responseDto.getResponseDtoList());
-        }
-    }
-
-    private KafkaThemeTimeResponseDto parseThemeTimeMessage(String message) {
-        try {
-            return objectMapper.readValue(message, KafkaThemeTimeResponseDto.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            future.complete(response.getResponseDtoList());
         }
     }
 }

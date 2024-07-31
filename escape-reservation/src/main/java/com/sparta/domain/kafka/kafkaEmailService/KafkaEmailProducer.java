@@ -1,4 +1,4 @@
-package com.sparta.domain.kafka.kafkaService;
+package com.sparta.domain.kafka.kafkaEmailService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class KafkaProducer {
+public class KafkaEmailProducer {
 
     private final KafkaTemplate<String, String> kafkaEmailTemplate;
 
