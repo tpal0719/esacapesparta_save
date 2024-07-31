@@ -2,14 +2,12 @@ package com.sparta.domain.reservation.repository;
 
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
-import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.exception.customException.ReservationException;
 import com.sparta.global.exception.errorCode.ReservationErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long>, ReservationRepositoryCustom{

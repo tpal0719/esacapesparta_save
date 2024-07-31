@@ -1,6 +1,5 @@
 package com.sparta.domain.review.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.review.dto.KafkaReviewRequestDto;
 import com.sparta.domain.review.dto.KafkaReviewResponseDto;
 import com.sparta.domain.review.dto.ReviewResponseDto;
@@ -11,7 +10,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;

@@ -1,15 +1,15 @@
 package com.sparta.controller;
 
-import com.sparta.domain.review.dto.ReviewRequestDto;
 import com.sparta.domain.review.dto.ReviewResponseDto;
 import com.sparta.domain.review.service.ReviewService;
 import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.entity.StoreRegion;
 import com.sparta.domain.store.service.StoreService;
-import com.sparta.domain.theme.dto.*;
+import com.sparta.domain.theme.dto.ThemeInfoResponseDto;
+import com.sparta.domain.theme.dto.ThemeResponseDto;
+import com.sparta.domain.theme.dto.ThemeTimeResponseDto;
 import com.sparta.domain.theme.service.ThemeService;
 import com.sparta.global.response.ResponseMessage;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

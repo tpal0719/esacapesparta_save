@@ -2,11 +2,8 @@ package com.sparta.domain.review.repository;
 
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.review.entity.Review;
-import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.user.entity.User;
-import com.sparta.global.exception.customException.FollowException;
 import com.sparta.global.exception.customException.ReviewException;
-import com.sparta.global.exception.errorCode.FollowErrorCode;
 import com.sparta.global.exception.errorCode.ReviewErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 

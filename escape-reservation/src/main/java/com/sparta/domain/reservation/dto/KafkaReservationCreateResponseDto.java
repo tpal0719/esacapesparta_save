@@ -1,6 +1,5 @@
 package com.sparta.domain.reservation.dto;
 
-import com.sparta.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

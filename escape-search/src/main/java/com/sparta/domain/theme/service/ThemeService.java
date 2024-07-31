@@ -1,12 +1,7 @@
 package com.sparta.domain.theme.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.domain.theme.dto.*;
-import com.sparta.domain.theme.entity.Theme;
-import com.sparta.domain.theme.entity.ThemeTime;
-import com.sparta.domain.theme.repository.ThemeRepository;
-import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

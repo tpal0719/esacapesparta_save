@@ -1,6 +1,5 @@
 package com.sparta.domain.review.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.review.dto.KafkaReviewRequestDto;
 import com.sparta.domain.review.dto.KafkaReviewResponseDto;
 import com.sparta.domain.review.dto.ReviewResponseDto;

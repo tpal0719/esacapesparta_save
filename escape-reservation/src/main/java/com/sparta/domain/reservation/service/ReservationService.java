@@ -1,11 +1,6 @@
 package com.sparta.domain.reservation.service;
 
-import com.sparta.domain.kafka.kafkaEmailService.KafkaEmailProducer;
-import com.sparta.domain.kakaopayment.service.PaymentService;
 import com.sparta.domain.reservation.dto.*;
-import com.sparta.domain.reservation.entity.Reservation;
-import com.sparta.domain.reservation.repository.ReservationRepository;
-import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;

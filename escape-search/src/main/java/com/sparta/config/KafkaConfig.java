@@ -3,9 +3,10 @@ package com.sparta.config;
 
 import com.sparta.domain.review.dto.KafkaReviewRequestDto;
 import com.sparta.domain.review.dto.KafkaReviewResponseDto;
-import com.sparta.domain.store.dto.KafkaStoreRequestDto;
-import com.sparta.domain.store.dto.KafkaStoreResponseDto;
-import com.sparta.domain.theme.dto.*;
+import com.sparta.domain.theme.dto.KafkaThemeInfoRequestDto;
+import com.sparta.domain.theme.dto.KafkaThemeInfoResponseDto;
+import com.sparta.domain.theme.dto.KafkaThemeTimeRequestDto;
+import com.sparta.domain.theme.dto.KafkaThemeTimeResponseDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -16,11 +17,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
-import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -6,8 +6,6 @@ import com.sparta.domain.reservation.dto.*;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
-import com.sparta.domain.review.entity.Review;
-import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.domain.user.entity.User;
@@ -21,8 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor

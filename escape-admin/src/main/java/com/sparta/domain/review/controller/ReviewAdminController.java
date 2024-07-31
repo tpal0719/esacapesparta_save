@@ -1,11 +1,10 @@
 package com.sparta.domain.review.controller;
 
-import com.sparta.global.response.ResponseMessage;
 import com.sparta.domain.review.service.ReviewAdminService;
+import com.sparta.global.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

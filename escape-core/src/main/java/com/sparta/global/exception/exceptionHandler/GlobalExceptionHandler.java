@@ -5,7 +5,6 @@ import com.sparta.global.exception.customException.GlobalCustomException;
 import com.sparta.global.exception.errorCode.CommonErrorCode;
 import com.sparta.global.exception.errorCode.S3ErrorCode;
 import com.sparta.global.response.ResponseErrorMessage;
-import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-import java.nio.file.AccessDeniedException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 

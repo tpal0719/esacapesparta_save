@@ -1,23 +1,21 @@
 package com.sparta.domain.consumer.controller;
 
+import com.sparta.domain.consumer.dto.request.EditPasswordRequestDto;
+import com.sparta.domain.consumer.dto.request.EditProfileRequestDto;
+import com.sparta.domain.consumer.service.ConsumerService;
 import com.sparta.domain.user.dto.UserResponseDto;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.service.UserService;
-import com.sparta.domain.consumer.dto.request.EditPasswordRequestDto;
-import com.sparta.domain.consumer.dto.request.EditProfileRequestDto;
+import com.sparta.feign.EscapeReservationClient;
 import com.sparta.global.response.ResponseMessage;
 import com.sparta.security.UserDetailsImpl;
-import com.sparta.domain.consumer.service.ConsumerService;
 import jakarta.validation.Valid;
-import com.sparta.feign.EscapeReservationClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
