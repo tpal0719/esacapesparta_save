@@ -15,7 +15,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("/reservationId/{reservationId}")
+    @PostMapping("/reservations/{reservationId}")
     public String preparePayment(Long reservationId,
                                  Model model) {
         Map<String, Object> response = paymentService.preparePayment(reservationId);
