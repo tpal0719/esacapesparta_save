@@ -15,6 +15,8 @@ spring:
   redis:
     port: ${REDIS_MAIL_PORT}
     host: ${REDIS_MAIL_HOST}
+  invite:
+    email: ${ROLE_EMAIL}
   mail:
     host: ${MAIL_HOST} #smtp 서버 주소
     port: ${MAIL_PORT} # 메일 인증서버 포트
@@ -45,8 +47,11 @@ cloud:
     stack:
       auto: false
     defaultPath: ${DEFAULT_IMAGE_URL}
+
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
 server:
   port: ${ADMIN_SERVER_PORT}
+admin:
+  key: ${ADMIN_KEY}
