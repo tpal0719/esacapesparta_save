@@ -24,6 +24,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -44,7 +51,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
@@ -61,20 +68,37 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        // CSFF 설정
-        http.csrf(AbstractHttpConfigurer::disable);
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+        configuration.addExposedHeader("Authorization"); // 클라이언트에서 접근할 수 있게 허용할 헤더 추가
+        configuration.addExposedHeader("RefreshToken"); // 클라이언트에서 접근할 수 있게 허용할 헤더 추가
 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // CSFF 설정
+
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()));
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //resource 접근 허용 설정
-                .requestMatchers(HttpMethod.POST,"/users/signup/**").permitAll() // non-user 접근허용
-                .requestMatchers(HttpMethod.POST,"/users/mail/**").permitAll() // non-user 접근허용
-                .requestMatchers(HttpMethod.POST,"/auth/reissue").permitAll()
-                .requestMatchers(HttpMethod.GET,"/search/**").permitAll() // non-user 접근허용 + 차후 리팩토링
+                .requestMatchers(HttpMethod.POST, "/users/signup/**").permitAll() // non-user 접근허용
+                .requestMatchers(HttpMethod.POST, "/users/mail/**").permitAll() // non-user 접근허용
+                .requestMatchers(HttpMethod.POST, "/auth/reissue").permitAll()
+                .requestMatchers(HttpMethod.GET, "/search/**").permitAll() // non-user 접근허용 + 차후 리팩토링
                 .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll() //리뷰 조회 접근허용
+                .requestMatchers("/payments/**").permitAll() //리뷰 조회 접근허용
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 .requestMatchers("/manager/**").hasAuthority("MANAGER")
                 .anyRequest().authenticated()
