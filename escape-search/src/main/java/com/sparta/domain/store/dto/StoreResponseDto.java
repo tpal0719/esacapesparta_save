@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 public class StoreResponseDto {
     private Long storeId;
     private String storeImage;
-    private String name;
+    private String title;
     private String address;
 
     public StoreResponseDto(Store store){
         this.storeId = store.getId();
         this.storeImage = store.getStoreImage();
-        this.name = store.getName();
+        this.title = store.getName();
         this.address = store.getAddress();
     }
 }
