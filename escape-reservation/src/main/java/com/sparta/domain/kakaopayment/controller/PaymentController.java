@@ -25,20 +25,25 @@ public class PaymentController {
         model.addAttribute("nextRedirectPcUrl", response.get("next_redirect_pc_url"));
         return "" + response.get("next_redirect_pc_url");
     }
-
-    @GetMapping("/kakaoPaySuccess")
-    public ResponseEntity<String> kakaoPaySuccess(@RequestParam("pg_token") String pgToken, Model model) {
-        return ResponseEntity.ok("결제 성공");
-    }
-
-    @GetMapping("/kakaoPayCancel")
-    public ResponseEntity<String> kakaoPayCancel() {
-        return ResponseEntity.ok("결제 취소");
-    }
-
-    @GetMapping("/kakaoPayFail")
-    public ResponseEntity<String> kakaoPayFail() {
-        return ResponseEntity.ok("결제 실패");
-    }
+//
+//    @GetMapping("/kakaoPaySuccess")
+//    public String kakaoPaySuccess(@RequestParam("pg_token") String pgToken, Model model) {
+//        String frontendHomeUrl = "http://localhost:5173/home";  // 프론트엔드 URL과 포트 번호
+//        return "redirect: " + frontendHomeUrl;
+//    }
+//
+//    @GetMapping("/kakaoPayCancel")
+//    public String kakaoPayCancel() {
+//        // 프론트엔드의 결제 취소 화면 URL로 리다이렉트
+//        String frontendCancelUrl = "http://localhost:5173/cancel";  // 프론트엔드 URL과 포트 번호
+//        return "redirect:" + frontendCancelUrl;
+//    }
+//
+//    @GetMapping("/kakaoPayFail")
+//    public String kakaoPayFail() {
+//        // 프론트엔드의 결제 실패 화면 URL로 리다이렉트
+//        String frontendFailUrl = "http://localhost:5173/fail";  // 프론트엔드 URL과 포트 번호
+//        return "redirect:" + frontendFailUrl;
+//    }
 
 }
