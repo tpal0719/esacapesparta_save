@@ -11,4 +11,5 @@ public class KafkaThemeTimeRequestDto {
     private String requestId;
     private Long storeId;
     private Long themeId;
+    private String day;
 }

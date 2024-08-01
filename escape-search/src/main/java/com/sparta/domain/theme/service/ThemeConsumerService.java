@@ -9,6 +9,7 @@ import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.theme.repository.ThemeRepository;
 import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.global.kafka.KafkaTopic;
+import com.sparta.global.util.LocalDateTimeUtil;
 import com.sparta.global.util.PageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -62,9 +64,9 @@ public class ThemeConsumerService {
 
     @KafkaListener(topics = KafkaTopic.THEME_TIME_REQUEST_TOPIC, groupId = "${GROUP_ID}")
     public void handleThemeTimeRequest(KafkaThemeTimeRequestDto request) {
+        LocalDate day = LocalDateTimeUtil.parseDateStringToLocalDate(request.getDay());
         storeRepository.findByActiveStore(request.getStoreId());
-        Theme theme = themeRepository.findByActiveTheme(request.getThemeId());
-        List<ThemeTime> themeTimeList = themeTimeRepository.findByTheme(theme);
+        List<ThemeTime> themeTimeList = themeTimeRepository.findThemeTimesByDate(request.getThemeId(), day);
         List<ThemeTimeResponseDto> themeTimeResponseDtoList = themeTimeList.stream().map(ThemeTimeResponseDto::new).toList();
 
         KafkaThemeTimeResponseDto responseDto = new KafkaThemeTimeResponseDto(request.getRequestId(), themeTimeResponseDtoList);
