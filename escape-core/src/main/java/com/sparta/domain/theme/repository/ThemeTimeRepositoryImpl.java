@@ -32,7 +32,8 @@ public class ThemeTimeRepositoryImpl implements ThemeTimeRepositoryCustom{
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
         return jpaQueryFactory.selectFrom(themeTime)
-                .where(themeTime.startTime.between(startOfDay, endOfDay))
+                .where(themeTime.startTime.between(startOfDay, endOfDay)
+                        .and(themeTime.theme.id.eq(themeId)))
                 .fetch();
     }
 
