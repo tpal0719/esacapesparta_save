@@ -3,9 +3,11 @@ package com.sparta.domain.kakaopayment.controller;
 
 import com.sparta.domain.kakaopayment.service.PaymentService;
 import com.sparta.domain.reservation.entity.Reservation;
+import com.sparta.security.UserDetailsImpl;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ public class PaymentController {
 
     @PostMapping("/reservations/{reservationId}")
     public String preparePayment(@PathVariable Long reservationId,
+                                 @AuthenticationPrincipal UserDetailsImpl userDetails,
                                  Model model) {
         Map<String, Object> response = paymentService.preparePayment(reservationId);
         model.addAttribute("nextRedirectPcUrl", response.get("next_redirect_pc_url"));
