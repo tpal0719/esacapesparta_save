@@ -63,7 +63,6 @@ public class ReservationService {
      */
     @Transactional
     public void deleteReservation(Long reservationId, User user) {
-
         String requestId = UUID.randomUUID().toString();
         CompletableFuture<Void> future = new CompletableFuture<>();
         responseDeleteFutures.put(requestId, future);

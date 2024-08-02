@@ -76,7 +76,7 @@ Content-Type: application/json
 
 
 {
-  "email": "yooss135@naver.com",
+  "email": "mmarland0@facebook.com",
   "password": "Test1234!"
 }
 > {% client.global.set("user1Auth", response.headers.valueOf("Authorization")); %}

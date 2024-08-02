@@ -1,5 +1,5 @@
 ### 예약 등록
-POST http://localhost:8085/reservations
+POST http://localhost:8084/reservations
 Content-Type: application/json
 Authorization: {{user1Auth}}
 
@@ -11,7 +11,7 @@ Authorization: {{user1Auth}}
 }
 
 ### 예약 취소
-DELETE http://localhost:8085/reservations/65
+DELETE http://localhost:8084/reservations/49
 Content-Type: application/json
 Authorization: {{user1Auth}}
 

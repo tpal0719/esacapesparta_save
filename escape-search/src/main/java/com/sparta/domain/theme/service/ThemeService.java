@@ -114,11 +114,11 @@ public class ThemeService {
      * @param themeId 해당 카페의 테마 id
      * @return theme 시간 반환
      */
-    public List<ThemeTimeResponseDto> getThemeTime(Long storeId, Long themeId) {
+    public List<ThemeTimeResponseDto> getThemeTime(Long storeId, Long themeId, String day) {
         String requestId = UUID.randomUUID().toString();
         CompletableFuture<List<ThemeTimeResponseDto>> future = new CompletableFuture<>();
         responseThemeTimeFutures.put(requestId, future);
-        sendThemeTimeRequest(requestId, storeId, themeId);
+        sendThemeTimeRequest(requestId, storeId, themeId, day);
 
         try {
             return future.get(); // 응답을 기다림
@@ -129,8 +129,8 @@ public class ThemeService {
 
     }
 
-    private void sendThemeTimeRequest(String requestId, Long storeId, Long themeId) {
-        KafkaThemeTimeRequestDto Request = new KafkaThemeTimeRequestDto(requestId, storeId, themeId);
+    private void sendThemeTimeRequest(String requestId, Long storeId, Long themeId, String day) {
+        KafkaThemeTimeRequestDto Request = new KafkaThemeTimeRequestDto(requestId, storeId, themeId, day);
         kafkaThemeTimeTemplate.send(KafkaTopic.THEME_TIME_REQUEST_TOPIC, Request);
     }
 

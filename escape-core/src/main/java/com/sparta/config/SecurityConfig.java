@@ -25,10 +25,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
     }
 
@@ -83,22 +82,21 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         // CSFF 설정
-
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()));
+
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //resource 접근 허용 설정
-                .requestMatchers(HttpMethod.POST, "/users/signup/**").permitAll() // non-user 접근허용
-                .requestMatchers(HttpMethod.POST, "/users/mail/**").permitAll() // non-user 접근허용
-                .requestMatchers(HttpMethod.POST, "/auth/reissue").permitAll()
-                .requestMatchers(HttpMethod.GET, "/search/**").permitAll() // non-user 접근허용 + 차후 리팩토링
+                .requestMatchers(HttpMethod.POST,"/users/signup/**").permitAll() // non-user 접근허용
+                .requestMatchers(HttpMethod.POST,"/users/mail/**").permitAll() // non-user 접근허용
+                .requestMatchers(HttpMethod.POST,"/auth/reissue").permitAll()
+                .requestMatchers(HttpMethod.GET,"/search/**").permitAll() // non-user 접근허용 + 차후 리팩토링
                 .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll() //리뷰 조회 접근허용
-                .requestMatchers("/payments/**").permitAll() //리뷰 조회 접근허용
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 .requestMatchers("/manager/**").hasAuthority("MANAGER")
                 .anyRequest().authenticated()

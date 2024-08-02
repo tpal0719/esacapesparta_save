@@ -117,9 +117,10 @@ public class SearchController {
     @GetMapping("/stores/theme/{themeId}/time")
     public ResponseEntity<ResponseMessage<List<ThemeTimeResponseDto>>> getThemeTime(
             @RequestParam(value = "storeId") Long storeId,
+            @RequestParam(value = "day") String day,
             @PathVariable Long themeId){
 
-        List<ThemeTimeResponseDto> responseDtoList = themeService.getThemeTime(storeId, themeId);
+        List<ThemeTimeResponseDto> responseDtoList = themeService.getThemeTime(storeId, themeId, day);
 
         ResponseMessage<List<ThemeTimeResponseDto>> responseMessage = ResponseMessage.<List<ThemeTimeResponseDto>>builder()
                 .statusCode(HttpStatus.OK.value())

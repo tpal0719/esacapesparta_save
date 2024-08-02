@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class ThemeInfoResponseDto {
     private Long themeId;
     private String title;
-    private String contents;
+    private String description;
     private Integer level;
     private Integer minPlayer;
     private Integer maxPlayer;
@@ -20,7 +20,7 @@ public class ThemeInfoResponseDto {
     public ThemeInfoResponseDto(Theme theme){
         this.themeId = theme.getId();
         this.title = theme.getTitle();
-        this.contents = theme.getContents();
+        this.description = theme.getContents();
         this.level = theme.getLevel();
         this.minPlayer = theme.getMinPlayer();;
         this.maxPlayer = theme.getMaxPlayer();

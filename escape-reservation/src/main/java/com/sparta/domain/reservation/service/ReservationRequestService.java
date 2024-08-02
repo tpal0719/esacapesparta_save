@@ -7,9 +7,12 @@ import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
 import com.sparta.domain.theme.entity.ThemeTime;
+import com.sparta.domain.theme.entity.ThemeTimeStatus;
 import com.sparta.domain.theme.repository.ThemeTimeRepository;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.repository.UserRepository;
+import com.sparta.global.exception.customException.ReservationException;
+import com.sparta.global.exception.errorCode.ReservationErrorCode;
 import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +44,10 @@ public class ReservationRequestService {
         ThemeTime themeTime = themeTimeRepository.checkStoreAndThemeActive(requestDto.getRequestDto().getThemeTimeId());
         reservationRepository.checkReservation(themeTime);
 
+        if(themeTime.getThemeTimeStatus() == ThemeTimeStatus.DISABLE) {
+            throw new ReservationException(ReservationErrorCode.RESERVATION_DUPLICATION);
+        }
+
         Reservation reservation = Reservation.builder()
                 .player(requestDto.getRequestDto().getPlayer())
                 .price(requestDto.getRequestDto().getPrice())
@@ -50,6 +57,7 @@ public class ReservationRequestService {
                 .theme(themeTime.getTheme())
                 .themeTime(themeTime)
                 .build();
+
         KafkaReservationCreateResponseDto responseDto =  new KafkaReservationCreateResponseDto(requestDto.getRequestId()
                 , new ReservationCreateResponseDto(reservationRepository.save(reservation)), user.getEmail());
 
@@ -61,9 +69,11 @@ public class ReservationRequestService {
     public void handleDeleteReservationRequest(KafkaReservationDeleteRequestDto requestDto) {
         User user = userRepository.findByIdOrElseThrow(requestDto.getUserId());
         Reservation reservation = reservationRepository.findByIdAndUserAndActive(requestDto.getReservationId(), user);
-        reservation.updateReservationStatus();
 
-        paymentService.refundPayment(requestDto.getReservationId());
+//        paymentService.refundPayment(requestDto.getReservationId());
+        reservation.updateReservationStatus();
+        ThemeTime themeTime = reservation.getThemeTime();
+        themeTime.updateThemeTimeStatus();
         kafkaEmailProducer.sendDeleteReservationEmail(KafkaTopic.PAYMENT_DELETE_TOPIC, user.getEmail());
     }
 

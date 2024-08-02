@@ -4,6 +4,7 @@ package com.sparta.domain.kakaopayment.service;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +21,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Slf4j
 public class PaymentService {
 
     private final ReservationRepository reservationRepository;
@@ -85,7 +86,8 @@ public class PaymentService {
 
         ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_PAY_API_URL, entity, Map.class);
 
-
+        reservation.paymentToReservation(cid,
+                                        Objects.requireNonNull(response.getBody()).get("tid").toString());
 
         return response.getBody();
     }
@@ -97,6 +99,7 @@ public class PaymentService {
      * @return key - value format json
      * @author SEMI
      */
+    @Transactional
     public Map<String, Object> refundPayment(Long reservationId) {
 
         Reservation reservation = reservationRepository.findByIdOrElse(reservationId);
@@ -113,6 +116,7 @@ public class PaymentService {
 
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
 
+        reservation.updateReservationStatus();
         ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_ORDER_API_URL, entity, Map.class);
 
 
@@ -154,16 +158,4 @@ public class PaymentService {
 
         return response.getBody();
     }
-//
-//    public void kakaoPaySuccess(Long reservationId) {
-//        Reservation reservation = reservationRepository.findByIdOrElse(reservationId);
-//
-//        reservation.updateReservationStatus();
-////        reservation.paymentToReservation(cid,
-////                Objects.requireNonNull(response.getBody()).get("tid").toString());
-//    }
-//
-//    public void kakaoPayCancel(Long reservationId) {
-//        Reservation reservation = reservationRepository.findByIdOrElse(reservationId);
-//    }
 }

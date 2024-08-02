@@ -15,6 +15,10 @@ public class ReviewResponseDto {
     private String email;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private String title;
+    private String themeName;
+    private String author;
+
 
     public ReviewResponseDto(Review review){
         this.reviewId = review.getId();
@@ -23,5 +27,8 @@ public class ReviewResponseDto {
         this.email = review.getUser().getEmail();
         this.createAt = review.getCreatedAt();
         this.updateAt = review.getUpdatedAt();
+        this.author = review.getUser().getName();
+        this.title = review.getTitle();
+        this.themeName = review.getTheme().getTitle();
     }
 }
