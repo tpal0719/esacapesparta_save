@@ -8,8 +8,8 @@
 ## 📑 프로젝트의 전체적인 구조
  // System Architecture image
 - github hook을 받아 Jenkins에서 CI/CD를 진행합니다.
-- 모든 서버는 Naver Cloud Platform에 올라가 있습니다.<br>
-- 구동중인 서버  kafka Server, Redis Server, MySQL Server
+- 모든 서버는 AWS EC2에 올라가 있습니다.<br>
+- 구동중인 서버  Kafka Server, Redis Server, MySQL Server
 
 
 ## 📑 프로젝트의 주요 관심사
@@ -28,8 +28,7 @@
 - 인덱스와 쿼리 튜닝을 활용
 - 비동기를 활용하여 빠른 시간 내에 외부 API 호출
 <br><br>
-<b>그 외</b><br>
-- Project Wiki를 참고해주세요!
+
 <br><br>
 
 ### ✏️ 브랜치 관리 전략
@@ -52,22 +51,22 @@ EscapeSparta PR : [https://github.com/escapeSparta/escapeSparta/pulls]
 - Bitbucket Gitflow Workflow(https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
 
 ### 테스트
-- Mockito Framework를 활용하여 고립된 테스트 코드를 작성
-- Jenkins CI를 적용하여 테스트 자동화
-- 협업하는 동료의 소스코드에 서로 테스트코드를 작성하여 서로의 소스코드를 알 수 있도록 하고 있습니다.
-<br><br>
+
+추가 구현예정 입니다.
 
 ### 성능 테스트
-NGrinder를 설치하여 테스트하고있습니다.<br>
+
+추가 구현예정 입니다.
 
 
 ## 사용 기술 및 환경
-Java17, Spring boot 3.1.2, Spring Security, Gradle, JPA, Hibernate, Redis, MySQL, Redis, Docker, Jenkins
+Java 17, Spring boot 3.1.2, Spring Security, Gradle, JPA, Hibernate, Redis, MySQL, Redis, Docker, Jenkins
 <br>
 
 ## 트러블 슈팅
 
 현재는 종합되지 않았습니다. 팀 회의를 거쳐 트러블 슈팅을 종합적으로 검토하여 수정할 예정입니다.
+
 <br>
 ## CI
 Jenkins : 젠킨스를 이용하여 서버 운영을 하고 있습니다. <br>
@@ -81,6 +80,7 @@ Push 완료시 EscapeSparta 메인 서버에서 docker hub에 올라간 이미�
 
 
 <br>
+
 ## Database
 - MySQL
 EscapeSpara에 중요한 정보들을 담고 있습니다.
@@ -88,14 +88,12 @@ EscapeSpara에 중요한 정보들을 담고 있습니다.
 서버의 부하를 줄이기 위해 certificateCode,refreshToken을 Redis에서 관리하고 있습니다.
 <br>
 
-## 화면 설계
+## 클라이언트 화면 설계
 ![image](https://github.com/user-attachments/assets/24a60887-b962-4fb7-91d1-3c85b3854e26)
 
+## 사장님 화면
 
-클라이언트와 사장님의 보여지는 화면은 똑같습니다. 저희는 사전에 회원가입 단계에서 UserType을 구분하기 때문에 접근 권한에 따라 기능만 달리할 뿐,
-
-보여지는 화면은 클라이언트와 동일합니다.
-
+(추가 구현예정)
 
 ## 프로젝트 DB ERD
 2024-08-02 (수정예정)
