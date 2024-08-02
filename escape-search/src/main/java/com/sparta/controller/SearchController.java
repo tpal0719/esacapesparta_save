@@ -119,7 +119,7 @@ public class SearchController {
             @RequestParam(value = "storeId") Long storeId,
             @RequestParam(value = "day") String day,
             @PathVariable Long themeId){
-        log.error("!!!!");
+
         List<ThemeTimeResponseDto> responseDtoList = themeService.getThemeTime(storeId, themeId, day);
 
         ResponseMessage<List<ThemeTimeResponseDto>> responseMessage = ResponseMessage.<List<ThemeTimeResponseDto>>builder()
