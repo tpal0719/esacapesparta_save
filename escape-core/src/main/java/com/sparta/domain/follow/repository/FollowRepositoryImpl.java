@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.domain.follow.entity.Follow;
 import com.sparta.domain.follow.entity.QFollow;
 import com.sparta.domain.store.entity.QStore;
+import com.sparta.domain.store.entity.StoreStatus;
 import com.sparta.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
 
         JPAQuery<Follow> query = jpaQueryFactory.selectFrom(follow)
                 .leftJoin(follow.store, store).fetchJoin()
-                .where(follow.user.eq(user));
+                .where(follow.user.eq(user).and(store.storeStatus.eq(StoreStatus.ACTIVE)));
 
         return query.fetch();
     }
