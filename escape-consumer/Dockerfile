@@ -1,11 +1,24 @@
 # OpenJDK 11 이미지를 베이스 이미지로 사용
-FROM openjdk:11-jre-slim
+FROM openjdk:17-jdk-slim
 
-# 빌드된 JAR 파일을 /app 디렉토리로 복사
-COPY build/libs/escape-consumer*.jar /app/escape-consumer.jar
+# Set the working directory
+WORKDIR /apps
+## Copy the Gradle wrapper and build scripts
+#COPY gradlew .
+#COPY gradle/ gradle/
+#COPY build.gradle .
+#COPY settings.gradle .
+
+# Give gradlew file execute permissions
+#RUN chmod +x gradlew
+
+
+# Build the application
+#RUN ./gradlew bootJar
+COPY ./build/libs/*.jar /apps/app.jar
 
 # 어플리케이션 포트 설정 (예: 8080)
-EXPOSE 8082
+EXPOSE 8080
 
 # 어플리케이션 실행
-ENTRYPOINT ["java", "-jar", "/app/escape-consumer.jar"]
+CMD ["java", "-jar", "/apps/app.jar"]
