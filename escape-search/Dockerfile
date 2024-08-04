@@ -1,3 +1,5 @@
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 # Base image
 FROM openjdk:11-jre-slim
 
@@ -18,3 +20,15 @@ ADD ${JAR_FILE} escape-search.jar
 
 # Run the jar file
 ENTRYPOINT ["java","-jar","/escape-search.jar"]
+=======
+FROM openjdk:17
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+>>>>>>> Stashed changes
+=======
+FROM openjdk:17
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+>>>>>>> Stashed changes

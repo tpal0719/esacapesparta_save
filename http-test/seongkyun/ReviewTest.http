@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: {{user1Auth}}
 
 {
-  "reservationId": 2,
+  "reservationId": 49,
   "title": "제목",
   "contents": "내용",
   "rating": 4.5
@@ -22,7 +22,7 @@ Authorization: {{user1Auth}}
 }
 
 ### 리뷰 삭제
-DELETE http://localhost:8082/reviews/2
+DELETE http://localhost:8082/reviews/4
 Content-Type: application/json
 Authorization: {{user1Auth}}
 

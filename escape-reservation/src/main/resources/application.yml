@@ -33,10 +33,29 @@ spring:
           ssl:
             trust: smtp.gmail.com
             enable: true #반드시 필요 -> SSL 필요로 되어있으면
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
+    consumer:
+      group-id: ${GROUP_ID}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  aws:
+    ses:
+      accessKey: ${ACCESS_KEY}
+      secretKey: ${SECRET_KEY}
+      region: ${REGION}
+  invite:
+    email: ${ROLE_EMAIL}
   data:
     redis:
       port: ${REDIS_MAIL_PORT}
       host: ${REDIS_MAIL_HOST}
+admin:
+  key: ${ADMIN_KEY}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
@@ -46,6 +65,9 @@ server:
 kakao-payment:
   admin-key: ${PAY_ADMIN_KEY}
   cid: TC0ONETIME
-  approve-url:  http://localhost:${RESERVATION_SERVER_PORT}/payments/kakaoPaySuccess
-  cancel-url: http://localhost:${RESERVATION_SERVER_PORT}/payments/kakaoPayCancel
-  fail-url: http://localhost:${RESERVATION_SERVER_PORT}/payments/kakaoPayFail
+#  approve-url:  http://localhost:${RESERVATION_SERVER_PORT}/payments/kakaoPaySuccess
+#  cancel-url: http://localhost:${RESERVATION_SERVER_PORT}/payments/kakaoPayCancel
+#  fail-url: http://localhost:${RESERVATION_SERVER_PORT}/payments/kakaoPayFail
+  approve-url : http://localhost:5173/pay-success
+  cancel-url :  http://localhost:5173/pay-cancel
+  fail-url: http://localhost:5173/pay-fail

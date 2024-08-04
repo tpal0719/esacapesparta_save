@@ -33,6 +33,10 @@ spring:
           ssl:
             trust: smtp.gmail.com
             enable: true #반드시 필요 -> SSL 필요로 되어있으면
+  invite:
+    email: ${ROLE_EMAIL}
+admin:
+  key: ${ADMIN_KEY}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}

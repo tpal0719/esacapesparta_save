@@ -47,11 +47,10 @@ cloud:
     stack:
       auto: false
     defaultPath: ${DEFAULT_IMAGE_URL}
-
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
 server:
-  port: ${MANAGER_SERVER_PORT}
+  port: ${ADMIN_SERVER_PORT}
 admin:
   key: ${ADMIN_KEY}

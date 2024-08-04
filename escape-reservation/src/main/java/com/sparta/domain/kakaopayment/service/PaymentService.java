@@ -2,15 +2,16 @@ package com.sparta.domain.kakaopayment.service;
 
 
 import com.sparta.domain.reservation.entity.Reservation;
-import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -20,10 +21,12 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentService {
 
     private final ReservationRepository reservationRepository;
 
+    public Long reservationId;
     @Value("${kakao-payment.admin-key}")
     private String kakaoApiKey; //kakao api key
     @Value("${kakao-payment.cid}")
@@ -53,8 +56,8 @@ public class PaymentService {
      */
     public Map<String, Object> preparePayment(Long reservationId) {
 
-        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
-        
+        Reservation reservation = reservationRepository.findByIdOrElse(reservationId);
+
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -68,7 +71,7 @@ public class PaymentService {
 
         String itemName = reservation.getTheme().getTitle() + " / " +
                 reservation.getPlayer() + "인 / " +
-                reservation.getThemeTime();
+                reservation.getThemeTime().getStartTime();
 
         params.put("item_name", itemName);
         params.put("quantity", "1"); //1개의 예약은 1개의 수량 고정
@@ -76,8 +79,8 @@ public class PaymentService {
         params.put("vat_amount", "0");
         params.put("tax_free_amount", "0");
         params.put("approval_url", approveURL);
-        params.put("cancel_url", cancelURL);
-        params.put("fail_url", failURL);
+        params.put("cancel_url", cancelURL+"/"+this.reservationId);
+        params.put("fail_url", failURL+"/"+this.reservationId);
 
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
 
@@ -96,6 +99,7 @@ public class PaymentService {
      * @return key - value format json
      * @author SEMI
      */
+    @Transactional
     public Map<String, Object> refundPayment(Long reservationId) {
 
         Reservation reservation = reservationRepository.findByIdOrElse(reservationId);
@@ -148,6 +152,9 @@ public class PaymentService {
 
         ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_CANCEL_API_URL, entity, Map.class);
 
+        reservation.updateReservationStatus();
+        reservation.paymentToReservation(cid,
+                Objects.requireNonNull(response.getBody()).get("tid").toString());
 
         return response.getBody();
     }

@@ -4,10 +4,11 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.domain.store.entity.QStore;
 import com.sparta.domain.store.entity.StoreStatus;
-import com.sparta.domain.theme.entity.*;
-import com.sparta.global.exception.customException.ThemeException;
+import com.sparta.domain.theme.entity.QTheme;
+import com.sparta.domain.theme.entity.QThemeTime;
+import com.sparta.domain.theme.entity.ThemeStatus;
+import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.global.exception.customException.ThemeTimeException;
-import com.sparta.global.exception.errorCode.ThemeErrorCode;
 import com.sparta.global.exception.errorCode.ThemeTimeErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -31,7 +32,8 @@ public class ThemeTimeRepositoryImpl implements ThemeTimeRepositoryCustom{
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
         return jpaQueryFactory.selectFrom(themeTime)
-                .where(themeTime.startTime.between(startOfDay, endOfDay))
+                .where(themeTime.startTime.between(startOfDay, endOfDay)
+                        .and(themeTime.theme.id.eq(themeId)))
                 .fetch();
     }
 

@@ -1,20 +1,19 @@
 package com.sparta.domain.user.service;
 
-import java.security.SecureRandom;
-import java.util.UUID;
-
 import com.sparta.domain.user.dto.request.CertificateRequestDto;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.domain.user.repository.EmailRepository;
 import com.sparta.global.exception.customException.EmailException;
 import com.sparta.global.exception.errorCode.EmailErrorCode;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
+
+import java.security.SecureRandom;
 
 @Slf4j
 @Service

@@ -1,3 +1,13 @@
+<<<<<<< Updated upstream
+=======
+plugins {
+    id 'java'
+}
+
+
+bootJar {enabled = true}
+jar{enabled = true}
+>>>>>>> Stashed changes
 
 dependencies {
 

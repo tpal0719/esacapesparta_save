@@ -1,14 +1,13 @@
 package com.sparta.domain.user.repository;
 
-import java.time.Duration;
-
 import com.sparta.global.exception.customException.EmailException;
 import com.sparta.global.exception.errorCode.EmailErrorCode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import lombok.RequiredArgsConstructor;
+import java.time.Duration;
 
 @Slf4j
 @Repository

@@ -1,15 +1,15 @@
 package com.sparta.global.util;
 
 import com.sparta.global.exception.customException.LocalDateTimeException;
-import com.sparta.global.exception.customException.ThemeTimeException;
 import com.sparta.global.exception.errorCode.LocalDateTimeErrorCode;
-import com.sparta.global.exception.errorCode.ThemeTimeErrorCode;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+@Slf4j
 public class LocalDateTimeUtil {
 
     private final static DateTimeFormatter defaultFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
