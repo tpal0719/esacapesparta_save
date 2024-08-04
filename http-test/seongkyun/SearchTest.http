@@ -1,5 +1,5 @@
 ### 방탈출 카페 조회
-GET http://localhost:8083/search/stores
+GET http://localhost:8085/search/stores
 
 ### 방탈출 카페 테마 조회
 GET http://localhost:8083/search/stores/1/theme
