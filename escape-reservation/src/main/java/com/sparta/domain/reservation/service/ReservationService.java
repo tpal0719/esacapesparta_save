@@ -1,6 +1,8 @@
 package com.sparta.domain.reservation.service;
 
 import com.sparta.domain.reservation.dto.*;
+import com.sparta.domain.reservation.entity.Reservation;
+import com.sparta.domain.reservation.repository.ReservationRepository;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
@@ -92,6 +94,7 @@ public class ReservationService {
             throw new RuntimeException("리뷰 response 실패", e);
         }
     }
+
 
     private void sendReservationGetRequest(String requestId, Long userId) {
         KafkaReservationGetRequestDto createRequest = new KafkaReservationGetRequestDto(requestId, userId);
