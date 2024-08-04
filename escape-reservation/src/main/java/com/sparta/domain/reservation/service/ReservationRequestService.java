@@ -58,6 +58,8 @@ public class ReservationRequestService {
                 .themeTime(themeTime)
                 .build();
 
+        themeTime.updateThemeTimeStatus();
+
         KafkaReservationCreateResponseDto responseDto =  new KafkaReservationCreateResponseDto(requestDto.getRequestId()
                 , new ReservationCreateResponseDto(reservationRepository.save(reservation)), user.getEmail());
 
