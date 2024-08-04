@@ -15,10 +15,10 @@ WORKDIR /apps
 
 # Build the application
 #RUN ./gradlew bootJar
-COPY ./build/libs/*.jar /apps/app.jar
+COPY ./build/libs/*.jar /apps/escape-admin.jar
 
 # 어플리케이션 포트 설정 (예: 8080)
 EXPOSE 8080
 
 # 어플리케이션 실행
-CMD ["java", "-jar", "/apps/app.jar"]
+CMD ["java", "-jar", "/apps/escape-admin.jar"]
