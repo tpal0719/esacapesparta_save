@@ -1,13 +1,13 @@
-<<<<<<< Updated upstream
-=======
 plugins {
     id 'java'
 }
 
-bootJar {enabled = true}
-jar{enabled = true}
+bootJar {
+    enabled = true
+    archiveFileName = 'escape-consumer.jar' // 생성될 JAR 파일 이름 설정
+}
+jar{enabled = false}
 
->>>>>>> Stashed changes
 dependencies {
     implementation project(':escape-core')
 }

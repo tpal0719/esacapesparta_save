@@ -1,34 +1,11 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-# Base image
+# OpenJDK 11 이미지를 베이스 이미지로 사용
 FROM openjdk:11-jre-slim
 
-# Add Maintainer Info
-LABEL maintainer="tpal071997@gmail.com"
+# 빌드된 JAR 파일을 /app 디렉토리로 복사
+COPY build/libs/escape-manager*.jar /app/escape-manager.jar
 
-# Add a volume pointing to /tmp
-VOLUME /tmp
+# 어플리케이션 포트 설정 (예: 8080)
+EXPOSE 8083
 
-# Make port 8081 available to the world outside this container
-EXPOSE 8084
-
-# The application's jar file
-ARG JAR_FILE=app/escape-manager.jar
-
-# Add the application's jar to the container
-ADD ${JAR_FILE} escape-manager.jar
-
-# Run the jar file
-ENTRYPOINT ["java","-jar","/escape-manager.jar"]
-=======
-FROM openjdk:17
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
->>>>>>> Stashed changes
-=======
-FROM openjdk:17
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
->>>>>>> Stashed changes
+# 어플리케이션 실행
+ENTRYPOINT ["java", "-jar", "/app/escape-manager.jar"]
