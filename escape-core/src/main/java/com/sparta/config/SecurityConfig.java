@@ -71,8 +71,8 @@ public class SecurityConfig {
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
-        configuration.addExposedHeader("Authorization"); // 클라이언트에서 접근할 수 있게 허용할 헤더 추가
-        configuration.addExposedHeader("RefreshToken"); // 클라이언트에서 접근할 수 있게 허용할 헤더 추가
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("RefreshToken");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -81,9 +81,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        // CSFF 설정
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()));
+        http.csrf(AbstractHttpConfigurer::disable); // CSFF 설정
+        http.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource())); // cors 관련 설정
 
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

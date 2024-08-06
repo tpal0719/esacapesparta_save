@@ -26,6 +26,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
+
     private final EmailService emailService;
 
     @Value("${admin.key}")
@@ -56,26 +57,15 @@ public class UserService {
             }
         }
 
-        // 암호화
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         User user = new User(requestDto.getName(), requestDto.getEmail(), encodedPassword,
                 OAuthProvider.ORIGIN, userType, UserStatus.ACTIVE);
-        // ORIGIN 일단 구현 -> 나중에 @kakao, @google 등으로 이메일 확인해서 swtich case로 구현 생각중
-        userRepository.save(user);
 
+        userRepository.save(user);
         return new SignupResponseDto(user);
     }
 
-    // TODO : 이메일 중복 검사
-    private void duplicateUserEmail(String email) {
-        Optional<User> findUser = userRepository.findByEmail(email);
-        if (findUser.isPresent()) {
-            throw new UserException(UserErrorCode.USER_DUPLICATION);
-        }
-    }
-
-    // TODO : 로그아웃 전 사용자 조회
     @Transactional(readOnly = true)
     public Long logout(Long userId) {
 
@@ -85,7 +75,6 @@ public class UserService {
         return user.getId();
     }
 
-    // TODO : 회원 탈퇴
     @Transactional
     public Long withdraw(WithdrawRequestDto requestDto, Long userId) {
 
@@ -100,5 +89,12 @@ public class UserService {
         refreshTokenService.deleteRefreshTokenInfo(user.getEmail());
 
         return user.getId();
+    }
+
+    private void duplicateUserEmail(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+        if (findUser.isPresent()) {
+            throw new UserException(UserErrorCode.USER_DUPLICATION);
+        }
     }
 }

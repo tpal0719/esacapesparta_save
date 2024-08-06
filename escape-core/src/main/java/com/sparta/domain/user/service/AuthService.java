@@ -40,8 +40,8 @@ public class AuthService {
             User findUser = userRepository.findByEmailOrElseThrow(userEmail);
 
             // 새 토큰 발급
-            String newAccessToken = jwtProvider.createToken(findUser.getEmail(), JwtProvider.ACCESS_TOKEN_TIME, findUser.getUserType());
-            String newRefreshToken = jwtProvider.createToken(findUser.getEmail(), JwtProvider.REFRESH_TOKEN_TIME, findUser.getUserType());
+            String newAccessToken = jwtProvider.createAccessToken(findUser.getEmail(), findUser.getUserType());
+            String newRefreshToken = jwtProvider.createRefreshToken(findUser.getEmail());
 
             refreshTokenService.saveRefreshTokenInfo(findUser.getEmail(), newRefreshToken);
 

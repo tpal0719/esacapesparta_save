@@ -22,9 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 
-import static com.sparta.jwt.JwtProvider.ACCESS_TOKEN_TIME;
-import static com.sparta.jwt.JwtProvider.REFRESH_TOKEN_TIME;
-
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -72,10 +69,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UserType role = loginUser.getUserType();
 
             String userEmail = loginUser.getEmail();
-            String accessToken = jwtProvider.createToken(userEmail, ACCESS_TOKEN_TIME, role);
-            String refreshToken = jwtProvider.createToken(userEmail, REFRESH_TOKEN_TIME, role);
+            String accessToken = jwtProvider.createAccessToken(userEmail, role);
+            String refreshToken = jwtProvider.createRefreshToken(userEmail);
 
-            //refresh 토큰 저장메서드 추가
             refreshTokenService.saveRefreshTokenInfo(userEmail, refreshToken);
 
             // 응답 헤더에 토큰 추가
@@ -97,7 +93,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         log.info("로그인 실패 : {}", failed.getMessage());
-
         ResponseUtil.writeJsonErrorResponse(response, SecurityErrorCode.LOGIN_FAILED);
     }
 
