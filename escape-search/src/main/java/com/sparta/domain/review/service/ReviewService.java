@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 public class ReviewService {
 
     private final KafkaTemplate<String, KafkaReviewRequestDto> kafkaTemplate;
-    private final ConcurrentHashMap<String, CompletableFuture<List<ReviewResponseDto>>> responseFutures = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, CompletableFuture<List<ReviewResponseDto>>> responseFutures;
 
     /**
      * 방탈출 카페 테마 리뷰 조회
@@ -49,14 +49,6 @@ public class ReviewService {
     private void sendReviewRequest(String requestId, Long storeId, Long themeId) {
         KafkaReviewRequestDto reviewRequest = new KafkaReviewRequestDto(requestId, storeId, themeId);
         kafkaTemplate.send(KafkaTopic.REVIEW_REQUEST_TOPIC, reviewRequest);
-    }
-
-    @KafkaListener(topics = KafkaTopic.REVIEW_RESPONSE_TOPIC, groupId = "${GROUP_ID}")
-    public void handleReviewResponse(KafkaReviewResponseDto reviewResponse) {
-        CompletableFuture<List<ReviewResponseDto>> future = responseFutures.remove(Objects.requireNonNull(reviewResponse).getRequestId());
-        if (future != null) {
-            future.complete(reviewResponse.getReviewResponses());
-        }
     }
 }
 

@@ -16,6 +16,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +29,7 @@ public class StoreConsumerService {
     private final ObjectMapper objectMapper;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseFutures;
 
     @KafkaListener(topics = KafkaTopic.STORE_REQUEST_TOPIC, groupId = "${GROUP_ID}")
     public void handleStoreRequest(KafkaStoreRequestDto request) {
@@ -32,12 +38,13 @@ public class StoreConsumerService {
         Page<StoreResponseDto> storeResponseDtoPage =  stores.map(StoreResponseDto::new);
         KafkaStoreResponseDto response = new KafkaStoreResponseDto(request.getRequestId(), storeResponseDtoPage);
 
-        try {
-            String message = objectMapper.writeValueAsString(response);
-            kafkaTemplate.send(KafkaTopic.STORE_RESPONSE_TOPIC, message);
-        } catch (Exception e) {
-            log.error("직열화 에러: {}", e.getMessage());
-        }
+        handleStoreResponse(response);
     }
 
+    public void handleStoreResponse(KafkaStoreResponseDto response) {
+        CompletableFuture<Page<StoreResponseDto>> future = responseFutures.remove(response.getRequestId());
+        if (future != null) {
+            future.complete(response.getResponseDtos());
+        }
+    }
 }
