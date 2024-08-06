@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +37,9 @@ public class ThemeConsumerService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final KafkaTemplate<String, KafkaThemeInfoResponseDto> kafkaThemeInfoTemplate;
     private final KafkaTemplate<String, KafkaThemeTimeResponseDto> kafkaThemeTimeTemplate;
+    private final ConcurrentHashMap<String, CompletableFuture<Page<ThemeResponseDto>>> responseThemeFutures;
+    private final ConcurrentHashMap<String, CompletableFuture<ThemeInfoResponseDto>> responseThemeInfoFutures;
+    private final ConcurrentHashMap<String, CompletableFuture<List<ThemeTimeResponseDto>>> responseThemeTimeFutures;
 
     @KafkaListener(topics = KafkaTopic.THEME_REQUEST_TOPIC, groupId = "${GROUP_ID}")
     public void handleThemeRequest(KafkaThemeRequestDto request) {
@@ -44,12 +50,13 @@ public class ThemeConsumerService {
         Page<ThemeResponseDto> themeResponseDtoPage =  themes.map(ThemeResponseDto::new);
 
         KafkaThemeResponseDto responseDto = new KafkaThemeResponseDto(request.getRequestId(), themeResponseDtoPage);
+        handleThemeResponse(responseDto);
+    }
 
-        try {
-            String message = objectMapper.writeValueAsString(responseDto);
-            kafkaTemplate.send(KafkaTopic.THEME_RESPONSE_TOPIC, message);
-        } catch (Exception e) {
-            log.error("직열화 에러: {}", e.getMessage());
+    public void handleThemeResponse(KafkaThemeResponseDto response) {
+        CompletableFuture<Page<ThemeResponseDto>> future = responseThemeFutures.remove(response.getRequestId());
+        if (future != null) {
+            future.complete(response.getResponseDtos());
         }
     }
 
@@ -59,7 +66,14 @@ public class ThemeConsumerService {
         Theme theme = themeRepository.findByActiveTheme(request.getThemeId());
         ThemeInfoResponseDto themeInfoResponseDto = new ThemeInfoResponseDto(theme);
         KafkaThemeInfoResponseDto responseDto = new KafkaThemeInfoResponseDto(request.getRequestId(), themeInfoResponseDto);
-        kafkaThemeInfoTemplate.send(KafkaTopic.THEME_INFO_RESPONSE_TOPIC, responseDto);
+        handleThemeInfoResponse(responseDto);
+    }
+
+    public void handleThemeInfoResponse(KafkaThemeInfoResponseDto response) {
+        CompletableFuture<ThemeInfoResponseDto> future = responseThemeInfoFutures.remove(Objects.requireNonNull(response).getRequestId());
+        if (future != null) {
+            future.complete(response.getResponseDto());
+        }
     }
 
     @KafkaListener(topics = KafkaTopic.THEME_TIME_REQUEST_TOPIC, groupId = "${GROUP_ID}")
@@ -70,7 +84,14 @@ public class ThemeConsumerService {
         List<ThemeTimeResponseDto> themeTimeResponseDtoList = themeTimeList.stream().map(ThemeTimeResponseDto::new).toList();
 
         KafkaThemeTimeResponseDto responseDto = new KafkaThemeTimeResponseDto(request.getRequestId(), themeTimeResponseDtoList);
-        kafkaThemeTimeTemplate.send(KafkaTopic.THEME_TIME_RESPONSE_TOPIC, responseDto);
+        handleThemeTimeResponse(responseDto);
+    }
+
+    public void handleThemeTimeResponse(KafkaThemeTimeResponseDto response) {
+        CompletableFuture<List<ThemeTimeResponseDto>> future = responseThemeTimeFutures.remove(Objects.requireNonNull(response).getRequestId());
+        if (future != null) {
+            future.complete(response.getResponseDtoList());
+        }
     }
 
 }
