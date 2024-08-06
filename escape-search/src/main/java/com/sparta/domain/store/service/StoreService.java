@@ -1,20 +1,15 @@
 package com.sparta.domain.store.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.store.dto.KafkaStoreRequestDto;
-import com.sparta.domain.store.dto.KafkaStoreResponseDto;
 import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.entity.StoreRegion;
 import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;

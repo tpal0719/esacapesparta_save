@@ -1,6 +1,5 @@
 package com.sparta.domain.theme.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.domain.theme.dto.*;
@@ -16,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,10 +31,6 @@ public class ThemeConsumerService {
     private final ThemeRepository themeRepository;
     private final StoreRepository storeRepository;
     private final ThemeTimeRepository themeTimeRepository;
-    private final ObjectMapper objectMapper;
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private final KafkaTemplate<String, KafkaThemeInfoResponseDto> kafkaThemeInfoTemplate;
-    private final KafkaTemplate<String, KafkaThemeTimeResponseDto> kafkaThemeTimeTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<Page<ThemeResponseDto>>> responseThemeFutures;
     private final ConcurrentHashMap<String, CompletableFuture<ThemeInfoResponseDto>> responseThemeInfoFutures;
     private final ConcurrentHashMap<String, CompletableFuture<List<ThemeTimeResponseDto>>> responseThemeTimeFutures;
@@ -53,7 +47,7 @@ public class ThemeConsumerService {
         handleThemeResponse(responseDto);
     }
 
-    public void handleThemeResponse(KafkaThemeResponseDto response) {
+    private void handleThemeResponse(KafkaThemeResponseDto response) {
         CompletableFuture<Page<ThemeResponseDto>> future = responseThemeFutures.remove(response.getRequestId());
         if (future != null) {
             future.complete(response.getResponseDtos());
@@ -69,7 +63,7 @@ public class ThemeConsumerService {
         handleThemeInfoResponse(responseDto);
     }
 
-    public void handleThemeInfoResponse(KafkaThemeInfoResponseDto response) {
+    private void handleThemeInfoResponse(KafkaThemeInfoResponseDto response) {
         CompletableFuture<ThemeInfoResponseDto> future = responseThemeInfoFutures.remove(Objects.requireNonNull(response).getRequestId());
         if (future != null) {
             future.complete(response.getResponseDto());
@@ -87,7 +81,7 @@ public class ThemeConsumerService {
         handleThemeTimeResponse(responseDto);
     }
 
-    public void handleThemeTimeResponse(KafkaThemeTimeResponseDto response) {
+    private void handleThemeTimeResponse(KafkaThemeTimeResponseDto response) {
         CompletableFuture<List<ThemeTimeResponseDto>> future = responseThemeTimeFutures.remove(Objects.requireNonNull(response).getRequestId());
         if (future != null) {
             future.complete(response.getResponseDtoList());

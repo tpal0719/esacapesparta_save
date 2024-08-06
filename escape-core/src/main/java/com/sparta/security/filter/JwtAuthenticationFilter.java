@@ -22,7 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 
-import static com.sparta.jwt.JwtProvider.*;
+import static com.sparta.jwt.JwtProvider.ACCESS_TOKEN_TIME;
+import static com.sparta.jwt.JwtProvider.REFRESH_TOKEN_TIME;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {

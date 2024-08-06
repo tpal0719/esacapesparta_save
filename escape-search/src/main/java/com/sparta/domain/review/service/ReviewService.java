@@ -1,17 +1,14 @@
 package com.sparta.domain.review.service;
 
 import com.sparta.domain.review.dto.KafkaReviewRequestDto;
-import com.sparta.domain.review.dto.KafkaReviewResponseDto;
 import com.sparta.domain.review.dto.ReviewResponseDto;
 import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;

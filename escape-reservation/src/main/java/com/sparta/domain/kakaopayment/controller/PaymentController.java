@@ -2,14 +2,14 @@ package com.sparta.domain.kakaopayment.controller;
 
 
 import com.sparta.domain.kakaopayment.service.PaymentService;
-import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.security.UserDetailsImpl;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
