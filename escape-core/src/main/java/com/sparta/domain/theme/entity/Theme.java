@@ -99,7 +99,7 @@ public class Theme extends TimeStamped {
     }
 
     public void toggleThemeStatus() {
-        this.themeStatus = this.themeStatus == ThemeStatus.ACTIVE ? ThemeStatus.DEACTIVE : ThemeStatus.ACTIVE;
+        this.themeStatus = this.themeStatus == ThemeStatus.ACTIVE ? ThemeStatus.INACTIVE : ThemeStatus.ACTIVE;
 
     }
 

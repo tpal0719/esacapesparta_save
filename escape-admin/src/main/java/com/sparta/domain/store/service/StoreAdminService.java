@@ -28,13 +28,6 @@ public class StoreAdminService {
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
 
-    /**
-     * TODO : 방탈출 카페 강제 등록 for Admin
-     *
-     * @param requestDto
-     * @return StoreResponseDto : 방탈출 카페 정보
-     * @author SEMI
-     */
     @Transactional
     public StoreDetailResponseDto createStoreByAdmin(MultipartFile file, StoreCreateRequestDto requestDto) {
 
@@ -57,12 +50,6 @@ public class StoreAdminService {
         return new StoreDetailResponseDto(store);
     }
 
-    /**
-     * TODO : 모든 방탈출 카페 조회 (모든상태: 대기중,활성화,비활성화 ) for Admin
-     *
-     * @return List<StoreResponseDto> 모든 방탈출카페
-     * @author SEMI
-     */
     @Transactional(readOnly = true)
     public List<StoreResponseDto> getAllStore() {
         List<Store> stores = storeRepository.findAll();
@@ -72,13 +59,6 @@ public class StoreAdminService {
                 .collect(Collectors.toList());
     }
 
-
-    /**
-     * TODO : 방탈출 카페 등록 승인 ( PENDING -> ACTIVE ) for Admin
-     *
-     * @param storeId
-     * @author SEMI
-     */
     @Transactional
     public void approveStore(Long storeId) {
         Store store = storeRepository.findByIdOrElseThrow(storeId);
@@ -129,44 +109,16 @@ public class StoreAdminService {
         store.deactivateStore();
     }
 
-    /**
-     * TODO : 방탈출 카페 완전 삭제 for Admin
-     *
-     * @param storeId
-     * @author SEMI
-     */
     @Transactional
     public void deleteStore(Long storeId) {
-        //validateAuthority(user);
         Store store = storeRepository.findByIdOrElseThrow(storeId);
-
         storeRepository.delete(store);
     }
 
-    /**
-     * TODO : Admin 또는 Manager가 방탈출 카페 활성화 ( DEACTIVE -> ACTIVE )
-     *
-     * @param storeId
-     * @author SEMI
-     */
     @Transactional
-    public void activeStore(Long storeId) {
+    public void activateStore(Long storeId) {
         Store store = storeRepository.findByIdOrElseThrow(storeId);
-
-        store.setStoreStatus(StoreStatus.ACTIVE);
-    }
-
-    /**
-     * TODO : Admin 또는 Manager가 방탈출 카페 비활성화 ( ACTIVE -> DEACTIVE )
-     *
-     * @param storeId
-     * @author SEMI
-     */
-    @Transactional
-    public void deactiveStore(Long storeId) {
-        Store store = storeRepository.findByIdOrElseThrow(storeId);
-
-        store.setStoreStatus(StoreStatus.DEACTIVE);
+        store.activateStore();
     }
 
 }
