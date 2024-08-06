@@ -35,7 +35,7 @@ public class ThemeConsumerService {
     private final ConcurrentHashMap<String, CompletableFuture<ThemeInfoResponseDto>> responseThemeInfoFutures;
     private final ConcurrentHashMap<String, CompletableFuture<List<ThemeTimeResponseDto>>> responseThemeTimeFutures;
 
-    @KafkaListener(topics = KafkaTopic.THEME_REQUEST_TOPIC, groupId = "${GROUP_ID}")
+    @KafkaListener(topics = KafkaTopic.THEME_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void handleThemeRequest(KafkaThemeRequestDto request) {
         Store store = storeRepository.findByIdOrElseThrow(request.getStoreId());
 
@@ -54,7 +54,7 @@ public class ThemeConsumerService {
         }
     }
 
-    @KafkaListener(topics = KafkaTopic.THEME_INFO_REQUEST_TOPIC, groupId = "${GROUP_ID}")
+    @KafkaListener(topics = KafkaTopic.THEME_INFO_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void handleThemeInfoRequest(KafkaThemeInfoRequestDto request) {
         storeRepository.findByActiveStore(request.getStoreId());
         Theme theme = themeRepository.findByActiveTheme(request.getThemeId());
@@ -70,7 +70,7 @@ public class ThemeConsumerService {
         }
     }
 
-    @KafkaListener(topics = KafkaTopic.THEME_TIME_REQUEST_TOPIC, groupId = "${GROUP_ID}")
+    @KafkaListener(topics = KafkaTopic.THEME_TIME_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void handleThemeTimeRequest(KafkaThemeTimeRequestDto request) {
         LocalDate day = LocalDateTimeUtil.parseDateStringToLocalDate(request.getDay());
         storeRepository.findByActiveStore(request.getStoreId());

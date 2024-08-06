@@ -13,8 +13,6 @@ public class KafkaEmailProducer {
 
     private final KafkaTemplate<String, String> kafkaEmailTemplate;
 
-    private final ObjectMapper objectMapper;
-
     public void sendCreateReservationEmail(String topic, String email){
         try{
             kafkaEmailTemplate.send(topic, email);
@@ -30,15 +28,4 @@ public class KafkaEmailProducer {
             log.error("error");
         }
     }
-
-//    public void sendMessage(String topic, Reservation reservation) {
-//        try {
-//            String message = objectMapper.writeValueAsString(reservation);
-//            kafkaTemplate.send(topic, message);
-//        } catch (Exception e) {
-//            log.error("Error serializing Reservation object: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-
 }

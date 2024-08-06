@@ -24,7 +24,7 @@ public class StoreConsumerService {
     private final StoreRepository storeRepository;
     private final ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseFutures;
 
-    @KafkaListener(topics = KafkaTopic.STORE_REQUEST_TOPIC, groupId = "${GROUP_ID}")
+    @KafkaListener(topics = KafkaTopic.STORE_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void handleStoreRequest(KafkaStoreRequestDto request) {
         Pageable pageable = PageUtil.createPageable(request.getPageNum(), request.getPageSize(), request.isDesc(), request.getSort());
         Page<Store> stores = storeRepository.findByName(request.getKeyWord(), request.getStoreRegion(), pageable);

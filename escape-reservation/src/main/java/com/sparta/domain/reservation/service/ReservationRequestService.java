@@ -41,7 +41,7 @@ public class ReservationRequestService {
     private final KafkaEmailProducer kafkaEmailProducer;
 
     @Transactional
-    @KafkaListener(topics = KafkaTopic.RESERVATION_CREATE_REQUEST_TOPIC, groupId = "${GROUP_ID}")
+    @KafkaListener(topics = KafkaTopic.RESERVATION_CREATE_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void handleCreateReservationRequest(KafkaReservationCreateRequestDto requestDto) {
         User user = userRepository.findByIdOrElseThrow(requestDto.getUserId());
         ThemeTime themeTime = themeTimeRepository.checkStoreAndThemeActive(requestDto.getRequestDto().getThemeTimeId());
@@ -78,7 +78,7 @@ public class ReservationRequestService {
     }
 
     @Transactional
-    @KafkaListener(topics = KafkaTopic.RESERVATION_DELETE_REQUEST_TOPIC, groupId = "${GROUP_ID}")
+    @KafkaListener(topics = KafkaTopic.RESERVATION_DELETE_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void handleDeleteReservationRequest(KafkaReservationDeleteRequestDto requestDto) {
         User user = userRepository.findByIdOrElseThrow(requestDto.getUserId());
         Reservation reservation = reservationRepository.findByIdAndUserAndActive(requestDto.getReservationId(), user);
@@ -91,7 +91,7 @@ public class ReservationRequestService {
     }
 
     @Transactional
-    @KafkaListener(topics = KafkaTopic.RESERVATION_GET_REQUEST_TOPIC, groupId = "${GROUP_ID}")
+    @KafkaListener(topics = KafkaTopic.RESERVATION_GET_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void handleGetReservationRequest(KafkaReservationGetRequestDto requestDto) {
         User user = userRepository.findByIdOrElseThrow(requestDto.getUserId());
         List<Reservation> reservationList = reservationRepository.findByUser(user);
