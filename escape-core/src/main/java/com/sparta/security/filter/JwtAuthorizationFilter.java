@@ -36,11 +36,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
      * 토큰 검증
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = jwtProvider.getJwtFromHeader(req, AUTHORIZATION_HEADER);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String accessToken = jwtProvider.getJwtFromHeader(request, AUTHORIZATION_HEADER);
 
         if(StringUtils.hasText(accessToken)) {
-            if(jwtProvider.validateTokenInternal(req, accessToken)) {
+            if(jwtProvider.validateTokenInternal(request, accessToken)) {
                 log.info("Access Token 검증 성공");
                 // 해당 유저의 리프레시 토큰이 존재하는지 검증 필요..?
                 Claims info = jwtProvider.getUserInfoFromClaims(accessToken);
@@ -49,11 +49,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 if(refreshTokenService.isRefreshTokenPresent(userEmail)) {
                     setAuthentication(info.getSubject());
                 } else{
-                    req.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_ACCESS_TOKEN));
+                    request.setAttribute("exception", new CustomSecurityException(SecurityErrorCode.INVALID_ACCESS_TOKEN));
                 }
             }
         }
-        filterChain.doFilter(req, res);
+        filterChain.doFilter(request, response);
     }
 
     /**

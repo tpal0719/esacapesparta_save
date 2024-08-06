@@ -22,7 +22,6 @@ public class UserController {
 
     private final UserService userService;
 
-    // TODO : 회원가입
     @PostMapping("/signup")
     public ResponseEntity<ResponseMessage<SignupResponseDto>> createUser(@Valid @RequestBody SignupRequestDto requestDto) {
         SignupResponseDto signupResponseDto = userService.createUser(requestDto);
@@ -36,7 +35,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
-    // TODO : 로그아웃
     @PutMapping("/logout")
     public ResponseEntity<ResponseMessage<Long>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long response = userService.logout(userDetails.getUser().getId());
@@ -49,7 +47,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    // TODO : 회원 탈퇴
     @PutMapping("/withdraw")
     public ResponseEntity<ResponseMessage<Long>> withdraw(
             @Valid @RequestBody WithdrawRequestDto withdrawRequestDto,
@@ -60,6 +57,7 @@ public class UserController {
         ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("회원 탈퇴가 완료되었습니다.")
+                .data(userId)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

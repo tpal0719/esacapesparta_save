@@ -3,11 +3,6 @@ POST http://localhost:8089/payment/prepare/1
 Authorization: {{user1Auth}}
 Content-Type: application/json
 
-
-
-
-
-
 ### 회원가입 요청
 POST http://localhost:8080/users/signup
 Content-Type: application/json
