@@ -28,7 +28,7 @@ public class ReviewConsumerService {
     private final StoreRepository storeRepository;
     private final ConcurrentHashMap<String, CompletableFuture<List<ReviewResponseDto>>> responseFutures;
 
-    @KafkaListener(topics = KafkaTopic.REVIEW_REQUEST_TOPIC, groupId = "${GROUP_ID}")
+    @KafkaListener(topics = KafkaTopic.REVIEW_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void handleReviewRequest(KafkaReviewRequestDto reviewRequest) {
         storeRepository.findByActiveStore(reviewRequest.getStoreId());
         Theme theme = themeRepository.findByActiveTheme(reviewRequest.getThemeId());
