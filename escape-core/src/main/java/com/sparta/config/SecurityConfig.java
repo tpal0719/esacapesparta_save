@@ -1,13 +1,12 @@
 package com.sparta.config;
 
-import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.jwt.JwtProvider;
 import com.sparta.jwt.RefreshTokenService;
+import com.sparta.security.UserDetailsServiceImpl;
 import com.sparta.security.filter.CustomAccessDeniedHandler;
 import com.sparta.security.filter.CustomAuthenticationEntryPoint;
 import com.sparta.security.filter.JwtAuthenticationFilter;
 import com.sparta.security.filter.JwtAuthorizationFilter;
-import com.sparta.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +26,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 

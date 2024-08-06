@@ -4,7 +4,6 @@ import com.sparta.global.exception.customException.CustomSecurityException;
 import com.sparta.global.exception.errorCode.SecurityErrorCode;
 import com.sparta.jwt.JwtProvider;
 import com.sparta.jwt.RefreshTokenService;
-import com.sparta.security.ResponseUtil;
 import com.sparta.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -23,7 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.sparta.jwt.JwtProvider.*;
+import static com.sparta.jwt.JwtProvider.AUTHORIZATION_HEADER;
 
 @Slf4j
 @RequiredArgsConstructor

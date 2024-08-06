@@ -17,19 +17,22 @@ import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ReservationRequestService {
 
-    private final KafkaTemplate<String, KafkaReservationCreateResponseDto> kafkaReservationCreateTemplate;
-    private final KafkaTemplate<String, KafkaReservationGetResponseDto> kafkaReservationGetTemplate;
+    public final ConcurrentHashMap<String, CompletableFuture<ReservationCreateResponseDto>> responseCreateFutures;
+    public final ConcurrentHashMap<String, CompletableFuture<Void>> responseDeleteFutures;
+    public final ConcurrentHashMap<String, CompletableFuture<List<ReservationResponseDto>>> responseGetFutures;
 
     private final ReservationRepository reservationRepository;
     private final ThemeTimeRepository themeTimeRepository;
@@ -63,7 +66,15 @@ public class ReservationRequestService {
         KafkaReservationCreateResponseDto responseDto =  new KafkaReservationCreateResponseDto(requestDto.getRequestId()
                 , new ReservationCreateResponseDto(reservationRepository.save(reservation)), user.getEmail());
 
-        kafkaReservationCreateTemplate.send(KafkaTopic.RESERVATION_CREATE_RESPONSE_TOPIC, responseDto);
+        handleReservationCreateResponse(responseDto);
+    }
+
+    private void handleReservationCreateResponse(KafkaReservationCreateResponseDto response) {
+        CompletableFuture<ReservationCreateResponseDto> future = responseCreateFutures.remove(Objects.requireNonNull(response).getRequestId());
+        if (future != null) {
+            kafkaEmailProducer.sendCreateReservationEmail(KafkaTopic.PAYMENT_TOPIC, response.getEmail());
+            future.complete(response.getResponseDto());
+        }
     }
 
     @Transactional
@@ -86,7 +97,14 @@ public class ReservationRequestService {
         List<Reservation> reservationList = reservationRepository.findByUser(user);
         List<ReservationResponseDto> responseDtoList = reservationList.stream().map(ReservationResponseDto::new).toList();
         KafkaReservationGetResponseDto responseDto = new KafkaReservationGetResponseDto(requestDto.getRequestId(), responseDtoList);
-        kafkaReservationGetTemplate.send(KafkaTopic.RESERVATION_GET_RESPONSE_TOPIC, responseDto);
+        handleReservationGetResponse(responseDto);
+    }
+
+    private void handleReservationGetResponse(KafkaReservationGetResponseDto response) {
+        CompletableFuture<List<ReservationResponseDto>> future = responseGetFutures.remove(Objects.requireNonNull(response).getRequestId());
+        if (future != null) {
+            future.complete(response.getResponseDtoList());
+        }
     }
 
 }

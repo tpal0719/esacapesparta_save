@@ -1,6 +1,5 @@
 package com.sparta.domain.user.controller;
 
-import com.sparta.domain.user.dto.response.SignupResponseDto;
 import com.sparta.domain.user.service.AuthService;
 import com.sparta.global.response.ResponseMessage;
 import jakarta.servlet.http.HttpServletRequest;

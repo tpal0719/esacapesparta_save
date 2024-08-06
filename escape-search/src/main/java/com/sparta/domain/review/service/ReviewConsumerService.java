@@ -12,7 +12,6 @@ import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +26,6 @@ public class ReviewConsumerService {
     private final ReviewRepository reviewRepository;
     private final ThemeRepository themeRepository;
     private final StoreRepository storeRepository;
-    private final KafkaTemplate<String, KafkaReviewResponseDto> kafkaTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<List<ReviewResponseDto>>> responseFutures;
 
     @KafkaListener(topics = KafkaTopic.REVIEW_REQUEST_TOPIC, groupId = "${GROUP_ID}")
@@ -42,7 +40,7 @@ public class ReviewConsumerService {
         handleReviewResponse(reviewResponse);
     }
 
-    public void handleReviewResponse(KafkaReviewResponseDto reviewResponse) {
+    private void handleReviewResponse(KafkaReviewResponseDto reviewResponse) {
         CompletableFuture<List<ReviewResponseDto>> future = responseFutures.remove(Objects.requireNonNull(reviewResponse).getRequestId());
         if (future != null) {
             future.complete(reviewResponse.getReviewResponses());

@@ -1,6 +1,5 @@
 package com.sparta.domain.store.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.store.dto.KafkaStoreRequestDto;
 import com.sparta.domain.store.dto.KafkaStoreResponseDto;
 import com.sparta.domain.store.dto.StoreResponseDto;
@@ -13,11 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,9 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class StoreConsumerService {
     private final StoreRepository storeRepository;
-    private final ObjectMapper objectMapper;
-
-    private final KafkaTemplate<String, String> kafkaTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseFutures;
 
     @KafkaListener(topics = KafkaTopic.STORE_REQUEST_TOPIC, groupId = "${GROUP_ID}")
@@ -41,7 +34,7 @@ public class StoreConsumerService {
         handleStoreResponse(response);
     }
 
-    public void handleStoreResponse(KafkaStoreResponseDto response) {
+    private void handleStoreResponse(KafkaStoreResponseDto response) {
         CompletableFuture<Page<StoreResponseDto>> future = responseFutures.remove(response.getRequestId());
         if (future != null) {
             future.complete(response.getResponseDtos());
