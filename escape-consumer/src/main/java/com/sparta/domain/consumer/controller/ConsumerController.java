@@ -3,7 +3,7 @@ package com.sparta.domain.consumer.controller;
 import com.sparta.domain.consumer.dto.request.EditPasswordRequestDto;
 import com.sparta.domain.consumer.dto.request.EditProfileRequestDto;
 import com.sparta.domain.consumer.service.ConsumerService;
-import com.sparta.domain.user.dto.UserResponseDto;
+import com.sparta.domain.user.dto.response.UserResponseDto;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.service.UserService;
 import com.sparta.feign.EscapeReservationClient;

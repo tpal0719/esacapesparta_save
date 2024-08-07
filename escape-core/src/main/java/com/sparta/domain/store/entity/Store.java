@@ -5,16 +5,13 @@ import com.sparta.global.entity.TimeStamped;
 import com.sparta.global.exception.customException.StoreException;
 import com.sparta.global.exception.errorCode.StoreErrorCode;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Objects;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

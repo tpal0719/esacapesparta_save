@@ -5,13 +5,14 @@ import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

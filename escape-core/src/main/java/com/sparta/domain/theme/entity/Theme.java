@@ -8,6 +8,7 @@ import com.sparta.global.exception.errorCode.ThemeErrorCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Theme extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

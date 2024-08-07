@@ -2,6 +2,7 @@ package com.sparta.domain.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 public class WithdrawRequestDto {
