@@ -39,7 +39,7 @@ public class ThemeService {
         String requestId = UUID.randomUUID().toString();
         CompletableFuture<Page<ThemeResponseDto>> future = new CompletableFuture<>();
         responseThemeFutures.put(requestId, future);
-        sendReviewRequest(requestId, storeId, pageNum, pageSize, isDesc, sort);
+        sendThemeRequest(requestId, storeId, pageNum, pageSize, isDesc, sort);
 
         try {
             return future.get(3, TimeUnit.SECONDS); // 응답을 기다림
@@ -50,9 +50,9 @@ public class ThemeService {
         }
     }
 
-    private void sendReviewRequest(String requestId, Long storeId, int pageNum, int pageSize, boolean isDesc, String sort) {
-        KafkaThemeRequestDto reviewRequest = new KafkaThemeRequestDto(requestId, storeId, pageNum, pageSize, isDesc, sort);
-        kafkaThemeTemplate.send(KafkaTopic.THEME_REQUEST_TOPIC, reviewRequest);
+    private void sendThemeRequest(String requestId, Long storeId, int pageNum, int pageSize, boolean isDesc, String sort) {
+        KafkaThemeRequestDto themeRequest = new KafkaThemeRequestDto(requestId, storeId, pageNum, pageSize, isDesc, sort);
+        kafkaThemeTemplate.send(KafkaTopic.THEME_REQUEST_TOPIC, themeRequest);
     }
 
     /**
@@ -77,8 +77,8 @@ public class ThemeService {
     }
 
     private void sendThemeInfoRequest(String requestId, Long storeId, Long themeId) {
-        KafkaThemeInfoRequestDto reviewRequest = new KafkaThemeInfoRequestDto(requestId, storeId, themeId);
-        kafkaThemeInfoTemplate.send(KafkaTopic.THEME_INFO_REQUEST_TOPIC, reviewRequest);
+        KafkaThemeInfoRequestDto themeInfoRequest = new KafkaThemeInfoRequestDto(requestId, storeId, themeId);
+        kafkaThemeInfoTemplate.send(KafkaTopic.THEME_INFO_REQUEST_TOPIC, themeInfoRequest);
     }
 
     /**
