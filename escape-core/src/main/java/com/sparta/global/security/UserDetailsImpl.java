@@ -1,4 +1,4 @@
-package com.sparta.security;
+package com.sparta.global.security;
 
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserType;
@@ -15,11 +15,6 @@ public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
-
-    public String getUserEmail() {
-        return user.getEmail();
-    }
-
     public UserDetailsImpl(User user) {
         this.user = user;
     }
@@ -32,7 +27,7 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return user.getName();
-    } // email 수정
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

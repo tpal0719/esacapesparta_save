@@ -4,12 +4,13 @@ import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Recommendation extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

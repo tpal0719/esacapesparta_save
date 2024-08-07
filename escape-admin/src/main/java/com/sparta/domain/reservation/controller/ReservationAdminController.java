@@ -3,7 +3,7 @@ package com.sparta.domain.reservation.controller;
 import com.sparta.domain.reservation.dto.ReservationsGetResponseDto;
 import com.sparta.domain.reservation.service.ReservationAdminService;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

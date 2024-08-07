@@ -1,5 +1,5 @@
 ### 방탈출 카페 등록 요청 -> postman
-POST http://localhost:8085/manager/stores
+POST http://localhost:8082/manager/stores
 Authorization: {{manager1Auth}}
 Content-Type: application/json
 
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### 방탈출 카페 등록 요청 실패 - 일반 유저 -> postman
-POST http://localhost:8085/manager/stores
+POST http://localhost:8082/manager/stores
 Authorization: {{user1Auth}}
 Content-Type: application/json
 
@@ -25,11 +25,11 @@ Content-Type: application/json
 }
 
 ### 자신의 방탈출 카페 조회
-GET http://localhost:8085/manager/stores
+GET http://localhost:8082/manager/stores
 Authorization: {{manager1Auth}}
 
 ### 방탈출 카페 수정
-PUT http://localhost:8085/manager/stores/4
+PUT http://localhost:8082/manager/stores/4
 Authorization: {{manager1Auth}}
 Content-Type: application/json
 
@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ### 방탈출 카페 수정 - validation
-PUT http://localhost:8085/manager/stores/1
+PUT http://localhost:8082/manager/stores/1
 Authorization: {{manager1Auth}}
 Content-Type: application/json
 
@@ -55,13 +55,13 @@ Content-Type: application/json
 }
 
 ### 방탕출 카페 이미지 수정 -> postman
-PUT http://localhost:8085/manager/stores/{{storeId}}/image
+PUT http://localhost:8082/manager/stores/{{storeId}}/image
 Authorization: {{manager1Auth}}
 
 ### 방탕출 카페 이미지 삭제 -> postman
-DELETE http://localhost:8085/manager/stores/{{storeId}}/image
+DELETE http://localhost:8082/manager/stores/{{storeId}}/image
 Authorization: {{manager1Auth}}
 
 ### 방탈출 카페 삭제
-DELETE http://localhost:8085/manager/stores/5
+DELETE http://localhost:8082/manager/stores/5
 Authorization: {{manager1Auth}}

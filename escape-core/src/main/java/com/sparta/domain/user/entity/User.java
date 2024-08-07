@@ -4,6 +4,7 @@ import com.sparta.domain.reaction.entity.Reaction;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User extends TimeStamped {
     @Id

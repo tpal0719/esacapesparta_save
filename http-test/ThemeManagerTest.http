@@ -1,5 +1,5 @@
 ### 방탈출 테마 등록 -> postman
-POST http://localhost:8085/manager/stores/themes
+POST http://localhost:8082/manager/stores/themes
 Authorization: {{manager1Auth}}
 Content-Type: application/json
 
@@ -16,11 +16,11 @@ Content-Type: application/json
 }
 
 ### 방탈출 카페의 테마 조회
-GET http://localhost:8085/manager/stores/4/themes
+GET http://localhost:8082/manager/stores/4/themes
 Authorization: {{manager1Auth}}
 
 ### 방탈출 테마 수정
-PUT http://localhost:8085/manager/stores/themes/2
+PUT http://localhost:8082/manager/stores/themes/2
 Authorization: {{manager1Auth}}
 Content-Type: application/json
 
@@ -36,9 +36,9 @@ Content-Type: application/json
 }
 
 ### 방탈출 테마 삭제
-DELETE http://localhost:8085/manager/stores/themes/2
+DELETE http://localhost:8082/manager/stores/themes/2
 Authorization: {{manager1Auth}}
 
 ### 방탈출 테마 상태 변경
-PUT http://localhost:8085/manager/stores/themes/2/status
+PUT http://localhost:8082/manager/stores/themes/2/status
 Authorization: {{manager1Auth}}

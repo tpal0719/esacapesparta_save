@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
      * Validation 예외 처리
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ResponseErrorMessage> handleValidException(MethodArgumentNotValidException e) {
+    protected ResponseEntity<ResponseErrorMessage<String>> handleValidException(MethodArgumentNotValidException e) {
         log.error("[MethodArgumentNotValidException] caused By : {}, message : {} ", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
 
         Map<String, String> errors = e.getBindingResult().getFieldErrors().stream()
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
             ex.printStackTrace();
         }
 
-        ResponseErrorMessage errorMessage = new ResponseErrorMessage(CommonErrorCode.BAD_REQUEST, response);
+        ResponseErrorMessage<String> errorMessage = new ResponseErrorMessage<>(CommonErrorCode.BAD_REQUEST, response);
 
         return ResponseEntity.status(CommonErrorCode.BAD_REQUEST.getHttpStatusCode())
                 .body(errorMessage);
@@ -52,20 +52,20 @@ public class GlobalExceptionHandler {
      * 파일 크기 초과 예외 처리
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    protected ResponseEntity<ResponseErrorMessage> maxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+    protected ResponseEntity<ResponseErrorMessage<Void>> maxUploadSizeExceededException(MaxUploadSizeExceededException e) {
         log.error("MaxUploadSizeExceededException 발생");
         return ResponseEntity.status(S3ErrorCode.FILE_MAX_SIZE_ERROR.getHttpStatusCode())
-                .body(new ResponseErrorMessage(S3ErrorCode.FILE_MAX_SIZE_ERROR));
+                .body(new ResponseErrorMessage<>(S3ErrorCode.FILE_MAX_SIZE_ERROR));
     }
 
     /**
      * CustomException 예외 처리
      */
     @ExceptionHandler(GlobalCustomException.class)
-    protected ResponseEntity<ResponseErrorMessage> handlerGlobalCustomException(GlobalCustomException e) {
+    protected ResponseEntity<ResponseErrorMessage<Void>> handlerGlobalCustomException(GlobalCustomException e) {
         log.error("{} 예외 발생", e.getClass());
 
         return ResponseEntity.status(e.getErrorCode().getHttpStatusCode())
-                .body(new ResponseErrorMessage(e.getErrorCode()));
+                .body(new ResponseErrorMessage<>(e.getErrorCode()));
     }
 }

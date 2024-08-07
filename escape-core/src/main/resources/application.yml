@@ -6,14 +6,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         use_sql_comments: true
-  invite:
-    email: ${ROLE_EMAIL}
   mail:
     host: ${MAIL_HOST} #smtp 서버 주소
     port: ${MAIL_PORT} # 메일 인증서버 포트
@@ -34,8 +32,9 @@ spring:
             enable: true #반드시 필요 -> SSL 필요로 되어있으면
   data:
     redis:
-      host: ${REDIS_MAIL_HOST}
-      port: ${REDIS_MAIL_PORT}
+      port: ${REDIS_PORT}
+      host: ${REDIS_HOST}
+
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}

@@ -96,19 +96,6 @@ Authorization: {{user1Auth}}
   "password": "Test1234!"
 }
 
-
-### 이메일 인증번호 발송
-POST http://localhost:8080/users/mail
-Authorization: {{user1Auth}}
-
-### 이메일 인증
-GET http://localhost:8080/users/mail
-Authorization: {{user1Auth}}
-
-{
-  "verificationCode":340374
-}
-
 ### 로그인한 유저 프로필 조회
 GET http://localhost:8081/users/profile
 Authorization: {{user1Auth}}

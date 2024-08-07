@@ -1,6 +1,6 @@
 package com.sparta.domain.user.service;
 
-import com.sparta.domain.user.dto.UserResponseDto;
+import com.sparta.domain.user.dto.response.UserResponseDto;
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.domain.user.repository.UserRepository;
@@ -47,7 +47,6 @@ public class UserAdminService {
                 .map(UserResponseDto::new)
                 .collect(Collectors.toList());
     }
-
 
 
     /* Utils */

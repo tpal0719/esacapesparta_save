@@ -1,4 +1,4 @@
-package com.sparta.jwt;
+package com.sparta.global.jwt;
 
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -3,7 +3,7 @@ package com.sparta.domain.follow.controller;
 import com.sparta.domain.follow.dto.FollowStoreResponseDto;
 import com.sparta.domain.follow.service.FollowService;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

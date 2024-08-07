@@ -1,4 +1,4 @@
-package com.sparta.security.filter;
+package com.sparta.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.user.dto.request.LoginRequestDto;
@@ -6,10 +6,10 @@ import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserStatus;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.global.exception.errorCode.SecurityErrorCode;
-import com.sparta.jwt.JwtProvider;
-import com.sparta.jwt.RefreshTokenService;
-import com.sparta.security.ResponseUtil;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.jwt.JwtProvider;
+import com.sparta.global.jwt.RefreshTokenService;
+import com.sparta.global.util.ResponseUtil;
+import com.sparta.global.security.UserDetailsImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,9 +21,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-
-import static com.sparta.jwt.JwtProvider.ACCESS_TOKEN_TIME;
-import static com.sparta.jwt.JwtProvider.REFRESH_TOKEN_TIME;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -72,10 +69,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UserType role = loginUser.getUserType();
 
             String userEmail = loginUser.getEmail();
-            String accessToken = jwtProvider.createToken(userEmail, ACCESS_TOKEN_TIME, role);
-            String refreshToken = jwtProvider.createToken(userEmail, REFRESH_TOKEN_TIME, role);
+            String accessToken = jwtProvider.createAccessToken(userEmail, role);
+            String refreshToken = jwtProvider.createRefreshToken(userEmail);
 
-            //refresh 토큰 저장메서드 추가
             refreshTokenService.saveRefreshTokenInfo(userEmail, refreshToken);
 
             // 응답 헤더에 토큰 추가
@@ -97,7 +93,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         log.info("로그인 실패 : {}", failed.getMessage());
-
         ResponseUtil.writeJsonErrorResponse(response, SecurityErrorCode.LOGIN_FAILED);
     }
 
