@@ -45,7 +45,6 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
-    defaultPath: ${DEFAULT_IMAGE_URL}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
