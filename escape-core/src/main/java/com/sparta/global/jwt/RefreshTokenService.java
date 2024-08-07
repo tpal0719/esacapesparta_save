@@ -38,7 +38,7 @@ public class RefreshTokenService {
     }
 
     /**
-     *
+     * 리프레시 토큰 존재 여부 확인
      * @param email 유저의 이메일
      * @return 리프레시 토큰 존재 여부
      */
