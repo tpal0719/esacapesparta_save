@@ -1,6 +1,5 @@
 package com.sparta.domain.theme.dto;
 
-import com.sparta.global.util.KafkaDtoUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class KafkaThemeTimeRequestDto implements KafkaDtoUtil {
+public class KafkaThemeTimeRequestDto {
     private String requestId;
     private Long storeId;
     private Long themeId;

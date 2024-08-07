@@ -5,7 +5,6 @@ import com.sparta.domain.review.dto.ReviewResponseDto;
 import com.sparta.global.exception.customException.KafkaException;
 import com.sparta.global.exception.errorCode.KafkaErrorCode;
 import com.sparta.global.kafka.KafkaTopic;
-import com.sparta.global.util.KafkaDtoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,7 +19,7 @@ import java.util.concurrent.*;
 @Slf4j
 public class ReviewService {
 
-    private final KafkaTemplate<String, KafkaDtoUtil> kafkaTemplate;
+    private final KafkaTemplate<String, KafkaReviewRequestDto> kafkaTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<List<ReviewResponseDto>>> responseFutures;
 
     /**
@@ -47,7 +46,7 @@ public class ReviewService {
     }
 
     private void sendReviewRequest(String requestId, Long storeId, Long themeId) {
-        KafkaDtoUtil reviewRequest = new KafkaReviewRequestDto(requestId, storeId, themeId);
+        KafkaReviewRequestDto reviewRequest = new KafkaReviewRequestDto(requestId, storeId, themeId);
         kafkaTemplate.send(KafkaTopic.REVIEW_REQUEST_TOPIC, reviewRequest);
     }
 }

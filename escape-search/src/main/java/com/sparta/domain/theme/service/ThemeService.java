@@ -4,7 +4,6 @@ import com.sparta.domain.theme.dto.*;
 import com.sparta.global.exception.customException.KafkaException;
 import com.sparta.global.exception.errorCode.KafkaErrorCode;
 import com.sparta.global.kafka.KafkaTopic;
-import com.sparta.global.util.KafkaDtoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,9 @@ import java.util.concurrent.*;
 @Slf4j
 public class ThemeService {
 
-    private final KafkaTemplate<String, KafkaDtoUtil> kafkaTemplate;
+    private final KafkaTemplate<String, KafkaThemeRequestDto> kafkaThemeTemplate;
+    private final KafkaTemplate<String, KafkaThemeInfoRequestDto> kafkaThemeInfoTemplate;
+    private final KafkaTemplate<String, KafkaThemeTimeRequestDto> kafkaThemeTimeTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<Page<ThemeResponseDto>>> responseThemeFutures;
     private final ConcurrentHashMap<String, CompletableFuture<ThemeInfoResponseDto>> responseThemeInfoFutures;
     private final ConcurrentHashMap<String, CompletableFuture<List<ThemeTimeResponseDto>>> responseThemeTimeFutures;
@@ -50,8 +51,8 @@ public class ThemeService {
     }
 
     private void sendThemeRequest(String requestId, Long storeId, int pageNum, int pageSize, boolean isDesc, String sort) {
-        KafkaDtoUtil themeRequest = new KafkaThemeRequestDto(requestId, storeId, pageNum, pageSize, isDesc, sort);
-        kafkaTemplate.send(KafkaTopic.THEME_REQUEST_TOPIC, themeRequest);
+        KafkaThemeRequestDto themeRequest = new KafkaThemeRequestDto(requestId, storeId, pageNum, pageSize, isDesc, sort);
+        kafkaThemeTemplate.send(KafkaTopic.THEME_REQUEST_TOPIC, themeRequest);
     }
 
     /**
@@ -76,8 +77,8 @@ public class ThemeService {
     }
 
     private void sendThemeInfoRequest(String requestId, Long storeId, Long themeId) {
-        KafkaDtoUtil themeInfoRequest = new KafkaThemeInfoRequestDto(requestId, storeId, themeId);
-        kafkaTemplate.send(KafkaTopic.THEME_INFO_REQUEST_TOPIC, themeInfoRequest);
+        KafkaThemeInfoRequestDto themeInfoRequest = new KafkaThemeInfoRequestDto(requestId, storeId, themeId);
+        kafkaThemeInfoTemplate.send(KafkaTopic.THEME_INFO_REQUEST_TOPIC, themeInfoRequest);
     }
 
     /**
@@ -102,7 +103,7 @@ public class ThemeService {
     }
 
     private void sendThemeTimeRequest(String requestId, Long storeId, Long themeId, String day) {
-        KafkaDtoUtil Request = new KafkaThemeTimeRequestDto(requestId, storeId, themeId, day);
-        kafkaTemplate.send(KafkaTopic.THEME_TIME_REQUEST_TOPIC, Request);
+        KafkaThemeTimeRequestDto Request = new KafkaThemeTimeRequestDto(requestId, storeId, themeId, day);
+        kafkaThemeTimeTemplate.send(KafkaTopic.THEME_TIME_REQUEST_TOPIC, Request);
     }
 }

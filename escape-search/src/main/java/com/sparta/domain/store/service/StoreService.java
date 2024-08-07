@@ -6,7 +6,6 @@ import com.sparta.domain.store.entity.StoreRegion;
 import com.sparta.global.exception.customException.KafkaException;
 import com.sparta.global.exception.errorCode.KafkaErrorCode;
 import com.sparta.global.kafka.KafkaTopic;
-import com.sparta.global.util.KafkaDtoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,7 @@ import java.util.concurrent.*;
 @RequiredArgsConstructor
 public class StoreService {
 
-    private final KafkaTemplate<String, KafkaDtoUtil> kafkaTemplate;
+    private final KafkaTemplate<String, KafkaStoreRequestDto> kafkaTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseFutures;
 
     /**
@@ -52,8 +51,8 @@ public class StoreService {
     }
 
     private void sendStoreRequest(String requestId, int pageNum, int pageSize, boolean isDesc, String keyWord, StoreRegion storeRegion, String sort) {
-        KafkaDtoUtil StoreRequest = new KafkaStoreRequestDto(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
-        kafkaTemplate.send(KafkaTopic.STORE_REQUEST_TOPIC, StoreRequest);
+        KafkaStoreRequestDto storeRequest = new KafkaStoreRequestDto(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
+        kafkaTemplate.send(KafkaTopic.STORE_REQUEST_TOPIC, storeRequest);
     }
 
 }
