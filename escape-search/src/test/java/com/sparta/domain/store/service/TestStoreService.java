@@ -22,13 +22,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TestTestService {
+class TestStoreService {
 
     @Mock
     private KafkaTemplate<String, KafkaStoreRequestDto> kafkaTemplate;
 
     @InjectMocks
-    private TestService testService;
+    private StoreService storeService;
 
     @Mock
     private ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseFutures;
@@ -58,7 +58,7 @@ class TestTestService {
 //        when(testService.getStores(pageNum, pageSize, isDesc, keyWord, storeRegion, sort)).thenReturn(testPage);
 
         // when
-        Page<StoreResponseDto> result = testService.getStores(pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
+        Page<StoreResponseDto> result = storeService.getStores(pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
 
         // then
         assertThat(result).isEqualTo(future);
