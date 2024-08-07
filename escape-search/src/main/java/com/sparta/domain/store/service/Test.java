@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -19,7 +20,7 @@ import java.util.concurrent.*;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class StoreService {
+public class Test {
 
     private final KafkaTemplate<String, KafkaDtoUtil> kafkaTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseFutures;
@@ -37,23 +38,31 @@ public class StoreService {
     public Page<StoreResponseDto> getStores(int pageNum, int pageSize, boolean isDesc,
                                             String keyWord, StoreRegion storeRegion, String sort) {
 
+        // 값을 세팅
         String requestId = UUID.randomUUID().toString();
         CompletableFuture<Page<StoreResponseDto>> future = new CompletableFuture<>();
         responseFutures.put(requestId, future);
+
+        // 카프카 보내는
         sendStoreRequest(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
 
+        // 카프카 값 가져오기
         try {
             return future.get(3, TimeUnit.SECONDS); // 응답을 기다림
         } catch (InterruptedException | ExecutionException e) {
             throw new KafkaException(KafkaErrorCode.KAFKA_SERVER_ERROR);
-        }catch (TimeoutException e){
+        } catch (TimeoutException e){
             throw new KafkaException(KafkaErrorCode.KAFKA_RESPONSE_ERROR);
         }
     }
 
     private void sendStoreRequest(String requestId, int pageNum, int pageSize, boolean isDesc, String keyWord, StoreRegion storeRegion, String sort) {
-        KafkaDtoUtil StoreRequest = new KafkaStoreRequestDto(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
-        kafkaTemplate.send(KafkaTopic.STORE_REQUEST_TOPIC, StoreRequest);
+        KafkaDtoUtil storeRequest = new KafkaStoreRequestDto(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
+        sendKafka(KafkaTopic.STORE_REQUEST_TOPIC, storeRequest);
     }
 
+    public CompletableFuture<SendResult<String, KafkaDtoUtil>> sendKafka(String topic, KafkaDtoUtil RequestDto) {
+        return kafkaTemplate.send(topic, RequestDto);
+    }
 }
+
