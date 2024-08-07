@@ -54,5 +54,4 @@ public class StoreService {
         KafkaStoreRequestDto storeRequest = new KafkaStoreRequestDto(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
         kafkaTemplate.send(KafkaTopic.STORE_REQUEST_TOPIC, storeRequest);
     }
-
 }

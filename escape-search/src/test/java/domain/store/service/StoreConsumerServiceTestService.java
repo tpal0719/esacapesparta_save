@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class StoreConsumerServiceTest {
+class StoreConsumerServiceTestService {
     @Mock
     private StoreRepository storeRepository;
 

@@ -19,7 +19,7 @@ import java.util.concurrent.*;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class Test {
+public class TestService {
 
     private final KafkaTemplate<String, KafkaStoreRequestDto> kafkaTemplate;
     private final ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseFutures;
@@ -55,12 +55,12 @@ public class Test {
         }
     }
 
-    public void sendStoreRequest(String requestId, int pageNum, int pageSize, boolean isDesc, String keyWord, StoreRegion storeRegion, String sort) {
+    private void sendStoreRequest(String requestId, int pageNum, int pageSize, boolean isDesc, String keyWord, StoreRegion storeRegion, String sort) {
         KafkaStoreRequestDto storeRequest = new KafkaStoreRequestDto(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
         sendKafka(KafkaTopic.STORE_REQUEST_TOPIC, storeRequest);
     }
 
-    public CompletableFuture<SendResult<String, KafkaStoreRequestDto>> sendKafka(String topic, KafkaStoreRequestDto RequestDto) {
+    private CompletableFuture<SendResult<String, KafkaStoreRequestDto>> sendKafka(String topic, KafkaStoreRequestDto RequestDto) {
         return kafkaTemplate.send(topic, RequestDto);
     }
 }
