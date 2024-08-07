@@ -6,7 +6,7 @@ import com.sparta.domain.theme.dto.response.ThemeDetailResponseDto;
 import com.sparta.domain.theme.dto.response.ThemeGetResponseDto;
 import com.sparta.domain.theme.service.ThemeService;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

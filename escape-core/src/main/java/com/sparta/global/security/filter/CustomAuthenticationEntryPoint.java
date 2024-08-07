@@ -1,8 +1,8 @@
-package com.sparta.security.filter;
+package com.sparta.global.security.filter;
 
 import com.sparta.global.exception.customException.CustomSecurityException;
 import com.sparta.global.exception.errorCode.CommonErrorCode;
-import com.sparta.security.ResponseUtil;
+import com.sparta.global.util.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

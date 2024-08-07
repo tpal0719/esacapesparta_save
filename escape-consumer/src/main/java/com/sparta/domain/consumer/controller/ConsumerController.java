@@ -8,7 +8,7 @@ import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.service.UserService;
 import com.sparta.feign.EscapeReservationClient;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

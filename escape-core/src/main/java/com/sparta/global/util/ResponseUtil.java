@@ -1,4 +1,4 @@
-package com.sparta.security;
+package com.sparta.global.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.global.exception.errorCode.ErrorCode;

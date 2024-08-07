@@ -7,7 +7,7 @@ import com.sparta.domain.store.dto.response.StoreRegisterResponseDto;
 import com.sparta.domain.store.dto.response.StoresGetResponseDto;
 import com.sparta.domain.store.service.StoreService;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

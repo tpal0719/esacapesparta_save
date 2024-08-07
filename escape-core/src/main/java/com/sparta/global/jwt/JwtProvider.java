@@ -1,4 +1,4 @@
-package com.sparta.jwt;
+package com.sparta.global.jwt;
 
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.global.exception.customException.CustomSecurityException;

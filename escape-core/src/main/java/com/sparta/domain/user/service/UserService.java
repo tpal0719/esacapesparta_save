@@ -10,24 +10,21 @@ import com.sparta.domain.user.entity.UserType;
 import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.global.exception.customException.UserException;
 import com.sparta.global.exception.errorCode.UserErrorCode;
-import com.sparta.jwt.RefreshTokenService;
+import com.sparta.global.jwt.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RefreshTokenService refreshTokenService;
-
+    private final UserRepository userRepository;
     private final EmailService emailService;
+    private final RefreshTokenService refreshTokenService;
 
     @Value("${admin.key}")
     private String adminKey;
@@ -43,7 +40,7 @@ public class UserService {
     public SignupResponseDto createUser(SignupRequestDto requestDto) {
 
         // 이메일로 유저 중복검사
-        duplicateUserEmail(requestDto.getEmail());
+        userRepository.throwIfEmailExists(requestDto.getEmail());
 
         // 인증 코드로 회원가입할 Role 체크
         UserType userType = emailService.determineUserTypeFromCertificateCode(requestDto.getCertificateCode());
@@ -59,8 +56,14 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        User user = new User(requestDto.getName(), requestDto.getEmail(), encodedPassword,
-                OAuthProvider.ORIGIN, userType, UserStatus.ACTIVE);
+        User user = new User(
+                requestDto.getName(),
+                requestDto.getEmail(),
+                encodedPassword,
+                OAuthProvider.ORIGIN,
+                userType,
+                UserStatus.ACTIVE
+        );
 
         userRepository.save(user);
         return new SignupResponseDto(user);
@@ -69,7 +72,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public Long logout(Long userId) {
 
-        User user = userRepository.findByUserId(userId);
+        User user = userRepository.findByIdOrElseThrow(userId);
         refreshTokenService.deleteRefreshTokenInfo(user.getEmail());
 
         return user.getId();
@@ -78,7 +81,7 @@ public class UserService {
     @Transactional
     public Long withdraw(WithdrawRequestDto requestDto, Long userId) {
 
-        User user = userRepository.findByUserId(userId);
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new UserException(UserErrorCode.PASSWORD_NOT_MATCH);
@@ -89,12 +92,5 @@ public class UserService {
         refreshTokenService.deleteRefreshTokenInfo(user.getEmail());
 
         return user.getId();
-    }
-
-    private void duplicateUserEmail(String email) {
-        Optional<User> findUser = userRepository.findByEmail(email);
-        if (findUser.isPresent()) {
-            throw new UserException(UserErrorCode.USER_DUPLICATION);
-        }
     }
 }

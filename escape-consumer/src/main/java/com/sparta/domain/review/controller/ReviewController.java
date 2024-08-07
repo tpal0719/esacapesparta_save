@@ -3,7 +3,7 @@ package com.sparta.domain.review.controller;
 import com.sparta.domain.review.dto.*;
 import com.sparta.domain.review.service.ReviewService;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

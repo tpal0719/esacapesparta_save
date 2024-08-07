@@ -1,12 +1,12 @@
 package com.sparta.config;
 
-import com.sparta.jwt.JwtProvider;
-import com.sparta.jwt.RefreshTokenService;
-import com.sparta.security.UserDetailsServiceImpl;
-import com.sparta.security.filter.CustomAccessDeniedHandler;
-import com.sparta.security.filter.CustomAuthenticationEntryPoint;
-import com.sparta.security.filter.JwtAuthenticationFilter;
-import com.sparta.security.filter.JwtAuthorizationFilter;
+import com.sparta.global.jwt.JwtProvider;
+import com.sparta.global.jwt.RefreshTokenService;
+import com.sparta.global.security.UserDetailsServiceImpl;
+import com.sparta.global.security.filter.CustomAccessDeniedHandler;
+import com.sparta.global.security.filter.CustomAuthenticationEntryPoint;
+import com.sparta.global.security.filter.JwtAuthenticationFilter;
+import com.sparta.global.security.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

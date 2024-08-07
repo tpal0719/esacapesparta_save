@@ -1,4 +1,4 @@
-package com.sparta.jwt;
+package com.sparta.global.jwt;
 
 import com.sparta.global.exception.customException.AuthException;
 import com.sparta.global.exception.errorCode.AuthErrorCode;
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.sparta.jwt.JwtProvider.BEARER_PREFIX;
+import static com.sparta.global.jwt.JwtProvider.BEARER_PREFIX;
 
 @Service
 @RequiredArgsConstructor

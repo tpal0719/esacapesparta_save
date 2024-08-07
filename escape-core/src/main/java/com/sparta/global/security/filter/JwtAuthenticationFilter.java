@@ -1,4 +1,4 @@
-package com.sparta.security.filter;
+package com.sparta.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.domain.user.dto.request.LoginRequestDto;
@@ -6,10 +6,10 @@ import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserStatus;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.global.exception.errorCode.SecurityErrorCode;
-import com.sparta.jwt.JwtProvider;
-import com.sparta.jwt.RefreshTokenService;
-import com.sparta.security.ResponseUtil;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.jwt.JwtProvider;
+import com.sparta.global.jwt.RefreshTokenService;
+import com.sparta.global.util.ResponseUtil;
+import com.sparta.global.security.UserDetailsImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

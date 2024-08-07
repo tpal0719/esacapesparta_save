@@ -5,7 +5,7 @@ import com.sparta.domain.theme.dto.request.ThemeTimeModifyRequestDto;
 import com.sparta.domain.theme.dto.response.ThemeTimeDetailResponseDto;
 import com.sparta.domain.theme.service.ThemeTimeAdminService;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

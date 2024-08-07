@@ -1,4 +1,4 @@
-package com.sparta.security;
+package com.sparta.global.security;
 
 import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.entity.UserStatus;

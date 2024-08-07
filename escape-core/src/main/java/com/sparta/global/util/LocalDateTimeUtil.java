@@ -11,7 +11,7 @@ import java.time.format.DateTimeParseException;
 
 @Slf4j
 public class LocalDateTimeUtil {
-
+    // 기본 Formatter
     private final static DateTimeFormatter defaultFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static LocalDateTime parseDateTimeStringToLocalDateTime(String dateTimeString) {
@@ -44,12 +44,6 @@ public class LocalDateTimeUtil {
     public static void checkValidTime(LocalDateTime localDateTime) {
         if(localDateTime.isBefore(LocalDateTime.now())) {
             throw new LocalDateTimeException(LocalDateTimeErrorCode.INVALID_PAST_TIME);
-        }
-    }
-
-    public static void checkValidStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
-        if(startTime.isAfter(endTime)) {
-            throw new LocalDateTimeException(LocalDateTimeErrorCode.INVALID_START_AND_END_TIME);
         }
     }
 
