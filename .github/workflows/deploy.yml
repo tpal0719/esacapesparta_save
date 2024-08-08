@@ -25,33 +25,38 @@ jobs:
       # Build each module
       - name: Build escape-search
         run: |
-          cd escape-search
+          cd escapeSparta/escape-search
            chmod +x ./gradlew
           ./gradlew bootJar
 
       - name: Build escape-reservation
         run: |
-          cd escape-reservation
+          cd escapeSparta/escape-reservation
+          chmod +x ./gradlew
           ./gradlew bootJar
 
       - name: Build escape-manager
         run: |
-          cd escape-manager
+          cd escapeSparta/escape-manager
+          chmod +x ./gradlew
           ./gradlew bootJar
 
       - name: Build escape-core
         run: |
-          cd escape-core
+          cd escapeSparta/escape-core
+          chmod +x ./gradlew
           ./gradlew bootJar
 
       - name: Build escape-consumer
         run: |
-          cd escape-consumer
+          cd escapeSparta/escape-consumer
+          chmod +x ./gradlew
           ./gradlew bootJar
 
       - name: Build escape-admin
         run: |
-          cd escape-admin
+          cd escapeSparta/escape-admin
+          chmod +x ./gradlew
           ./gradlew bootJar
 
       # Log in to Docker Hub
