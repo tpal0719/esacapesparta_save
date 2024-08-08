@@ -39,7 +39,7 @@ public class StoreService {
         String requestId = UUID.randomUUID().toString();
         CompletableFuture<Page<StoreResponseDto>> future = new CompletableFuture<>();
         responseFutures.put(requestId, future);
-        sendReviewRequest(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
+        sendStoreRequest(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
 
         try {
             return future.get(3, TimeUnit.SECONDS); // 응답을 기다림
@@ -50,8 +50,8 @@ public class StoreService {
         }
     }
 
-    private void sendReviewRequest(String requestId, int pageNum, int pageSize, boolean isDesc, String keyWord, StoreRegion storeRegion, String sort) {
-        KafkaStoreRequestDto reviewRequest = new KafkaStoreRequestDto(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
-        kafkaTemplate.send(KafkaTopic.STORE_REQUEST_TOPIC, reviewRequest);
+    private void sendStoreRequest(String requestId, int pageNum, int pageSize, boolean isDesc, String keyWord, StoreRegion storeRegion, String sort) {
+        KafkaStoreRequestDto storeRequest = new KafkaStoreRequestDto(requestId, pageNum, pageSize, isDesc, keyWord, storeRegion, sort);
+        kafkaTemplate.send(KafkaTopic.STORE_REQUEST_TOPIC, storeRequest);
     }
 }
