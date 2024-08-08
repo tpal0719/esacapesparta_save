@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   escape-core:
-    image: escapesparta/escape-core:latest
+    image: semmmi/escape-core:latest
     build:
       context: ./escape-core
       dockerfile: Dockerfile
@@ -15,7 +15,7 @@ services:
       - kafka
 
   escape-admin:
-    image: escapesparta/escape-admin:latest
+    image: semmmi/escape-admin:latest
     build:
       context: ./escape-admin
       dockerfile: Dockerfile
@@ -29,7 +29,7 @@ services:
       - escape-core
 
   escape-consumer:
-    image: escapesparta/escape-consumer:latest
+    image: semmmi/escape-consumer:latest
     build:
       context: ./escape-consumer
       dockerfile: Dockerfile
@@ -43,7 +43,7 @@ services:
       - escape-core
 
   escape-manager:
-    image: escapesparta/escape-manager:latest
+    image: semmmi/escape-manager:latest
     build:
       context: ./escape-manager
       dockerfile: Dockerfile
@@ -57,7 +57,7 @@ services:
       - escape-core
 
   escape-reservation:
-    image: escapesparta/escape-reservation:latest
+    image: semmmi/escape-reservation:latest
     build:
       context: ./escape-reservation
       dockerfile: Dockerfile
@@ -71,7 +71,7 @@ services:
       - escape-core
 
   escape-search:
-    image: escapesparta/escape-search:latest
+    image: semmmi/escape-search:latest
     build:
       context: ./escape-search
       dockerfile: Dockerfile
