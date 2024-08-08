@@ -1,6 +1,6 @@
 package com.sparta.domain.user.controller;
 
-import com.sparta.domain.user.dto.UserResponseDto;
+import com.sparta.domain.user.dto.response.UserResponseDto;
 import com.sparta.domain.user.service.UserAdminService;
 import com.sparta.global.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;

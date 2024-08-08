@@ -5,16 +5,13 @@ import com.sparta.global.entity.TimeStamped;
 import com.sparta.global.exception.customException.StoreException;
 import com.sparta.global.exception.errorCode.StoreErrorCode;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Objects;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +29,6 @@ public class Store extends TimeStamped {
     @Column(nullable = false)
     private String workHours;
 
-//    @Column(nullable = false)
     private String storeImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -77,7 +73,11 @@ public class Store extends TimeStamped {
     }
 
     public void deactivateStore() {
-        this.storeStatus = StoreStatus.DEACTIVE;
+        this.storeStatus = StoreStatus.INACTIVE;
+    }
+
+    public void activateStore() {
+        this.storeStatus = StoreStatus.ACTIVE;
     }
 
     public void checkManager(User manager) {

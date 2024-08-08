@@ -1,4 +1,4 @@
-package com.sparta.jwt;
+package com.sparta.global.jwt;
 
 import com.sparta.global.exception.customException.AuthException;
 import com.sparta.global.exception.errorCode.AuthErrorCode;
@@ -9,17 +9,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.sparta.jwt.JwtProvider.BEARER_PREFIX;
+import static com.sparta.global.jwt.JwtProvider.BEARER_PREFIX;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RefreshTokenService {
     private static final String REFRESH_TOKEN_PREFIX = "refreshToken:";
-    // 만료 시간 7일
-    private static final long refreshTokenTTL = 7 * 24 * 60 * 60 * 1000L;
+    private static final long refreshTokenTTL = 7 * 24 * 60 * 60 * 1000L; // 만료 시간 7일
+
     private final RedisTemplate<String, Object> redisTemplate;
 
+    /**
+     * Redis에 리프레시 토큰 저장
+     * @param email 유저의 이메일
+     * @param refreshToken 저장할 토큰값
+     */
     public void saveRefreshTokenInfo(String email, String refreshToken) {
         String parsedRefreshToken = refreshToken.substring(BEARER_PREFIX.length());
         String key = makeRefreshTokenKey(email);
@@ -32,16 +37,21 @@ public class RefreshTokenService {
         redisTemplate.opsForValue().set(key, refreshTokenInfo, refreshTokenTTL, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * 리프레시 토큰 존재 여부 확인
+     * @param email 유저의 이메일
+     * @return 리프레시 토큰 존재 여부
+     */
     public boolean isRefreshTokenPresent(String email) {
         RefreshTokenInfo tokenInfo = (RefreshTokenInfo) redisTemplate.opsForValue().get(makeRefreshTokenKey(email));
-
-        if(tokenInfo == null) {
-            return false;
-        }
-
-        return true;
+        return tokenInfo != null;
     }
 
+    /**
+     * 전달된 리프레시 토큰과 Redis에 저장된 리프레시 토큰 검증
+     * @param email 유저의 이메일
+     * @param refreshToken 헤더로 전달된 리프레시 토큰
+     */
     public void checkValidRefreshToken(String email, String refreshToken) {
         RefreshTokenInfo tokenInfo = (RefreshTokenInfo) redisTemplate.opsForValue().get(makeRefreshTokenKey(email));
 
@@ -54,37 +64,21 @@ public class RefreshTokenService {
         }
     }
 
+    /**
+     * Redis에서 리프레시 토큰 삭제
+     * @param email 유저의 이메일
+     */
     public void deleteRefreshTokenInfo(String email) {
         redisTemplate.delete(makeRefreshTokenKey(email));
     }
 
+    /**
+     * Redis key값 생성
+     * @param email 유저의 이메일
+     * @return Redis 키값
+     */
     private String makeRefreshTokenKey(String email) {
         return REFRESH_TOKEN_PREFIX + email;
     }
 
-    //    public void updateRefreshToken(RefreshToken refreshToken) {
-//        redisTemplate.opsForValue().set(refreshToken.getEmail(), refreshToken, refreshToken.getExpiration(), TimeUnit.MILLISECONDS);
-//    }
-//    @Transactional
-//    public void saveRefreshToken(User user, String refreshToken) {
-//        Optional<RefreshToken> existToken = findByEmail(user.getEmail());
-//
-//        if (existToken.isPresent()) {
-//            existToken.get().update(refreshToken);
-//        } else {
-//            refreshTokenRepository.save(new RefreshToken(user.getEmail(), refreshToken));
-//        }
-//    }
-//
-//    @Transactional
-//    public void deleteToken(String email) {
-//        RefreshToken refreshToken = refreshTokenRepository.findByEmail(email).orElseThrow( //
-//                () -> new RefreshTokenException(RefreshTokenErrorCode.REFRESH_TOKEN_NOT_FOUND)
-//        );
-//        refreshTokenRepository.delete(refreshToken);
-//    }
-//
-//    public String createRefreshToken() {
-//        return UUID.randomUUID().toString();
-//    }
 }

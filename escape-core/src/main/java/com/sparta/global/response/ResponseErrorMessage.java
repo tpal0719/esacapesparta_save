@@ -4,12 +4,7 @@ import com.sparta.global.exception.errorCode.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class ResponseErrorMessage<T> extends ResponseMessage {
-
-//    @Builder
-//    public ResponseErrorMessage(int statusCode, String message, Object data) {
-//        super(statusCode, message, data);
-//    }
+public class ResponseErrorMessage<T> extends ResponseMessage<T> {
 
     public ResponseErrorMessage(ErrorCode errorCode) {
         super(errorCode.getHttpStatusCode(), errorCode.getErrorDescription(), null);

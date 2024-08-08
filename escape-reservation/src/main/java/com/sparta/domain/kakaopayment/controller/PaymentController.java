@@ -2,7 +2,7 @@ package com.sparta.domain.kakaopayment.controller;
 
 
 import com.sparta.domain.kakaopayment.service.PaymentService;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;

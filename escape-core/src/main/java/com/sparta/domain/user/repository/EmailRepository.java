@@ -14,8 +14,9 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class EmailRepository {
     private static final String EMAIL_PREFIX = "certificate:";
+    private static final int EMAIL_VERIFICATION_LIMIT_IN_SECONDS = 300;
+
     private final StringRedisTemplate redisTemplate;
-    static final int EMAIL_VERIFICATION_LIMIT_IN_SECONDS = 300;
 
     public void saveCertificationNumber(String email, String certificationNumber) {
         String key = makeEmailPrefix(email);

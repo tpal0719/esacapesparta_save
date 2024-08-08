@@ -6,7 +6,7 @@ import com.sparta.domain.reservation.dto.ReservationCreateResponseDto;
 import com.sparta.domain.reservation.dto.ReservationResponseDto;
 import com.sparta.domain.reservation.service.ReservationService;
 import com.sparta.global.response.ResponseMessage;
-import com.sparta.security.UserDetailsImpl;
+import com.sparta.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

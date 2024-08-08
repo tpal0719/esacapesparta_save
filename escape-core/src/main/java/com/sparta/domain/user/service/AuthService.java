@@ -4,8 +4,8 @@ import com.sparta.domain.user.entity.User;
 import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.global.exception.customException.AuthException;
 import com.sparta.global.exception.errorCode.AuthErrorCode;
-import com.sparta.jwt.JwtProvider;
-import com.sparta.jwt.RefreshTokenService;
+import com.sparta.global.jwt.JwtProvider;
+import com.sparta.global.jwt.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -40,8 +40,8 @@ public class AuthService {
             User findUser = userRepository.findByEmailOrElseThrow(userEmail);
 
             // 새 토큰 발급
-            String newAccessToken = jwtProvider.createToken(findUser.getEmail(), JwtProvider.ACCESS_TOKEN_TIME, findUser.getUserType());
-            String newRefreshToken = jwtProvider.createToken(findUser.getEmail(), JwtProvider.REFRESH_TOKEN_TIME, findUser.getUserType());
+            String newAccessToken = jwtProvider.createAccessToken(findUser.getEmail(), findUser.getUserType());
+            String newRefreshToken = jwtProvider.createRefreshToken(findUser.getEmail());
 
             refreshTokenService.saveRefreshTokenInfo(findUser.getEmail(), newRefreshToken);
 
