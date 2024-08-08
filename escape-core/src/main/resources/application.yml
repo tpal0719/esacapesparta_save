@@ -34,8 +34,8 @@ spring:
             enable: true #반드시 필요 -> SSL 필요로 되어있으면
   data:
     redis:
-      host: ${REDIS_MAIL_HOST}
-      port: ${REDIS_MAIL_PORT}
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
