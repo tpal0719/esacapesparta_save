@@ -1,7 +1,7 @@
 name: Deploy Backend Modules
 
 on:
-  push:
+  pull_request:
     branches:
       - main
       - develop
@@ -130,13 +130,13 @@ jobs:
           echo "ROLE_EMAIL=${{ secrets.ROLE_EMAIL }}" >> .env
           echo "ADMIN_KEY=${{ secrets.ADMIN_KEY }}" >> .env
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
-#          echo "CORE_SERVER_PORT=${{ secrets.CORE_SERVER_PORT }}" >> .env
-#          echo "ADMIN_SERVER_PORT=${{ secrets.ADMIN_SERVER_PORT }}" >> .env
-#          echo "MANAGER_SERVER_PORT=${{ secrets.MANAGER_SERVER_PORT }}" >> .env
-#          echo "CONSUMER_SERVER_PORT=${{ secrets.CONSUMER_SERVER_PORT }}" >> .env
-#          echo "RESERVATION_SERVER_PORT=${{ secrets.RESERVATION_SERVER_PORT }}" >> .env
-#          echo "SEARCH_SERVER_PORT=${{ secrets.SEARCH_SERVER_PORT }}" >> .env
-#          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+          echo "CORE_SERVER_PORT=${{ secrets.CORE_SERVER_PORT }}" >> .env
+          echo "ADMIN_SERVER_PORT=${{ secrets.ADMIN_SERVER_PORT }}" >> .env
+          echo "MANAGER_SERVER_PORT=${{ secrets.MANAGER_SERVER_PORT }}" >> .env
+          echo "CONSUMER_SERVER_PORT=${{ secrets.CONSUMER_SERVER_PORT }}" >> .env
+          echo "RESERVATION_SERVER_PORT=${{ secrets.RESERVATION_SERVER_PORT }}" >> .env
+          echo "SEARCH_SERVER_PORT=${{ secrets.SEARCH_SERVER_PORT }}" >> .env
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
 
       # Copy .env file to EC2
       - name: Copy .env file to EC2

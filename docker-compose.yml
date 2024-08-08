@@ -84,6 +84,20 @@ services:
       - kafka
       - escape-core
 
+  escape-frontend:
+    image: escapesparta/escape-frontend:latest
+    ports:
+      - "5173:80"
+    env_file:
+      - .env
+    depends_on:
+      - escape-core
+      - escape-admin
+      - escape-consumer
+      - escape-manager
+      - escape-reservation
+      - escape-search
+
   redis:
     image: "redis:alpine"
     ports:
