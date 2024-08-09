@@ -1,4 +1,4 @@
-package domain.store.service;
+package com.sparta.domain.store.service;
 
 import com.sparta.domain.store.dto.KafkaStoreRequestDto;
 import com.sparta.domain.store.dto.KafkaStoreResponseDto;

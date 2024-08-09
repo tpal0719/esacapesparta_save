@@ -88,7 +88,7 @@ public class PaymentService {
     reservation.paymentToReservation(cid,
         Objects.requireNonNull(response.getBody()).get("tid").toString());
 
-    payment.update(tid);
+//    payment.update(tid);
 
     return response.getBody();
   }
