@@ -156,6 +156,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           source: ".env"
           target: "/home/to/escapesparta-b13/.env"
+
       # Deploy to EC2
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.3
