@@ -20,7 +20,7 @@ public class UserAdminController {
     private final UserAdminService userAdminService;
 
     /**
-     * TODO : 모든 Manager 조회
+     * 모든 Manager 조회
      *
      * @author SEMI
      */
@@ -38,7 +38,7 @@ public class UserAdminController {
     }
 
     /**
-     * TODO : 모든 Consumer 조회
+     * 모든 Consumer 조회
      *
      * @author SEMI
      */
