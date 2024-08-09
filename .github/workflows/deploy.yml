@@ -167,6 +167,7 @@ jobs:
           script: |
             cd /home/ubuntu/app
             sudo touch .env
-            echo "${{ secrets.ENV_VARS }}"
+            echo "${{ secrets.ENV_VARS }}" >> .env
+            ls -l .env
             docker-compose pull
             docker-compose up -d
