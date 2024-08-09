@@ -2,6 +2,9 @@ version: '3.8'
 
 services:
   escape-core:
+    networks:
+      - app-network
+    container_name: escape-core
     image: semmmi/escape-core:latest
     #    build:
     #      context: ./escape-core
@@ -15,6 +18,9 @@ services:
       - kafka
 
   escape-admin:
+    networks:
+      - app-network
+    container_name: escape-admin
     image: semmmi/escape-admin:latest
     #    build:
     #      context: ./escape-admin
@@ -29,6 +35,9 @@ services:
       - escape-core
 
   escape-consumer:
+    networks:
+      - app-network
+    container_name: escape-consumer
     image: semmmi/escape-consumer:latest
     #    build:
     #      context: ./escape-consumer
@@ -43,6 +52,9 @@ services:
       - escape-core
 
   escape-manager:
+    networks:
+      - app-network
+    container_name: escape-manager
     image: semmmi/escape-manager:latest
     #    build:
     #      context: ./escape-manager
@@ -57,6 +69,9 @@ services:
       - escape-core
 
   escape-reservation:
+    networks:
+      - app-network
+    container_name: escape-reservation
     image: semmmi/escape-reservation:latest
     #    build:
     #      context: ./escape-reservation
@@ -71,6 +86,9 @@ services:
       - escape-core
 
   escape-search:
+    networks:
+      - app-network
+    container_name: escape-search
     image: semmmi/escape-search:latest
     #    build:
     #      context: ./escape-search
@@ -85,11 +103,15 @@ services:
       - escape-core
 
   redis:
+    networks:
+      - app-network
     image: "redis:alpine"
     ports:
       - "6379:6379"
 
   zookeeper:
+    networks:
+      - app-network
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
