@@ -3,9 +3,9 @@ version: '3.8'
 services:
   escape-core:
     image: semmmi/escape-core:latest
-    build:
-      context: ./escape-core
-      dockerfile: Dockerfile
+    #    build:
+    #      context: ./escape-core
+    #      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     env_file:
@@ -16,9 +16,9 @@ services:
 
   escape-admin:
     image: semmmi/escape-admin:latest
-    build:
-      context: ./escape-admin
-      dockerfile: Dockerfile
+    #    build:
+    #      context: ./escape-admin
+    #      dockerfile: Dockerfile
     ports:
       - "8081:8081"
     env_file:
@@ -30,9 +30,9 @@ services:
 
   escape-consumer:
     image: semmmi/escape-consumer:latest
-    build:
-      context: ./escape-consumer
-      dockerfile: Dockerfile
+    #    build:
+    #      context: ./escape-consumer
+    #      dockerfile: Dockerfile
     ports:
       - "8082:8082"
     env_file:
@@ -58,9 +58,9 @@ services:
 
   escape-reservation:
     image: semmmi/escape-reservation:latest
-    build:
-      context: ./escape-reservation
-      dockerfile: Dockerfile
+    #    build:
+    #      context: ./escape-reservation
+    #      dockerfile: Dockerfile
     ports:
       - "8084:8084"
     env_file:
