@@ -109,40 +109,40 @@ jobs:
           source: "./docker-compose.yml" # 로컬 파일 시스템에서 복사할 파일 경로
           target: "/home/ubuntu/app" # 원격에서 파일을 복사할 대상 경로
           timeout: 600s
-
-      # Create .env file
-      #      - name: Create .env file
-      #        run: |
-      #          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
-      #          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
-      #          echo "KAFKA_HOST=${{ secrets.KAFKA_HOST }}" >> .env
-      #          echo "BOOTSTRAP_SERVER=${{ secrets.BOOTSTRAP_SERVER }}" >> .env
-      #          echo "GROUP_ID=${{ secrets.GROUP_ID }}" >> .env
-      #          echo "DATASOURCE_URL=${{ secrets.DATASOURCE_URL }}" >> .env
-      #          echo "DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}" >> .env
-      #          echo "DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}" >> .env
-      #          echo "BUCKET_NAME=${{ secrets.BUCKET_NAME }}" >> .env
-      #          echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
-      #          echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> .env
-      #          echo "DEFAULT_IMAGE_URL=${{ secrets.DEFAULT_IMAGE_URL }}" >> .env
-      #          echo "ACCESS_KEY=${{ secrets.ACCESS_KEY }}" >> .env
-      #          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-      #          echo "REGION=${{ secrets.REGION }}" >> .env
-      #          echo "PAY_ADMIN_KEY=${{ secrets.PAY_ADMIN_KEY }}" >> .env
-      #          echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> .env
-      #          echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
-      #          echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
-      #          echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
-      #          echo "ROLE_EMAIL=${{ secrets.ROLE_EMAIL }}" >> .env
-      #          echo "ADMIN_KEY=${{ secrets.ADMIN_KEY }}" >> .env
-      #          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
-      #          echo "CORE_SERVER_PORT=${{ secrets.CORE_SERVER_PORT }}" >> .env
-      #          echo "ADMIN_SERVER_PORT=${{ secrets.ADMIN_SERVER_PORT }}" >> .env
-      #          echo "MANAGER_SERVER_PORT=${{ secrets.MANAGER_SERVER_PORT }}" >> .env
-      #          echo "CONSUMER_SERVER_PORT=${{ secrets.CONSUMER_SERVER_PORT }}" >> .env
-      #          echo "RESERVATION_SERVER_PORT=${{ secrets.RESERVATION_SERVER_PORT }}" >> .env
-      #          echo "SEARCH_SERVER_PORT=${{ secrets.SEARCH_SERVER_PORT }}" >> .env
-      #          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+            
+            # Create .env file
+            #      - name: Create .env file
+            #        run: |
+            echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+            echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+            echo "KAFKA_HOST=${{ secrets.KAFKA_HOST }}" >> .env
+            echo "BOOTSTRAP_SERVER=${{ secrets.BOOTSTRAP_SERVER }}" >> .env
+            echo "GROUP_ID=${{ secrets.GROUP_ID }}" >> .env
+            echo "DATASOURCE_URL=${{ secrets.DATASOURCE_URL }}" >> .env
+            echo "DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}" >> .env
+            echo "DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}" >> .env
+            echo "BUCKET_NAME=${{ secrets.BUCKET_NAME }}" >> .env
+            echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
+            echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> .env
+            echo "DEFAULT_IMAGE_URL=${{ secrets.DEFAULT_IMAGE_URL }}" >> .env
+            echo "ACCESS_KEY=${{ secrets.ACCESS_KEY }}" >> .env
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+            echo "REGION=${{ secrets.REGION }}" >> .env
+            echo "PAY_ADMIN_KEY=${{ secrets.PAY_ADMIN_KEY }}" >> .env
+            echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> .env
+            echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
+            echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
+            echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
+            echo "ROLE_EMAIL=${{ secrets.ROLE_EMAIL }}" >> .env
+            echo "ADMIN_KEY=${{ secrets.ADMIN_KEY }}" >> .env
+            echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
+            echo "CORE_SERVER_PORT=${{ secrets.CORE_SERVER_PORT }}" >> .env
+            echo "ADMIN_SERVER_PORT=${{ secrets.ADMIN_SERVER_PORT }}" >> .env
+            echo "MANAGER_SERVER_PORT=${{ secrets.MANAGER_SERVER_PORT }}" >> .env
+            echo "CONSUMER_SERVER_PORT=${{ secrets.CONSUMER_SERVER_PORT }}" >> .env
+            echo "RESERVATION_SERVER_PORT=${{ secrets.RESERVATION_SERVER_PORT }}" >> .env
+            echo "SEARCH_SERVER_PORT=${{ secrets.SEARCH_SERVER_PORT }}" >> .env
+            echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
       #
       #      - name: Verify .env file
       #        run: ls -l .env
@@ -166,8 +166,39 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd /home/ubuntu/app
-            sudo touch .env
-            echo "${{ secrets.ENV_VARS }}" >> .env
+            
+            echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+            echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+            echo "KAFKA_HOST=${{ secrets.KAFKA_HOST }}" >> .env
+            echo "BOOTSTRAP_SERVER=${{ secrets.BOOTSTRAP_SERVER }}" >> .env
+            echo "GROUP_ID=${{ secrets.GROUP_ID }}" >> .env
+            echo "DATASOURCE_URL=${{ secrets.DATASOURCE_URL }}" >> .env
+            echo "DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}" >> .env
+            echo "DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}" >> .env
+            echo "BUCKET_NAME=${{ secrets.BUCKET_NAME }}" >> .env
+            echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
+            echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> .env
+            echo "DEFAULT_IMAGE_URL=${{ secrets.DEFAULT_IMAGE_URL }}" >> .env
+            echo "ACCESS_KEY=${{ secrets.ACCESS_KEY }}" >> .env
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+            echo "REGION=${{ secrets.REGION }}" >> .env
+            echo "PAY_ADMIN_KEY=${{ secrets.PAY_ADMIN_KEY }}" >> .env
+            echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> .env
+            echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
+            echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
+            echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
+            echo "ROLE_EMAIL=${{ secrets.ROLE_EMAIL }}" >> .env
+            echo "ADMIN_KEY=${{ secrets.ADMIN_KEY }}" >> .env
+            echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
+            echo "CORE_SERVER_PORT=${{ secrets.CORE_SERVER_PORT }}" >> .env
+            echo "ADMIN_SERVER_PORT=${{ secrets.ADMIN_SERVER_PORT }}" >> .env
+            echo "MANAGER_SERVER_PORT=${{ secrets.MANAGER_SERVER_PORT }}" >> .env
+            echo "CONSUMER_SERVER_PORT=${{ secrets.CONSUMER_SERVER_PORT }}" >> .env
+            echo "RESERVATION_SERVER_PORT=${{ secrets.RESERVATION_SERVER_PORT }}" >> .env
+            echo "SEARCH_SERVER_PORT=${{ secrets.SEARCH_SERVER_PORT }}" >> .env
+            echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+            
             ls -l .env
+            
             docker-compose pull
             docker-compose up -d
