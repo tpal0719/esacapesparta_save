@@ -16,6 +16,7 @@ WORKDIR /apps
 # Build the application
 #RUN ./gradlew bootJar
 COPY ./build/libs/*.jar /apps/escape-core.jar
+#COPY properties/env.properties /app/config/env.properties
 
 # 어플리케이션 포트 설정 (예: 8080)
 EXPOSE 8080

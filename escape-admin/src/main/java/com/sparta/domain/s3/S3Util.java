@@ -14,65 +14,53 @@ import java.util.UUID;
 @Component
 public class S3Util {
 
-    @Value("${cloud.aws.defaultPath}")
-    private String defaultImageUrl;
+  private static final String STORE_DIR = "store";
+  private static final String THEME_DIR = "theme";
 
-    public static String DEFAULT_IMAGE_URL;
+  /**
+   * 파일 존재 여부 검사
+   */
+  public static boolean doesFileExist(MultipartFile multipartFile) {
+    return multipartFile != null && !multipartFile.isEmpty();
+  }
 
-    @PostConstruct
-    private void init() {
-        DEFAULT_IMAGE_URL = defaultImageUrl;
+  /**
+   * 파일 확장자 검사
+   */
+  public static String getValidateImageExtension(String fileName) {
+    List<String> validExtensionList = Arrays.asList("jpg", "jpeg", "png", "webp");
+
+    int extensionIndex = fileName.lastIndexOf(".");
+
+    String extension = fileName.substring(extensionIndex + 1).toLowerCase();
+
+    if (!validExtensionList.contains(extension)) {
+      throw new S3Exception(S3ErrorCode.INVALID_EXTENSION);
     }
 
-    private static final String STORE_DIR = "store";
-    private static final String THEME_DIR = "theme";
+    return extension;
+  }
 
-    /**
-     * 파일 존재 여부 검사
-     */
-    public static boolean doesFileExist(MultipartFile multipartFile) {
-        return multipartFile != null && !multipartFile.isEmpty();
-    }
+  /**
+   * 방탈출 카페 이미지 경로 생성 store/{storeId}
+   */
+  public static String createStoreImageDir(Long storeId) {
+    return STORE_DIR + "/"
+        + storeId + "/";
+  }
 
-    /**
-     * 파일 확장자 검사
-     */
-    public static String getValidateImageExtension(String fileName) {
-        List<String> validExtensionList = Arrays.asList("jpg", "jpeg", "png", "webp");
+  /**
+   * 방탈출 테마 이미지 저장 경로 생성 store/{storeId}/theme/{themeId}
+   */
+  public static String createThemeImageDir(Long storeId, Long themeId) {
+    return STORE_DIR + "/" + storeId + "/"
+        + THEME_DIR + "/" + themeId + "/";
+  }
 
-        int extensionIndex = fileName.lastIndexOf(".");
-
-        String extension = fileName.substring(extensionIndex + 1).toLowerCase();
-
-        if(!validExtensionList.contains(extension)) {
-            throw new S3Exception(S3ErrorCode.INVALID_EXTENSION);
-        }
-
-        return extension;
-    }
-
-    /**
-     * 방탈출 카페 이미지 경로 생성
-     * store/{storeId}
-     */
-    public static String createStoreImageDir(Long storeId) {
-        return STORE_DIR + "/"
-                + storeId + "/";
-    }
-
-    /**
-     * 방탈출 테마 이미지 저장 경로 생성
-     * store/{storeId}/theme/{themeId}
-     */
-    public static String createThemeImageDir(Long storeId, Long themeId) {
-        return STORE_DIR + "/" + storeId + "/"
-                + THEME_DIR + "/" + themeId + "/";
-    }
-
-    /**
-     * 파일명 랜덤 생성
-     */
-    public static String createFileName(String extension) {
-        return UUID.randomUUID().toString().concat("." + extension);
-    }
+  /**
+   * 파일명 랜덤 생성
+   */
+  public static String createFileName(String extension) {
+    return UUID.randomUUID().toString().concat("." + extension);
+  }
 }
