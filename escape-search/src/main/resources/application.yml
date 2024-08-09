@@ -9,8 +9,8 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-#        show_sql: true
-#        format_sql: true
+        #        show_sql: true
+        #        format_sql: true
         use_sql_comments: true
   mail:
     host: ${MAIL_HOST} #smtp 서버 주소
@@ -24,9 +24,9 @@ spring:
             enable: true
             required: true
           auth: true
-          connectiontimeout: 5000
+          connection-timeout: 5000
           timeout: 5000
-          writetimeout: 50000
+          write-timeout: 50000
           ssl:
             trust: smtp.gmail.com
             enable: true #반드시 필요 -> SSL 필요로 되어있으면

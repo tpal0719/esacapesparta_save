@@ -11,20 +11,19 @@ public class PageUtil {
 //    public static final int PAGE_SIZE_LIMIT = 5;
 //    public static final int SEARCH_SIZE_LIMIT = 50;
 
-    private PageUtil() {
-        throw new UnsupportedOperationException("유틸리티 클래스입니다.");
+  private PageUtil() {
+  }
+
+  public static Pageable createPageable(int pageNum, int pageSize, boolean isDesc, String sortBy) {
+    if (pageNum < 1) {
+      throw new PageException(PageErrorCode.PAGE_NOT_FOUND);
     }
 
-    public static Pageable createPageable(int pageNum, int pageSize, boolean isDesc, String sortBy) {
-        if (pageNum < 1) {
-            throw new PageException(PageErrorCode.PAGE_NOT_FOUND);
-        }
+    Sort.Direction direction = isDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
+    Sort sort = Sort.by(direction, sortBy);
 
-        Sort.Direction direction = isDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Sort sort = Sort.by(direction, sortBy);
-
-        return PageRequest.of(pageNum - 1, pageSize, sort);
-    }
+    return PageRequest.of(pageNum - 1, pageSize, sort);
+  }
 
 //    public static long getOffset(int pageNumber) {
 //        if (pageNumber < PageUtil.PAGE_SIZE_LIMIT) {

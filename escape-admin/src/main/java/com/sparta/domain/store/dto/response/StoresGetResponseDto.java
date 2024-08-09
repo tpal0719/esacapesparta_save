@@ -7,8 +7,8 @@ import java.util.List;
 
 @Getter
 public class StoresGetResponseDto {
-    private int totalStore;
-    private List<StoreDetailResponseDto> storeDtoList;
+    private final int totalStore;
+    private final List<StoreDetailResponseDto> storeDtoList;
 
     public StoresGetResponseDto(List<Store> storeList) {
         this.totalStore = storeList.size();

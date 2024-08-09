@@ -25,7 +25,7 @@ public class ConsumerController {
     private final UserService userService;
     private final ConsumerService consumerService;
 
-    // TODO : 로그인한 유저 프로필 조회
+    //  로그인한 유저 프로필 조회
     @GetMapping("/profile")
     public ResponseEntity<ResponseMessage<UserResponseDto>> inquiryProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -42,7 +42,7 @@ public class ConsumerController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    // TODO : 유저 프로필 수정
+    //  유저 프로필 수정
     @PutMapping("/profile")
     public ResponseEntity<ResponseMessage<UserResponseDto>> modifyProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -60,7 +60,7 @@ public class ConsumerController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    // TODO : 비밀번호 수정
+    //  비밀번호 수정
     @PutMapping("/profile/password")
     public ResponseEntity<ResponseMessage<UserResponseDto>> editPassword(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
