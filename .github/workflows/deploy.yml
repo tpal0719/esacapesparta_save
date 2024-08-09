@@ -1,10 +1,10 @@
 name: Deploy Backend Modules
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-      - develop
+      - feature/53-cicd
 
 permissions: write-all
 
