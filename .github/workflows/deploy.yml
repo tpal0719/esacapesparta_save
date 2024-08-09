@@ -22,6 +22,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Delete Cache
+      - name: Clear cache
+        run: |
+          rm -rf ~/.cache
+          sudo rm -rf /var/lib/docker
+
       # Build each module
       - name: Build escape-search
         run: |
