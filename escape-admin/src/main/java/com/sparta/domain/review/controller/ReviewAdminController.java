@@ -18,7 +18,7 @@ public class ReviewAdminController {
     private final ReviewAdminService reviewService;
 
     /**
-     * TODO : 리뷰 강제 삭제
+     * 리뷰 강제 삭제
      * @param reviewId
      * @author SEMI
      */

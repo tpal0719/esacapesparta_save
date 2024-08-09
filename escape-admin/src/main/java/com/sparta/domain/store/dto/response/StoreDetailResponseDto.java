@@ -7,16 +7,16 @@ import lombok.Getter;
 
 @Getter
 public class StoreDetailResponseDto {
-    private Long storeId;
-    private String name;
-    private String address;
-    private String phoneNumber;
-    private String workHours;
-    private String storeImage;
-    private StoreRegion storeRegion;
-    private StoreStatus storeStatus;
-    private Long managerId;
-    private String managerName;
+    private final Long storeId;
+    private final String name;
+    private final String address;
+    private final String phoneNumber;
+    private final String workHours;
+    private final String storeImage;
+    private final StoreRegion storeRegion;
+    private final StoreStatus storeStatus;
+    private final Long managerId;
+    private final String managerName;
 
     public StoreDetailResponseDto(Store store) {
         this.storeId = store.getId();

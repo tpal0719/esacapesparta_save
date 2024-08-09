@@ -6,15 +6,16 @@ import lombok.Getter;
 
 @Getter
 public class ThemeTimeDetailResponseDto {
-    private Long themeTimeId;
-    private String themeTitle;
-    private String startTime;
-    private String endTime;
 
-    public ThemeTimeDetailResponseDto(ThemeTime themeTime) {
-        this.themeTimeId = themeTime.getId();
-        this.themeTitle = themeTime.getTheme().getTitle();
-        this.startTime = LocalDateTimeUtil.parseLocalDateTimeToString(themeTime.getStartTime());
-        this.endTime = LocalDateTimeUtil.parseLocalDateTimeToString(themeTime.getEndTime());
-    }
+  private final Long themeTimeId;
+  private final String themeTitle;
+  private final String startTime;
+  private final String endTime;
+
+  public ThemeTimeDetailResponseDto(ThemeTime themeTime) {
+    this.themeTimeId = themeTime.getId();
+    this.themeTitle = themeTime.getTheme().getTitle();
+    this.startTime = LocalDateTimeUtil.parseLocalDateTimeToString(themeTime.getStartTime());
+    this.endTime = LocalDateTimeUtil.parseLocalDateTimeToString(themeTime.getEndTime());
+  }
 }

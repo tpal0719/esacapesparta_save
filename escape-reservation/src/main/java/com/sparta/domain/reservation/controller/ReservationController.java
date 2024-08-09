@@ -25,7 +25,8 @@ public class ReservationController {
 
     /**
      * 예약 생성
-     * @param requestDto 예약 생성에 필요한 데이터
+     *
+     * @param requestDto  예약 생성에 필요한 데이터
      * @param userDetails 로그인 유저
      * @return status.code, message, 예약
      */
@@ -49,14 +50,15 @@ public class ReservationController {
 
     /**
      * 예약 취소
+     *
      * @param reservationId 취소할 에약 id
-     * @param userDetails 로그인 유저
+     * @param userDetails   로그인 유저
      * @return status.code, message
      */
     @DeleteMapping("/reservations/{reservationId}")
     public ResponseEntity<ResponseMessage<Void>> deleteReservation(
             @PathVariable Long reservationId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails){
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         reservationService.deleteReservation(reservationId, userDetails.getUser());
 
@@ -71,12 +73,13 @@ public class ReservationController {
 
     /**
      * 예약 내역 조회
+     *
      * @param userDetails 로그인 유저
      * @return 예약 내역
      */
     @GetMapping("/reservations")
     public ResponseEntity<ResponseMessage<List<ReservationResponseDto>>> getReservations(
-            @AuthenticationPrincipal UserDetailsImpl userDetails){
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         List<ReservationResponseDto> responseDtoList = reservationService.getReservations(userDetails.getUser());
 

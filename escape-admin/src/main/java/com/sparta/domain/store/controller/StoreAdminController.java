@@ -23,7 +23,7 @@ public class StoreAdminController {
     private final StoreAdminService storeAdminService;
 
     /**
-     * TODO : 방탈출 카페 강제 등록 for Admin
+     * 방탈출 카페 강제 등록 for Admin
      *
      * @param requestDto
      * @return StoreResponseDto : 방탈출 카페 정보
@@ -47,7 +47,7 @@ public class StoreAdminController {
     }
 
     /**
-     * TODO : 모든 방탈출 카페 조회 (모든상태: 대기중,활성화,비활성화 ) for Admin
+     * 모든 방탈출 카페 조회 (모든상태: 대기중,활성화,비활성화 ) for Admin
      *
      * @return List<StoreResponseDto> : 방탈출 카페 정보 리스트
      * @author SEMI
@@ -67,7 +67,7 @@ public class StoreAdminController {
 
 
     /**
-     * TODO : Admin이 방탈출 카페 등록 승인 ( PENDING -> ACTIVE )
+     * Admin이 방탈출 카페 등록 승인 ( PENDING -> ACTIVE )
      *
      * @param storeId
      * @author SEMI
@@ -158,7 +158,7 @@ public class StoreAdminController {
     }
 
     /**
-     * TODO : 방탈출 카페 완전 삭제 for Admin
+     * 방탈출 카페 완전 삭제 for Admin
      *
      * @param storeId
      * @author SEMI
