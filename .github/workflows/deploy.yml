@@ -108,7 +108,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           source: "./docker-compose.yml"
           target: "/home/ec2-user/app"
-          timeout: 600
+          timeout: 600s
 
 
 
