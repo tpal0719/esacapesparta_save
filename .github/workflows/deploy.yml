@@ -25,7 +25,7 @@ jobs:
       # Build each module
       - name: Build escape-search
         run: |
-          cd escapeSparta/escape-search
+          cd ../escapeSparta/escape-search
            chmod +x ./gradlew
           ./gradlew bootJar
 
