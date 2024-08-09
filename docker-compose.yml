@@ -127,7 +127,7 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
     volumes:
-      - create-topics.sh:/docker-entrypoint-initdb.d/create-topics.sh
+      - ./create-topics.sh:/docker-entrypoint-initdb.d/create-topics.sh
     depends_on:
       - zookeeper
 
