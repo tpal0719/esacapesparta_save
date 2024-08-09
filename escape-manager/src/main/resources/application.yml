@@ -24,9 +24,9 @@ spring:
             enable: true
             required: true
           auth: true
-          connectiontimeout: 5000
+          connection-timeout: 5000
           timeout: 5000
-          writetimeout: 5000
+          write-timeout: 5000
           ssl:
             trust: smtp.gmail.com
             enable: true #반드시 필요 -> SSL 필요로 되어있으면

@@ -10,21 +10,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class KafkaEmailProducer {
 
-    private final KafkaTemplate<String, String> kafkaEmailTemplate;
+  private final KafkaTemplate<String, String> kafkaEmailTemplate;
 
-    public void sendCreateReservationEmail(String topic, String email){
-        try{
-            kafkaEmailTemplate.send(topic, email);
-        } catch (Exception e){
-            log.error("error");
-        }
-    }
+  public void sendCreateReservationEmail(String topic, String email) {
+    kafkaEmailTemplate.send(topic, email);
+  }
 
-    public void sendDeleteReservationEmail(String topic, String email){
-        try{
-            kafkaEmailTemplate.send(topic, email);
-        } catch (Exception e){
-            log.error("error");
-        }
-    }
+  public void sendDeleteReservationEmail(String topic, String email) {
+    kafkaEmailTemplate.send(topic, email);
+  }
 }

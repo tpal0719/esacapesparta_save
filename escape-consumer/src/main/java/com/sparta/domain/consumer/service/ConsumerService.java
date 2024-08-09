@@ -22,14 +22,14 @@ public class ConsumerService {
     private final PasswordEncoder passwordEncoder;
 
 
-    // TODO : pk값으로 유저 조회
+    // pk값으로 유저 조회
     @Transactional(readOnly = true)
     public UserResponseDto inquiryUser(User user) {
 
         return new UserResponseDto(user);
     }
 
-    // TODO : 유저 프로필 수정
+    // 유저 프로필 수정
     @Transactional
     public UserResponseDto modifyProfile(EditProfileRequestDto request, User user) {
 
@@ -39,7 +39,7 @@ public class ConsumerService {
         return new UserResponseDto(user);
     }
 
-    //TODO : 유저 비밀번호 변경
+    //유저 비밀번호 변경
     @Transactional
     public UserResponseDto editPassword(EditPasswordRequestDto requestDTO, User user) {
 

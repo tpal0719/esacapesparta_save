@@ -13,7 +13,7 @@ public class ReviewAdminService {
     public final ReviewRepository reviewRepository;
 
     /**
-     * TODO : 리뷰 강제 삭제
+     * 리뷰 강제 삭제
      *
      * @param reviewId
      * @author SEMI

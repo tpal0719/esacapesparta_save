@@ -7,8 +7,8 @@ import java.util.List;
 
 @Getter
 public class ThemeGetResponseDto {
-    private int totalTheme;
-    private List<ThemeDetailResponseDto> themeDtoList;
+    private final int totalTheme;
+    private final List<ThemeDetailResponseDto> themeDtoList;
 
     public ThemeGetResponseDto(List<Theme> themeList
     ) {

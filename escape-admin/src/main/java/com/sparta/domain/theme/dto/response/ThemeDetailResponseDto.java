@@ -6,18 +6,18 @@ import lombok.Getter;
 
 @Getter
 public class ThemeDetailResponseDto {
-    private Long storeId;
-    private Long themeId;
-    private String title;
-    private String contents;
-    private Integer level;
-    private Integer duration;
-    private Integer minPlayer;
-    private Integer maxPlayer;
-    private String themeType;
-    private Long price;
-    private String themeImage;
-    private ThemeStatus themeStatus;
+    private final Long storeId;
+    private final Long themeId;
+    private final String title;
+    private final String contents;
+    private final Integer level;
+    private final Integer duration;
+    private final Integer minPlayer;
+    private final Integer maxPlayer;
+    private final String themeType;
+    private final Long price;
+    private final String themeImage;
+    private final ThemeStatus themeStatus;
 
     public ThemeDetailResponseDto(Theme theme) {
         this.storeId = theme.getStore().getId();

@@ -21,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        if(user.getUserStatus() == UserStatus.WITHDRAW){
+        if (user.getUserStatus() == UserStatus.WITHDRAW) {
             throw new UserException(UserErrorCode.USER_WITHDRAW);
         }
         return new UserDetailsImpl(user);

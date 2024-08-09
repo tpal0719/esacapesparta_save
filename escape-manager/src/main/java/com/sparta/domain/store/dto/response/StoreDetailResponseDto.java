@@ -7,29 +7,30 @@ import lombok.Getter;
 
 @Getter
 public class StoreDetailResponseDto {
-    private Long storeId;
-    private String name;
-    private String address;
-    private String phoneNumber;
-    private String workHours;
-    private String storeImage;
-    private StoreRegion storeRegion;
-    private StoreStatus storeStatus;
-    private Long managerId;
-    private String managerName;
 
-    public StoreDetailResponseDto(Store store) {
-        this.storeId = store.getId();
-        this.name = store.getName();
-        this.address = store.getAddress();
-        this.phoneNumber = store.getPhoneNumber();
-        this.workHours = store.getWorkHours();
-        this.storeImage = store.getStoreImage();
-        this.storeRegion = store.getStoreRegion();
-        this.storeStatus = store.getStoreStatus();
-        this.managerId = store.getManager().getId();
-        this.managerName = store.getManager().getName();
-    }
+  private final Long storeId;
+  private final String name;
+  private final String address;
+  private final String phoneNumber;
+  private final String workHours;
+  private final String storeImage;
+  private final StoreRegion storeRegion;
+  private final StoreStatus storeStatus;
+  private final Long managerId;
+  private final String managerName;
+
+  public StoreDetailResponseDto(Store store) {
+    this.storeId = store.getId();
+    this.name = store.getName();
+    this.address = store.getAddress();
+    this.phoneNumber = store.getPhoneNumber();
+    this.workHours = store.getWorkHours();
+    this.storeImage = store.getStoreImage();
+    this.storeRegion = store.getStoreRegion();
+    this.storeStatus = store.getStoreStatus();
+    this.managerId = store.getManager().getId();
+    this.managerName = store.getManager().getName();
+  }
 
 //    public static StoreDetailResponseDto of(Store store) {
 //        return StoreDetailResponseDto.builder()
