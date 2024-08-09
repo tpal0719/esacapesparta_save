@@ -109,9 +109,9 @@ jobs:
           source: "./docker-compose.yml" # 로컬 파일 시스템에서 복사할 파일 경로
           target: "/home/ubuntu/app" # 원격에서 파일을 복사할 대상 경로
           timeout: 600s
-            
-            # Create .env file
-            #      - name: Create .env file
+
+          # Create .env file
+          #      - name: Create .env file
           #        run: |
       #            echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
       #            echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
@@ -167,6 +167,12 @@ jobs:
           script: |
             cd /home/ubuntu/app
             
+            # Remove existing .env file if it exists
+            if [ -f .env ]; then
+            echo "Removing existing .env file"
+            rm .env
+            fi
+            
             echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
             echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
             echo "KAFKA_HOST=${{ secrets.KAFKA_HOST }}" >> .env
@@ -202,3 +208,4 @@ jobs:
             
             docker-compose pull
             docker-compose up -d
+
