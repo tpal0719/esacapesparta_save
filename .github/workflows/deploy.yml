@@ -13,20 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Delete Cache
+      - name: Clear cache
+        run: |
+          rm -rf ~/.cache
+          sudo rm -rf /var/lib/docker
+
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      # Delete Cache
-      - name: Clear cache
-        run: |
-          rm -rf ~/.cache
-          sudo rm -rf /var/lib/docker
 
       # Build each module
       - name: Build escape-search
