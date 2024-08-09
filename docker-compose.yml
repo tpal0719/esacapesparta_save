@@ -44,9 +44,9 @@ services:
 
   escape-manager:
     image: semmmi/escape-manager:latest
-    build:
-      context: ./escape-manager
-      dockerfile: Dockerfile
+    #    build:
+    #      context: ./escape-manager
+    #      dockerfile: Dockerfile
     ports:
       - "8083:8083"
     #    env_file:
@@ -72,9 +72,9 @@ services:
 
   escape-search:
     image: semmmi/escape-search:latest
-    build:
-      context: ./escape-search
-      dockerfile: Dockerfile
+    #    build:
+    #      context: ./escape-search
+    #      dockerfile: Dockerfile
     ports:
       - "8085:8085"
     #    env_file:
