@@ -31,33 +31,33 @@ jobs:
 
       - name: Build escape-reservation
         run: |
-          cd escapeSparta/escape-reservation
-          chmod +x ./gradlew
-          ./gradlew bootJar
+          cd ../escapeSparta/escape-reservation
+          chmod +x ../gradlew
+          ../gradlew bootJar
 
       - name: Build escape-manager
         run: |
-          cd escapeSparta/escape-manager
-          chmod +x ./gradlew
-          ./gradlew bootJar
+          cd ../escapeSparta/escape-manager
+          chmod +x ../gradlew
+          ../gradlew bootJar
 
       - name: Build escape-core
         run: |
-          cd escapeSparta/escape-core
-          chmod +x ./gradlew
-          ./gradlew bootJar
+          cd ../escapeSparta/escape-core
+          chmod +x ../gradlew
+          ../gradlew bootJar
 
       - name: Build escape-consumer
         run: |
-          cd escapeSparta/escape-consumer
-          chmod +x ./gradlew
-          ./gradlew bootJar
+          cd ../escapeSparta/escape-consumer
+          chmod +x ../gradlew
+          ../gradlew bootJar
 
       - name: Build escape-admin
         run: |
-          cd escapeSparta/escape-admin
-          chmod +x ./gradlew
-          ./gradlew bootJar
+          cd ../escapeSparta/escape-admin
+          chmod +x ../gradlew
+          ../gradlew bootJar
 
       # Log in to Docker Hub
       - name: Log in to Docker Hub
