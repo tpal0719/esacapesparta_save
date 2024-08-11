@@ -4,7 +4,16 @@ import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,64 +23,47 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation extends TimeStamped {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    // payment 추가
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String tid; //결제완료시 코드
+  // payment 추가
+  @Column(nullable = false)
+  private Integer player; //플레이 인원
 
-    private String cid; //가맹점 코드
+  @Column(nullable = false)
+  private Long price;
 
-    @Column(nullable = false)
-    private Integer player; //플레이 인원
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private ReservationStatus reservationStatus;
 
-    @Column(nullable = false)
-    private Long price;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PaymentStatus paymentStatus;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "theme_id", nullable = false)
+  private Theme theme;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ReservationStatus reservationStatus;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "theme_time_id", nullable = false)
+  private ThemeTime themeTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+  @Builder
+  public Reservation(Integer player, Long price,
+      ReservationStatus reservationStatus, User user, Theme theme, ThemeTime themeTime) {
+    this.player = player;
+    this.price = price;
+    this.reservationStatus = reservationStatus;
+    this.user = user;
+    this.theme = theme;
+    this.themeTime = themeTime;
+  }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theme_id", nullable = false)
-    private Theme theme;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theme_time_id", nullable = false)
-    private ThemeTime themeTime;
-
-    @Builder
-    public Reservation(Integer player, Long price, PaymentStatus paymentStatus, ReservationStatus reservationStatus, User user, Theme theme, ThemeTime themeTime){
-        this.player = player;
-        this.price = price;
-        this.paymentStatus = paymentStatus;
-        this.reservationStatus = reservationStatus;
-        this.user = user;
-        this.theme = theme;
-        this.themeTime = themeTime;
-    }
-
-    public void paymentToReservation(String tid, String cid) {
-        this.tid = tid;
-        this.cid = cid;
-    }
-
-    public void updateReservationStatus(){
-        this.reservationStatus = ReservationStatus.DEACTIVE;
-    }
-
-    public void updatePaymentStatus(PaymentStatus paymentStatus){
-        this.paymentStatus = paymentStatus;
-    }
+  public void updateReservationStatus() {
+    this.reservationStatus = ReservationStatus.COMPLETE;
+  }
 
 }

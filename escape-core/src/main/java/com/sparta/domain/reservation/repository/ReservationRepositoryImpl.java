@@ -10,65 +10,65 @@ import com.sparta.domain.theme.entity.QTheme;
 import com.sparta.domain.theme.entity.Theme;
 import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.user.entity.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class ReservationRepositoryImpl implements ReservationRepositoryCustom{
-    private final JPAQueryFactory jpaQueryFactory;
+public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
 
-    @Override
-    public Reservation findByThemeTime(ThemeTime themeTime) {
-        QReservation reservation = QReservation.reservation;
+  private final JPAQueryFactory jpaQueryFactory;
 
-        JPAQuery<Reservation> query = jpaQueryFactory.selectFrom(reservation)
-                .where(reservation.themeTime.eq(themeTime),
-                        reservation.reservationStatus.eq(ReservationStatus.ACTIVE));
+  @Override
+  public Reservation findByThemeTime(ThemeTime themeTime) {
+    QReservation reservation = QReservation.reservation;
 
-        return query.fetchFirst();
-    }
+    JPAQuery<Reservation> query = jpaQueryFactory.selectFrom(reservation)
+        .where(reservation.themeTime.eq(themeTime),
+            reservation.reservationStatus.eq(ReservationStatus.COMPLETE));
 
-    @Override
-    public Reservation findByIdAndActive(Long reservationId, User user) {
-        QReservation reservation = QReservation.reservation;
+    return query.fetchFirst();
+  }
 
-        JPAQuery<Reservation> query = jpaQueryFactory.selectFrom(reservation)
-                .where(reservation.id.eq(reservationId),
-                        reservation.reservationStatus.eq(ReservationStatus.ACTIVE),
-                        reservation.user.eq(user));
+  @Override
+  public Reservation findByIdAndActive(Long reservationId, User user) {
+    QReservation reservation = QReservation.reservation;
 
-        return query.fetchFirst();
-    }
+    JPAQuery<Reservation> query = jpaQueryFactory.selectFrom(reservation)
+        .where(reservation.id.eq(reservationId),
+            reservation.reservationStatus.eq(ReservationStatus.COMPLETE),
+            reservation.user.eq(user));
 
-    @Override
-    public List<Reservation> findByUser(User user) {
-        QReservation reservation = QReservation.reservation;
-        QTheme theme = QTheme.theme;
-        QStore store = QStore.store;
+    return query.fetchFirst();
+  }
 
-        JPAQuery<Reservation> query = jpaQueryFactory.selectFrom(reservation)
-                .leftJoin(reservation.theme, theme).fetchJoin()
-                .leftJoin(theme.store, store).fetchJoin()
-                .where(reservation.user.eq(user));
+  @Override
+  public List<Reservation> findByUser(User user) {
+    QReservation reservation = QReservation.reservation;
+    QTheme theme = QTheme.theme;
+    QStore store = QStore.store;
 
-        return query.fetch();
-    }
+    JPAQuery<Reservation> query = jpaQueryFactory.selectFrom(reservation)
+        .leftJoin(reservation.theme, theme).fetchJoin()
+        .leftJoin(theme.store, store).fetchJoin()
+        .where(reservation.user.eq(user));
 
-    @Override
-    public List<Reservation> findByTheme(Theme theme) {
-        QReservation reservation = QReservation.reservation;
-        QTheme qTheme = QTheme.theme;
-        QStore store = QStore.store;
+    return query.fetch();
+  }
 
-        return jpaQueryFactory.selectFrom(reservation)
-                .leftJoin(reservation.theme, qTheme).fetchJoin()
-                .leftJoin(reservation.theme.store, store).fetchJoin()
-                .where(reservation.theme.eq(theme))
-                .fetch();
-    }
+  @Override
+  public List<Reservation> findByTheme(Theme theme) {
+    QReservation reservation = QReservation.reservation;
+    QTheme qTheme = QTheme.theme;
+    QStore store = QStore.store;
+
+    return jpaQueryFactory.selectFrom(reservation)
+        .leftJoin(reservation.theme, qTheme).fetchJoin()
+        .leftJoin(reservation.theme.store, store).fetchJoin()
+        .where(reservation.theme.eq(theme))
+        .fetch();
+  }
 }
