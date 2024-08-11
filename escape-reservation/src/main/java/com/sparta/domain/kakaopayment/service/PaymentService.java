@@ -7,8 +7,11 @@ import com.sparta.domain.kakaopayment.dto.response.PaymentResponseDto;
 import com.sparta.domain.payment.entity.Payment;
 import com.sparta.domain.payment.repository.PaymentRepository;
 import com.sparta.domain.reservation.entity.Reservation;
+import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
 import com.sparta.domain.theme.entity.ThemeTimeStatus;
+import com.sparta.global.exception.customException.ReservationException;
+import com.sparta.global.exception.errorCode.ReservationErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -107,6 +110,9 @@ public class PaymentService {
 
         Reservation reservation = reservationRepository.findByIdOrElse(requestDto.getReservationId());
 
+        if (reservation.getReservationStatus() == ReservationStatus.COMPLETE) {
+            throw new ReservationException(ReservationErrorCode.RESERVATION_DUPLICATION);
+        }
         Payment payment = Payment.builder()
                 .tid(requestDto.getTid())
                 .cid(cid)
