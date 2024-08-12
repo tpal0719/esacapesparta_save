@@ -92,6 +92,12 @@ public class SecurityConfig {
     http.authorizeHttpRequests((requests) -> requests
         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
         .permitAll() //resource 접근 허용 설정
+        .requestMatchers("/api/core/status").permitAll()
+        .requestMatchers("/api/admin/status").permitAll()
+        .requestMatchers("/api/manager/status").permitAll()
+        .requestMatchers("/api/consumer/status").permitAll()
+        .requestMatchers("/api/reservations/status").permitAll()
+        .requestMatchers("/api/search/status").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/core/users/signup").permitAll() // non-user 접근허용
         .requestMatchers(HttpMethod.POST, "/api/core/users/mail").permitAll() // non-user 접근허용
         .requestMatchers(HttpMethod.POST, "/api/core/auth/reissue").permitAll()
