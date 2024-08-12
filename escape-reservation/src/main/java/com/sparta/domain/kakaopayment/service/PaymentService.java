@@ -110,14 +110,18 @@ public class PaymentService {
 
         Reservation reservation = reservationRepository.findByIdOrElse(requestDto.getReservationId());
 
-        if (reservation.getReservationStatus() == ReservationStatus.COMPLETE) {
-            throw new ReservationException(ReservationErrorCode.RESERVATION_DUPLICATION);
-        }
+
         Payment payment = Payment.builder()
                 .tid(requestDto.getTid())
                 .cid(cid)
                 .reservation(reservation)
                 .build();
+
+        if (reservation.getReservationStatus() == ReservationStatus.COMPLETE ||
+                paymentRepository.findByReservationThemeTimeId(
+                        payment.getReservation().getThemeTime().getId()).orElse(null) != null) {
+            throw new ReservationException(ReservationErrorCode.RESERVATION_DUPLICATION);
+        }
 
         reservation.updateReservationStatus(); // change Reservation COMPLETE
         reservation.getThemeTime().updateThemeTimeStatus(ThemeTimeStatus.DISABLE);
