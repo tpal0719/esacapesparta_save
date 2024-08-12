@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/payments")
+@RequestMapping("/reservations")
 public class PaymentController {
 
   private final PaymentService paymentService;
 
-  @PostMapping("/reservations/{reservationId}")
+  @PostMapping("/{reservationId}/payments")
   public String preparePayment(@PathVariable Long reservationId,
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       Model model) {

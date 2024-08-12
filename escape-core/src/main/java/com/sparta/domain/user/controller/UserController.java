@@ -16,51 +16,53 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/core/users")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<ResponseMessage<SignupResponseDto>> createUser(@Valid @RequestBody SignupRequestDto requestDto) {
-        SignupResponseDto signupResponseDto = userService.createUser(requestDto);
+  @PostMapping("/signup")
+  public ResponseEntity<ResponseMessage<SignupResponseDto>> createUser(
+      @Valid @RequestBody SignupRequestDto requestDto) {
+    SignupResponseDto signupResponseDto = userService.createUser(requestDto);
 
-        ResponseMessage<SignupResponseDto> responseMessage = ResponseMessage.<SignupResponseDto>builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message("회원가입이 완료되었습니다.")
-                .data(signupResponseDto)
-                .build();
+    ResponseMessage<SignupResponseDto> responseMessage = ResponseMessage.<SignupResponseDto>builder()
+        .statusCode(HttpStatus.CREATED.value())
+        .message("회원가입이 완료되었습니다.")
+        .data(signupResponseDto)
+        .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
-    }
+    return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
+  }
 
-    @PutMapping("/logout")
-    public ResponseEntity<ResponseMessage<Long>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long response = userService.logout(userDetails.getUser().getId());
+  @PutMapping("/logout")
+  public ResponseEntity<ResponseMessage<Long>> logout(
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    Long response = userService.logout(userDetails.getUser().getId());
 
-        ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("로그아웃이 완료되었습니다.")
-                .data(response)
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
+        .statusCode(HttpStatus.OK.value())
+        .message("로그아웃이 완료되었습니다.")
+        .data(response)
+        .build();
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 
-    @PutMapping("/withdraw")
-    public ResponseEntity<ResponseMessage<Long>> withdraw(
-            @Valid @RequestBody WithdrawRequestDto withdrawRequestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+  @PutMapping("/withdraw")
+  public ResponseEntity<ResponseMessage<Long>> withdraw(
+      @Valid @RequestBody WithdrawRequestDto withdrawRequestDto,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-       Long userId = userService.withdraw(withdrawRequestDto, userDetails.getUser().getId());
+    Long userId = userService.withdraw(withdrawRequestDto, userDetails.getUser().getId());
 
-        ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("회원 탈퇴가 완료되었습니다.")
-                .data(userId)
-                .build();
+    ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
+        .statusCode(HttpStatus.OK.value())
+        .message("회원 탈퇴가 완료되었습니다.")
+        .data(userId)
+        .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 
 }

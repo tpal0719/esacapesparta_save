@@ -17,24 +17,24 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users/mail")
+@RequestMapping("/core/users/mail")
 public class EmailController {
 
-    private final EmailService emailService;
+  private final EmailService emailService;
 
-    @PostMapping
-    public ResponseEntity<ResponseMessage<String>> sendCertificationNumber(
-            @Valid @RequestBody CertificateRequestDto requestDto)
-            throws MessagingException {
+  @PostMapping
+  public ResponseEntity<ResponseMessage<String>> sendCertificationNumber(
+      @Valid @RequestBody CertificateRequestDto requestDto)
+      throws MessagingException {
 
-        String email = emailService.sendEmailForCertification(requestDto);
+    String email = emailService.sendEmailForCertification(requestDto);
 
-        ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("입력한 이메일로 인증코드를 발송했습니다.")
-                .data(email)
-                .build();
+    ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
+        .statusCode(HttpStatus.OK.value())
+        .message("입력한 이메일로 인증코드를 발송했습니다.")
+        .data(email)
+        .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 }

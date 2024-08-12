@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   public JwtAuthenticationFilter(JwtProvider jwtProvider, RefreshTokenService refreshTokenService) {
     this.jwtProvider = jwtProvider;
     this.refreshTokenService = refreshTokenService;
-    setFilterProcessesUrl("/users/login");
+    setFilterProcessesUrl("/core/users/login");
   }
 
   /**
