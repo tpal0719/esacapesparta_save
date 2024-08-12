@@ -5,20 +5,16 @@ import com.sparta.domain.reaction.entity.ReactionType;
 import com.sparta.domain.reaction.repository.ReactionRepository;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.repository.ReservationRepository;
-import com.sparta.domain.review.dto.ReactionResponseDto;
-import com.sparta.domain.review.dto.ReviewCreateRequestDto;
-import com.sparta.domain.review.dto.ReviewCreateResponseDto;
-import com.sparta.domain.review.dto.ReviewResponseDto;
-import com.sparta.domain.review.dto.ReviewUpdateRequestDto;
-import com.sparta.domain.review.dto.ReviewUpdateResponseDto;
+import com.sparta.domain.review.dto.*;
 import com.sparta.domain.review.entity.Review;
 import com.sparta.domain.review.repository.ReviewRepository;
 import com.sparta.domain.user.entity.User;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

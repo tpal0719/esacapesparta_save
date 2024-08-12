@@ -1,8 +1,9 @@
 package com.sparta.domain.user.dto.response;
 
 import com.sparta.domain.user.entity.User;
-import java.time.LocalDateTime;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 public class SignupResponseDto {

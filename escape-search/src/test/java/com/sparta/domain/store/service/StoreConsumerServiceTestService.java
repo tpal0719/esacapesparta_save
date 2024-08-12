@@ -6,7 +6,6 @@ import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.entity.StoreRegion;
 import com.sparta.domain.store.repository.StoreRepository;
-import com.sparta.domain.store.service.StoreConsumerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

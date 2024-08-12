@@ -3,9 +3,6 @@ package com.sparta.domain.kakaopayment.service;
 
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.repository.ReservationRepository;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 
 @Service

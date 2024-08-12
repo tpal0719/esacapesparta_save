@@ -3,8 +3,6 @@ package com.sparta.domain.recommendation.repository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.domain.recommendation.entity.QRecommendation;
-import com.sparta.domain.reservation.entity.Reservation;
-import com.sparta.domain.theme.entity.QTheme;
 import com.sparta.domain.theme.entity.Theme;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
