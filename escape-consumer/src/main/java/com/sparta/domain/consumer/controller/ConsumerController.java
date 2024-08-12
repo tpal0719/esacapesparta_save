@@ -17,7 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/consumer")
+@RequestMapping("/api/consumer")
 @RequiredArgsConstructor
 @Slf4j
 public class ConsumerController {

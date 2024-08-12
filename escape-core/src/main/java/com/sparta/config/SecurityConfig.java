@@ -92,12 +92,12 @@ public class SecurityConfig {
     http.authorizeHttpRequests((requests) -> requests
         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
         .permitAll() //resource 접근 허용 설정
-        .requestMatchers(HttpMethod.POST, "core/users/signup").permitAll() // non-user 접근허용
-        .requestMatchers(HttpMethod.POST, "core/users/mail").permitAll() // non-user 접근허용
-        .requestMatchers(HttpMethod.POST, "core/auth/reissue").permitAll()
-        .requestMatchers(HttpMethod.GET, "/search/**").permitAll() // non-user 접근허용 + 차후 리팩토링
-        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-        .requestMatchers("/manager/**").hasAuthority("MANAGER")
+        .requestMatchers(HttpMethod.POST, "/api/core/users/signup").permitAll() // non-user 접근허용
+        .requestMatchers(HttpMethod.POST, "/api/core/users/mail").permitAll() // non-user 접근허용
+        .requestMatchers(HttpMethod.POST, "/api/core/auth/reissue").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/search/**").permitAll() // non-user 접근허용 + 차후 리팩토링
+        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+        .requestMatchers("/api/manager/**").hasAuthority("MANAGER")
         .anyRequest().authenticated()
     );
 

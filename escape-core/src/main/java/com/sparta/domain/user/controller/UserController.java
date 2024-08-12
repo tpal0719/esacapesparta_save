@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/core/users")
+@RequestMapping("/api/core/users")
 @RequiredArgsConstructor
 public class UserController {
 

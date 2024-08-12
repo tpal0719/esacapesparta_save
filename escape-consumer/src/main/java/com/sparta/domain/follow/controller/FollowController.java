@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("consumer/follow")
+@RequestMapping("/api/consumer/follow")
 public class FollowController {
 
   private final FollowService followService;

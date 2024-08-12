@@ -14,46 +14,46 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class UserAdminController {
 
-    private final UserAdminService userAdminService;
+  private final UserAdminService userAdminService;
 
-    /**
-     * 모든 Manager 조회
-     *
-     * @author SEMI
-     */
-    @GetMapping("/managers")
-    public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllManagers() {
+  /**
+   * 모든 Manager 조회
+   *
+   * @author SEMI
+   */
+  @GetMapping("/managers")
+  public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllManagers() {
 
-        List<UserResponseDto> responseDto = userAdminService.getAllManagers();
+    List<UserResponseDto> responseDto = userAdminService.getAllManagers();
 
-        ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
-                .statusCode(HttpStatus.OK.value())
-                .data(responseDto)
-                .build();
+    ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
+        .statusCode(HttpStatus.OK.value())
+        .data(responseDto)
+        .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 
-    /**
-     * 모든 Consumer 조회
-     *
-     * @author SEMI
-     */
-    @GetMapping("/consumers")
-    public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllConsumers() {
+  /**
+   * 모든 Consumer 조회
+   *
+   * @author SEMI
+   */
+  @GetMapping("/consumers")
+  public ResponseEntity<ResponseMessage<List<UserResponseDto>>> getAllConsumers() {
 
-        List<UserResponseDto> responseDto = userAdminService.getAllConsumers();
+    List<UserResponseDto> responseDto = userAdminService.getAllConsumers();
 
-        ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
-                .statusCode(HttpStatus.OK.value())
-                .data(responseDto)
-                .build();
+    ResponseMessage<List<UserResponseDto>> responseMessage = ResponseMessage.<List<UserResponseDto>>builder()
+        .statusCode(HttpStatus.OK.value())
+        .data(responseDto)
+        .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 
 
 }

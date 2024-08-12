@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/core/users/mail")
+@RequestMapping("/api/core/users/mail")
 public class EmailController {
 
   private final EmailService emailService;
