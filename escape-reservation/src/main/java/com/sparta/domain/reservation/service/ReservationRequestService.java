@@ -92,11 +92,6 @@ public class ReservationRequestService {
             Reservation reservation = reservationRepository.findByIdAndUserAndActive(
                     requestDto.getReservationId(), user);
 
-            reservation.cancelReservationStatus();
-
-            ThemeTime themeTime = reservation.getThemeTime();
-            themeTime.updateThemeTimeStatus();
-
             paymentService.refundPayment(reservation.getId());
 
             kafkaEmailProducer.sendDeleteReservationEmail(KafkaTopic.PAYMENT_DELETE_TOPIC,

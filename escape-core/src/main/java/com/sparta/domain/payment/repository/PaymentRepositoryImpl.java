@@ -26,9 +26,6 @@ public class PaymentRepositoryImpl implements PaymentRepositoryCustom {
                 .join(payment.reservation, reservation)
                 .where(reservation.themeTime.id.eq(reservationThemeTimeId))
                 .fetchOne();
-//        if (result == null) {
-//            throw new PaymentException(PaymentErrorCode.PAMENT_NOT_FOUND);
-//        }
 
         return result;
     }

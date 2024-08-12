@@ -6,11 +6,15 @@ import com.sparta.domain.kakaopayment.dto.response.KakaoResponseDto;
 import com.sparta.domain.kakaopayment.dto.response.PaymentResponseDto;
 import com.sparta.domain.payment.entity.Payment;
 import com.sparta.domain.payment.repository.PaymentRepository;
+import com.sparta.domain.reservation.entity.PaymentStatus;
 import com.sparta.domain.reservation.entity.Reservation;
 import com.sparta.domain.reservation.entity.ReservationStatus;
 import com.sparta.domain.reservation.repository.ReservationRepository;
+import com.sparta.domain.theme.entity.ThemeTime;
 import com.sparta.domain.theme.entity.ThemeTimeStatus;
+import com.sparta.global.exception.customException.PaymentException;
 import com.sparta.global.exception.customException.ReservationException;
+import com.sparta.global.exception.errorCode.PaymentErrorCode;
 import com.sparta.global.exception.errorCode.ReservationErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -140,22 +144,30 @@ public class PaymentService {
 
         Payment payment = paymentRepository.findByReservationId(reservationId);
 
-        RestTemplate restTemplate = new RestTemplate();
+        if (payment.getPaymentStatus() != PaymentStatus.COMPLETE) {
+            throw new PaymentException(PaymentErrorCode.ALREAY_REFUND);
+        }
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        headers.set("Authorization", "SECRET_KEY " + kakaoApiKey);
+//
+//        Map<String, String> params = new HashMap<>();
+//        params.put("cid", cid);
+//        params.put("tid", payment.getTid());
+//        params.put("cancel_amount", String.valueOf(payment.getReservation().getPrice()));
+//        params.put("cancel_tax_free_amount", "0");
+//
+//        HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
+//
+//        ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_CANCEL_API_URL, entity, Map.class);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "SECRET_KEY " + kakaoApiKey);
+        Reservation reservation = payment.getReservation();
 
-        Map<String, String> params = new HashMap<>();
-        params.put("cid", cid);
-        params.put("tid", payment.getTid());
-        params.put("cancel_amount", String.valueOf(payment.getReservation().getPrice()));
-        params.put("cancel_tax_free_amount", "0");
-
-        HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
-
-        ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_CANCEL_API_URL, entity, Map.class);
-
+        reservation.cancelReservationStatus();
+        ThemeTime themeTime = reservation.getThemeTime();
+        themeTime.updateThemeTimeStatus();
         payment.refundPayment();
     }
 

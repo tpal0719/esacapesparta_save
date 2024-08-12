@@ -34,7 +34,7 @@ public class PaymentController {
 
         ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
                 .statusCode(HttpStatus.CREATED.value())
-                .message("예약에 성공했습니다.")
+                .message("환불에 성공했습니다.")
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
