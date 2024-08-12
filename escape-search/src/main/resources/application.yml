@@ -41,9 +41,19 @@ spring:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        socket.connection.setup.timeout.ms: 50000
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        socket.connection.setup.timeout.ms: 50000
+        request.timeout.ms: 60000
+socket:
+  connection:
+    setup:
+      timeout:
+        ms: 50000
 
 admin:
   key: ${ADMIN_KEY}
