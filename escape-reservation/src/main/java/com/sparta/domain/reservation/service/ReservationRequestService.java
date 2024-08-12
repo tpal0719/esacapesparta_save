@@ -46,7 +46,8 @@ public class ReservationRequestService {
     public void handleCreateReservationRequest(KafkaReservationCreateRequestDto requestDto) {
         try {
             User user = userRepository.findByIdOrElseThrow(requestDto.getUserId());
-            ThemeTime themeTime = themeTimeRepository.checkStoreAndThemeActive(requestDto.getRequestDto().getThemeTimeId());
+            ThemeTime themeTime = themeTimeRepository.checkStoreAndThemeActive(
+                    requestDto.getRequestDto().getThemeTimeId());
             reservationRepository.checkReservation(themeTime);
 
             if (themeTime.getThemeTimeStatus() == ThemeTimeStatus.DISABLE) {
@@ -56,26 +57,27 @@ public class ReservationRequestService {
             Reservation reservation = Reservation.builder()
                     .player(requestDto.getRequestDto().getPlayer())
                     .price(requestDto.getRequestDto().getPrice())
-                    .paymentStatus(requestDto.getRequestDto().getPaymentStatus())
-                    .reservationStatus(ReservationStatus.ACTIVE)
+                    .reservationStatus(ReservationStatus.PENDING)
                     .user(user)
                     .theme(themeTime.getTheme())
                     .themeTime(themeTime)
                     .build();
 
-            themeTime.updateThemeTimeStatus();
 
-            KafkaReservationCreateResponseDto responseDto = new KafkaReservationCreateResponseDto(requestDto.getRequestId()
-                    , new ReservationCreateResponseDto(reservationRepository.save(reservation)), user.getEmail());
+            KafkaReservationCreateResponseDto responseDto = new KafkaReservationCreateResponseDto(
+                    requestDto.getRequestId()
+                    , new ReservationCreateResponseDto(reservationRepository.save(reservation)),
+                    user.getEmail());
 
             handleReservationCreateResponse(responseDto);
-        }catch (GlobalCustomException e){
+        } catch (GlobalCustomException e) {
             log.error(e.getMessage());
         }
     }
 
     private void handleReservationCreateResponse(KafkaReservationCreateResponseDto response) {
-        CompletableFuture<ReservationCreateResponseDto> future = responseCreateFutures.remove(Objects.requireNonNull(response).getRequestId());
+        CompletableFuture<ReservationCreateResponseDto> future = responseCreateFutures.remove(
+                Objects.requireNonNull(response).getRequestId());
         if (future != null) {
             kafkaEmailProducer.sendCreateReservationEmail(KafkaTopic.PAYMENT_TOPIC, response.getEmail());
             future.complete(response.getResponseDto());
@@ -87,14 +89,14 @@ public class ReservationRequestService {
     public void handleDeleteReservationRequest(KafkaReservationDeleteRequestDto requestDto) {
         try {
             User user = userRepository.findByIdOrElseThrow(requestDto.getUserId());
-            Reservation reservation = reservationRepository.findByIdAndUserAndActive(requestDto.getReservationId(), user);
+            Reservation reservation = reservationRepository.findByIdAndUserAndActive(
+                    requestDto.getReservationId(), user);
 
-//        paymentService.refundPayment(requestDto.getReservationId());
-            reservation.updateReservationStatus();
-            ThemeTime themeTime = reservation.getThemeTime();
-            themeTime.updateThemeTimeStatus();
-            kafkaEmailProducer.sendDeleteReservationEmail(KafkaTopic.PAYMENT_DELETE_TOPIC, user.getEmail());
-        }catch (GlobalCustomException e){
+            paymentService.refundPayment(reservation.getId());
+
+            kafkaEmailProducer.sendDeleteReservationEmail(KafkaTopic.PAYMENT_DELETE_TOPIC,
+                    user.getEmail());
+        } catch (GlobalCustomException e) {
             log.error(e.getMessage());
         }
     }
@@ -105,16 +107,19 @@ public class ReservationRequestService {
         try {
             User user = userRepository.findByIdOrElseThrow(requestDto.getUserId());
             List<Reservation> reservationList = reservationRepository.findByUser(user);
-            List<ReservationResponseDto> responseDtoList = reservationList.stream().map(ReservationResponseDto::new).toList();
-            KafkaReservationGetResponseDto responseDto = new KafkaReservationGetResponseDto(requestDto.getRequestId(), responseDtoList);
+            List<ReservationResponseDto> responseDtoList = reservationList.stream()
+                    .map(ReservationResponseDto::new).toList();
+            KafkaReservationGetResponseDto responseDto = new KafkaReservationGetResponseDto(
+                    requestDto.getRequestId(), responseDtoList);
             handleReservationGetResponse(responseDto);
-        }catch (GlobalCustomException e){
+        } catch (GlobalCustomException e) {
             log.error(e.getMessage());
         }
     }
 
     private void handleReservationGetResponse(KafkaReservationGetResponseDto response) {
-        CompletableFuture<List<ReservationResponseDto>> future = responseGetFutures.remove(Objects.requireNonNull(response).getRequestId());
+        CompletableFuture<List<ReservationResponseDto>> future = responseGetFutures.remove(
+                Objects.requireNonNull(response).getRequestId());
         if (future != null) {
             future.complete(response.getResponseDtoList());
         }
