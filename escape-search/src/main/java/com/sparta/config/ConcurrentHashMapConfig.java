@@ -2,6 +2,7 @@ package com.sparta.config;
 
 import com.sparta.domain.review.dto.ReviewResponseDto;
 import com.sparta.domain.store.dto.StoreResponseDto;
+import com.sparta.domain.store.dto.TopStoreResponseDto;
 import com.sparta.domain.theme.dto.ThemeInfoResponseDto;
 import com.sparta.domain.theme.dto.ThemeResponseDto;
 import com.sparta.domain.theme.dto.ThemeTimeResponseDto;
@@ -22,6 +23,11 @@ public class ConcurrentHashMapConfig {
 
     @Bean
     public ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> StoreResponseFutures(){
+        return new ConcurrentHashMap<>();
+    }
+
+    @Bean
+    public ConcurrentHashMap<String, CompletableFuture<List<TopStoreResponseDto>>> TopStoreResponseFutures(){
         return new ConcurrentHashMap<>();
     }
 
