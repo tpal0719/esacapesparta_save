@@ -118,8 +118,8 @@ public class PaymentService {
                 .build();
 
         if (reservation.getReservationStatus() == ReservationStatus.COMPLETE ||
-                paymentRepository.findByReservationThemeTimeId(
-                        payment.getReservation().getThemeTime().getId()).orElse(null) != null) {
+                paymentRepository.findPaymentByReservationThemeTimeId(
+                        payment.getReservation().getThemeTime().getId()) != null) {
             throw new ReservationException(ReservationErrorCode.RESERVATION_DUPLICATION);
         }
 
