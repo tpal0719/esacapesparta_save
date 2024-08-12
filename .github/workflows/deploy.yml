@@ -206,6 +206,9 @@ jobs:
             
             ls -l .env
             
+            docker-compose down
+            docker system prune -a
+            
             docker-compose pull
             docker-compose up -d
 
