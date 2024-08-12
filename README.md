@@ -60,7 +60,7 @@ EscapeSparta PR : [https://github.com/escapeSparta/escapeSparta/pulls]
 
 
 ## 사용 기술 및 환경
-Java 17, Spring boot 3.1.2, Spring Security, Gradle, JPA, Hibernate, Redis, MySQL, Redis, Docker, Jenkins
+Java 17, Spring boot 3.1.2, Spring Security, Gradle, JPA, Redis, MySQL, Redis, Docker, Jenkins
 <br>
 
 ## 트러블 슈팅
@@ -90,10 +90,6 @@ EscapeSpara에 중요한 정보들을 담고 있습니다.
 
 ## 클라이언트 화면 설계
 ![image](https://github.com/user-attachments/assets/24a60887-b962-4fb7-91d1-3c85b3854e26)
-
-## 사장님 화면
-
-(추가 구현예정)
 
 ## 프로젝트 DB ERD
 2024-08-02 (수정예정)
