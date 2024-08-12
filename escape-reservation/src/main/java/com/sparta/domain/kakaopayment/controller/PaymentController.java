@@ -26,6 +26,20 @@ public class PaymentController {
         return paymentService.preparePayment(reservationId);
     }
 
+    @DeleteMapping("/reservations/{reservationId}")
+    public ResponseEntity<ResponseMessage<Void>> refundPayment(@PathVariable Long reservationId,
+                                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        paymentService.refundPayment(reservationId);
+
+        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("예약에 성공했습니다.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
 
     @PostMapping("/kakaopay-success")
     public ResponseEntity<ResponseMessage<PaymentResponseDto>> kakaoPaySuccess(
@@ -41,18 +55,6 @@ public class PaymentController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
-
-//    @GetMapping("/kakaopay-fail")
-//    public ResponseEntity<ResponseMessage<Void>> kakaoPaySuccess() {
-//
-//        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
-//                .statusCode(HttpStatus.CREATED.value())
-//                .message("예약에 실패했습니다.")
-//                .data(null)
-//                .build();
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
-//    }
 
 
 }

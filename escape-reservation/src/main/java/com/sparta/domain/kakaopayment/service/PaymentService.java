@@ -110,7 +110,6 @@ public class PaymentService {
 
         Reservation reservation = reservationRepository.findByIdOrElse(requestDto.getReservationId());
 
-
         Payment payment = Payment.builder()
                 .tid(requestDto.getTid())
                 .cid(cid)
@@ -130,60 +129,35 @@ public class PaymentService {
         return new PaymentResponseDto(payment);
     }
 
-//  /**
-//   * TODO: 결제 환불
-//   *
-//   * @param paymentId 예약 고유 id
-//   * @return key - value format json
-//   * @author SEMI
-//   */
-//  @Transactional
-//  public Map<String, Object> refundPayment(Long paymentId) {
-//
-//    Payment payment = paymentRepository.findById(paymentId).orElse(null);
-//
-//    HttpHeaders headers = new HttpHeaders();
-//    headers.setContentType(MediaType.APPLICATION_JSON);
-//    headers.set("Authorization", "SECRET_KEY " + kakaoApiKey);
-//
-//    Map<String, String> params = new HashMap<>();
-//    params.put("tid", payment.getTid());
-//
-//    HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
-//
-//    return response.getBody();
-//  }
+    /**
+     * TODO: 결제 환불
+     *
+     * @return key - value format json
+     * @author SEMI
+     */
+    @Transactional
+    public void refundPayment(Long reservationId) {
 
-//  /**
-//   * TODO: 결제정보 조회
-//   *
-//   * @param paymentId 결제정보
-//   * @return key - value format json
-//   * @author SEMI
-//   */
-//  public Map<String, Object> getPaymentInfo(Long paymentId) {
-//
-//    Payment payment = paymentRepository.findByIdOrElse(paymentId);
-//
-//    RestTemplate restTemplate = new RestTemplate();
-//
-//    HttpHeaders headers = new HttpHeaders();
-//    headers.setContentType(MediaType.APPLICATION_JSON);
-//    headers.set("Authorization", "SECRET_KEY " + kakaoApiKey);
-//
-//    Map<String, String> params = new HashMap<>();
-//    params.put("cid", cid);
-//    params.put("tid", payment.getTid());
-//    params.put("cancel_amount", String.valueOf(payment.getReservation().getPrice()));
-//    params.put("cancel_tax_free_amount", "0");
-//
-//    HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
-//
-//    ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_CANCEL_API_URL, entity,
-//        Map.class);
-//
-//    return response.getBody();
-//  }
+        Payment payment = paymentRepository.findByReservationId(reservationId);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "SECRET_KEY " + kakaoApiKey);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cid", cid);
+        params.put("tid", payment.getTid());
+        params.put("cancel_amount", String.valueOf(payment.getReservation().getPrice()));
+        params.put("cancel_tax_free_amount", "0");
+
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_CANCEL_API_URL, entity, Map.class);
+
+        payment.refundPayment();
+    }
 
 
 }
