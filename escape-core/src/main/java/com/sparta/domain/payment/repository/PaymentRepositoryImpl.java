@@ -23,7 +23,7 @@ public class PaymentRepositoryImpl implements PaymentRepositoryCustom {
         QReservation reservation = QReservation.reservation;
 
         Payment result = queryFactory.selectFrom(payment)
-                .join(payment.reservation, reservation)
+                .join(payment.reservation, reservation).fetchJoin()
                 .where(reservation.themeTime.id.eq(reservationThemeTimeId))
                 .fetchOne();
 
@@ -36,6 +36,7 @@ public class PaymentRepositoryImpl implements PaymentRepositoryCustom {
         QReservation reservation = QReservation.reservation;
 
         Payment result = queryFactory.selectFrom(payment)
+                .join(payment.reservation, reservation).fetchJoin()
                 .where(payment.tid.eq(tid))
                 .fetchOne();
 
@@ -50,7 +51,7 @@ public class PaymentRepositoryImpl implements PaymentRepositoryCustom {
         QReservation reservation = QReservation.reservation;
 
         Payment result = queryFactory.selectFrom(payment)
-                .join(payment.reservation, reservation)
+                .join(payment.reservation, reservation).fetchJoin()
                 .where(reservation.id.eq(reservationId))
                 .fetchOne();
 
