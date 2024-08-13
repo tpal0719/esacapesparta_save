@@ -3,6 +3,7 @@ package com.sparta.controller;
 import com.sparta.domain.review.dto.ReviewResponseDto;
 import com.sparta.domain.review.service.ReviewService;
 import com.sparta.domain.store.dto.StoreResponseDto;
+import com.sparta.domain.store.dto.TopStoreResponseDto;
 import com.sparta.domain.store.entity.StoreRegion;
 import com.sparta.domain.store.service.StoreService;
 import com.sparta.domain.theme.dto.ThemeInfoResponseDto;
@@ -159,6 +160,20 @@ public class SearchController {
 
     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
   }
+
+    @GetMapping("/top-stores")
+    public ResponseEntity<ResponseMessage<List<TopStoreResponseDto>>> getTopStores(){
+
+        List<TopStoreResponseDto> stores = storeService.getTopStores();
+
+        ResponseMessage<List<TopStoreResponseDto>> responseMessage = ResponseMessage.<List<TopStoreResponseDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("방탈출 카페 조회에 성공했습니다.")
+                .data(stores)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
 
 }
 

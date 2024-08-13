@@ -1,5 +1,6 @@
 package com.sparta.domain.theme.service;
 
+import com.sparta.domain.recommendation.repository.RecommendationRepository;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.domain.theme.dto.*;
@@ -32,6 +33,7 @@ public class ThemeConsumerService {
     private final ThemeRepository themeRepository;
     private final StoreRepository storeRepository;
     private final ThemeTimeRepository themeTimeRepository;
+    private final RecommendationRepository recommendationRepository;
     private final ConcurrentHashMap<String, CompletableFuture<Page<ThemeResponseDto>>> responseThemeFutures;
     private final ConcurrentHashMap<String, CompletableFuture<ThemeInfoResponseDto>> responseThemeInfoFutures;
     private final ConcurrentHashMap<String, CompletableFuture<List<ThemeTimeResponseDto>>> responseThemeTimeFutures;
@@ -64,7 +66,8 @@ public class ThemeConsumerService {
         try {
             storeRepository.findByActiveStore(request.getStoreId());
             Theme theme = themeRepository.findByActiveTheme(request.getThemeId());
-            ThemeInfoResponseDto themeInfoResponseDto = new ThemeInfoResponseDto(theme);
+            Long recommendationCount = recommendationRepository.findByThemeCount(theme);
+            ThemeInfoResponseDto themeInfoResponseDto = new ThemeInfoResponseDto(theme, recommendationCount);
             KafkaThemeInfoResponseDto responseDto = new KafkaThemeInfoResponseDto(request.getRequestId(), themeInfoResponseDto);
             handleThemeInfoResponse(responseDto);
         }catch (GlobalCustomException e){

@@ -6,11 +6,12 @@ import com.sparta.domain.user.entity.UserType;
 import com.sparta.domain.user.repository.UserRepository;
 import com.sparta.global.exception.customException.UserException;
 import com.sparta.global.exception.errorCode.UserErrorCode;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

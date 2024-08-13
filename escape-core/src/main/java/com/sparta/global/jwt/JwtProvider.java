@@ -3,22 +3,18 @@ package com.sparta.global.jwt;
 import com.sparta.domain.user.entity.UserType;
 import com.sparta.global.exception.customException.CustomSecurityException;
 import com.sparta.global.exception.errorCode.SecurityErrorCode;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import java.security.Key;
-import java.util.Base64;
-import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.security.Key;
+import java.util.Base64;
+import java.util.Date;
 
 @Slf4j(topic = "JwtProvider")
 @Component

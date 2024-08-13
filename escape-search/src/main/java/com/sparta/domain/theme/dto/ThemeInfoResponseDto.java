@@ -16,8 +16,9 @@ public class ThemeInfoResponseDto {
     private Integer duration;
     private String themeImage;
     private Long price;
+    private Long recommendationCount;
 
-    public ThemeInfoResponseDto(Theme theme){
+    public ThemeInfoResponseDto(Theme theme, Long recommendationCount){
         this.themeId = theme.getId();
         this.title = theme.getTitle();
         this.description = theme.getContents();
@@ -27,5 +28,6 @@ public class ThemeInfoResponseDto {
         this.duration = theme.getDuration();
         this.themeImage = theme.getThemeImage();
         this.price = theme.getPrice();
+        this.recommendationCount = recommendationCount;
     }
 }

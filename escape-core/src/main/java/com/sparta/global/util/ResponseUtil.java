@@ -5,11 +5,12 @@ import com.sparta.global.exception.errorCode.ErrorCode;
 import com.sparta.global.response.ResponseErrorMessage;
 import com.sparta.global.response.ResponseMessage;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class ResponseUtil {
