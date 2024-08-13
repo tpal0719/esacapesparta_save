@@ -6,10 +6,13 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.domain.reservation.entity.PaymentStatus;
+import com.sparta.domain.reservation.entity.QReservation;
 import com.sparta.domain.store.entity.QStore;
 import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.entity.StoreRegion;
 import com.sparta.domain.store.entity.StoreStatus;
+import com.sparta.domain.theme.entity.QTheme;
 import com.sparta.global.exception.customException.StoreException;
 import com.sparta.global.exception.errorCode.StoreErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -83,5 +86,23 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom{
     private BooleanExpression storeRegionContains(StoreRegion storeRegion) {
         QStore store = QStore.store;
         return storeRegion == StoreRegion.ALL ? null : store.storeRegion.eq(storeRegion);
+    }
+
+    @Override
+    public List<Store> findTopStore() {
+        QStore store = QStore.store;
+        QTheme theme = QTheme.theme;
+        QReservation reservation = QReservation.reservation;
+
+        return jpaQueryFactory.select(store)
+                .from(store)
+                .leftJoin(theme).on(theme.store.eq(store)).fetchJoin()
+                .leftJoin(reservation).on(reservation.theme.eq(theme)).fetchJoin()
+                .where(store.storeStatus.eq(StoreStatus.ACTIVE)
+                        .and(reservation.paymentStatus.eq(PaymentStatus.COMPLETE)))
+                .groupBy(store.id)
+                .orderBy(reservation.count().desc())
+                .limit(10)
+                .fetch();
     }
 }

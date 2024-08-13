@@ -1,14 +1,15 @@
 package com.sparta.global.jwt;
 
-import static com.sparta.global.jwt.JwtProvider.BEARER_PREFIX;
-
 import com.sparta.global.exception.customException.AuthException;
 import com.sparta.global.exception.errorCode.AuthErrorCode;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.TimeUnit;
+
+import static com.sparta.global.jwt.JwtProvider.BEARER_PREFIX;
 
 @Service
 @RequiredArgsConstructor

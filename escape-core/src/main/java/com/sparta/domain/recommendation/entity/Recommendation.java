@@ -5,6 +5,7 @@ import com.sparta.domain.user.entity.User;
 import com.sparta.global.entity.TimeStamped;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,10 @@ public class Recommendation extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
+
+    @Builder
+    public Recommendation(User user, Theme theme){
+        this.user = user;
+        this.theme = theme;
+    }
 }

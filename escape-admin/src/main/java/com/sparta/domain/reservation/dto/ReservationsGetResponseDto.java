@@ -1,8 +1,9 @@
 package com.sparta.domain.reservation.dto;
 
 import com.sparta.domain.reservation.entity.Reservation;
-import java.util.List;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class ReservationsGetResponseDto {
