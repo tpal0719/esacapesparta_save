@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.domain.payment.entity.QPayment;
 import com.sparta.domain.reservation.entity.PaymentStatus;
 import com.sparta.domain.reservation.entity.QReservation;
 import com.sparta.domain.store.entity.QStore;
@@ -93,13 +94,15 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom{
         QStore store = QStore.store;
         QTheme theme = QTheme.theme;
         QReservation reservation = QReservation.reservation;
+        QPayment payment = QPayment.payment;
 
         return jpaQueryFactory.select(store)
                 .from(store)
                 .leftJoin(theme).on(theme.store.eq(store)).fetchJoin()
                 .leftJoin(reservation).on(reservation.theme.eq(theme)).fetchJoin()
+                .leftJoin(payment).on(payment.reservation.eq(reservation))
                 .where(store.storeStatus.eq(StoreStatus.ACTIVE)
-                        .and(reservation.paymentStatus.eq(PaymentStatus.COMPLETE)))
+                        .and(payment.paymentStatus.eq(PaymentStatus.COMPLETE)))
                 .groupBy(store.id)
                 .orderBy(reservation.count().desc())
                 .limit(10)
