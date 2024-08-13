@@ -27,7 +27,7 @@ public class ThemeTime {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ThemeTimeStatus themeTimeStatus = ThemeTimeStatus.ENABLE;
+    private ThemeTimeStatus themeTimeStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id", nullable = false)
@@ -38,6 +38,7 @@ public class ThemeTime {
         this.startTime = startTime;
         this.endTime = endTime;
         this.theme = theme;
+        this.themeTimeStatus = ThemeTimeStatus.ENABLE;
     }
 
     public void updateThemeTime(LocalDateTime startTime, LocalDateTime endTime) {
@@ -45,12 +46,15 @@ public class ThemeTime {
         this.endTime = endTime;
     }
 
-    public void updateThemeTimeStatus(){
-        if(this.themeTimeStatus == ThemeTimeStatus.ENABLE){
+    public void updateThemeTimeStatus() {
+        if (this.themeTimeStatus == ThemeTimeStatus.ENABLE) {
             this.themeTimeStatus = ThemeTimeStatus.DISABLE;
-        }
-        else{
+        } else {
             this.themeTimeStatus = ThemeTimeStatus.ENABLE;
         }
+    }
+
+    public void updateThemeTimeStatus(ThemeTimeStatus themeTimeStatus) {
+        this.themeTimeStatus = themeTimeStatus;
     }
 }

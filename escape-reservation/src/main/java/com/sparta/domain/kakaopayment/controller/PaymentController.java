@@ -1,15 +1,17 @@
 package com.sparta.domain.kakaopayment.controller;
 
 
+import com.sparta.domain.kakaopayment.dto.request.PaymentCreateRequestDto;
+import com.sparta.domain.kakaopayment.dto.response.KakaoResponseDto;
+import com.sparta.domain.kakaopayment.dto.response.PaymentResponseDto;
 import com.sparta.domain.kakaopayment.service.PaymentService;
+import com.sparta.global.response.ResponseMessage;
 import com.sparta.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -18,35 +20,43 @@ import java.util.Map;
 @RequestMapping("/payments")
 public class PaymentController {
 
-  private final PaymentService paymentService;
+    private final PaymentService paymentService;
 
-  @PostMapping("/reservations/{reservationId}")
-  public String preparePayment(@PathVariable Long reservationId,
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      Model model) {
-    Map<String, Object> response = paymentService.preparePayment(reservationId);
-    model.addAttribute("nextRedirectPcUrl", response.get("next_redirect_pc_url"));
-    return "" + response.get("next_redirect_pc_url");
-  }
+    @PostMapping("/reservations/{reservationId}")
+    public KakaoResponseDto preparePayment(@PathVariable Long reservationId,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return paymentService.preparePayment(reservationId);
+    }
 
-//  @GetMapping("/kakaoPaySuccess")
-//  public String kakaoPaySuccess(@RequestParam("pg_token") String pgToken, Model model) {
-//    String frontendHomeUrl = "http://localhost:5173/home";  // 프론트엔드 URL과 포트 번호
-//    return "redirect: " + frontendHomeUrl;
-//  }
-//
-//    @GetMapping("/kakaoPayCancel")
-//    public String kakaoPayCancel() {
-//        // 프론트엔드의 결제 취소 화면 URL로 리다이렉트
-//        String frontendCancelUrl = "http://localhost:5173/cancel";  // 프론트엔드 URL과 포트 번호
-//        return "redirect:" + frontendCancelUrl;
-//    }
-//
-//    @GetMapping("/kakaoPayFail")
-//    public String kakaoPayFail() {
-//        // 프론트엔드의 결제 실패 화면 URL로 리다이렉트
-//        String frontendFailUrl = "http://localhost:5173/fail";  // 프론트엔드 URL과 포트 번호
-//        return "redirect:" + frontendFailUrl;
-//    }
+    @DeleteMapping("/reservations/{reservationId}")
+    public ResponseEntity<ResponseMessage<Void>> refundPayment(@PathVariable Long reservationId,
+                                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        paymentService.refundPayment(reservationId);
+
+        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("환불에 성공했습니다.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    }
+
+
+    @PostMapping("/kakaopay-success")
+    public ResponseEntity<ResponseMessage<PaymentResponseDto>> kakaoPaySuccess(
+            @RequestBody PaymentCreateRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        PaymentResponseDto responseDto = paymentService.kakaoPaySuccess(requestDto);
+
+        ResponseMessage<PaymentResponseDto> responseMessage = ResponseMessage.<PaymentResponseDto>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("예약에 성공했습니다.")
+                .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
+    }
+
 
 }

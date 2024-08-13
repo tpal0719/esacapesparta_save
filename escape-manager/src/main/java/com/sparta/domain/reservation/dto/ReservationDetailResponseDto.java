@@ -9,16 +9,16 @@ import lombok.Getter;
 @Getter
 public class ReservationDetailResponseDto {
 
-  private final Long reservationId;
-  private final String storeName;
-  private final String themeImage;
-  private final String themeTitle;
-  private final LocalDateTime startTime;
-  private final Integer player;
-  private final Long price;
-  private final PaymentStatus paymentStatus;
-  private final ReservationStatus reservationStatus;
-  private final LocalDateTime createdAt;
+  private Long reservationId;
+  private String storeName;
+  private String themeImage;
+  private String themeTitle;
+  private LocalDateTime startTime;
+  private Integer player;
+  private Long price;
+  private PaymentStatus paymentStatus;
+  private ReservationStatus reservationStatus;
+  private LocalDateTime createdAt;
 
   public ReservationDetailResponseDto(Reservation reservation) {
     this.reservationId = reservation.getId();
@@ -28,7 +28,7 @@ public class ReservationDetailResponseDto {
     this.startTime = reservation.getThemeTime().getStartTime();
     this.player = reservation.getPlayer();
     this.price = reservation.getPrice();
-    this.paymentStatus = reservation.getPaymentStatus();
+//        this.paymentStatus = reservation.getPaymentStatus();
     this.reservationStatus = reservation.getReservationStatus();
     this.createdAt = reservation.getCreatedAt();
   }

@@ -14,25 +14,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation extends TimeStamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // payment 추가
-
-    private String tid; //결제완료시 코드
-
-    private String cid; //가맹점 코드
-
     @Column(nullable = false)
     private Integer player; //플레이 인원
 
     @Column(nullable = false)
     private Long price;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PaymentStatus paymentStatus;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -51,27 +43,22 @@ public class Reservation extends TimeStamped {
     private ThemeTime themeTime;
 
     @Builder
-    public Reservation(Integer player, Long price, PaymentStatus paymentStatus, ReservationStatus reservationStatus, User user, Theme theme, ThemeTime themeTime){
+    public Reservation(Integer player, Long price,
+                       ReservationStatus reservationStatus, User user, Theme theme, ThemeTime themeTime) {
         this.player = player;
         this.price = price;
-        this.paymentStatus = paymentStatus;
         this.reservationStatus = reservationStatus;
         this.user = user;
         this.theme = theme;
         this.themeTime = themeTime;
     }
 
-    public void paymentToReservation(String tid, String cid) {
-        this.tid = tid;
-        this.cid = cid;
+    public void updateReservationStatus() {
+        this.reservationStatus = ReservationStatus.COMPLETE;
     }
 
-    public void updateReservationStatus(){
-        this.reservationStatus = ReservationStatus.DEACTIVE;
-    }
-
-    public void updatePaymentStatus(PaymentStatus paymentStatus){
-        this.paymentStatus = paymentStatus;
+    public void cancelReservationStatus() {
+        this.reservationStatus = ReservationStatus.CANCEL;
     }
 
 }
