@@ -23,6 +23,12 @@ jobs:
           distribution: 'temurin'
 
       # Build each module
+      - name: Build escape-core
+        run: |
+          cd ../escapeSparta/escape-core
+          chmod +x ../gradlew
+          ../gradlew bootJar
+
       - name: Build escape-search
         run: |
           cd ../escapeSparta/escape-search
@@ -38,12 +44,6 @@ jobs:
       - name: Build escape-manager
         run: |
           cd ../escapeSparta/escape-manager
-          chmod +x ../gradlew
-          ../gradlew bootJar
-
-      - name: Build escape-core
-        run: |
-          cd ../escapeSparta/escape-core
           chmod +x ../gradlew
           ../gradlew bootJar
 
