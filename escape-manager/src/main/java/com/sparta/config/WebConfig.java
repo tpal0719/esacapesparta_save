@@ -9,13 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8080")
-                .allowedOrigins("http://localhost:8081")
-                .allowedOrigins("http://localhost:8082")
-                .allowedOrigins("http://localhost:8083")
-                .allowedOrigins("http://localhost:8084")
-                .allowedOrigins("http://localhost:8085")
-                .allowedOrigins("http://localhost:5173")
+                .allowedOrigins("https://escapesparta.store") // 특정 도메인 허용
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                 .allowedHeaders("*")
                 .allowCredentials(true);

@@ -62,6 +62,6 @@ server:
 kakao-payment:
   admin-key: ${PAY_ADMIN_KEY}
   cid: TC0ONETIME
-  approve-url: http://${BASE_URL}:5173/pay-success
-  cancel-url: http://${BASE_URL}:5173/pay-cancel
-  fail-url: http://${BASE_URL}:5173/pay-fail
+  approve-url: https://www.escapesparta.store/pay-success
+  cancel-url: https://www.escapesparta.store/pay-cancel
+  fail-url: https://www.escapesparta.store/pay-fail

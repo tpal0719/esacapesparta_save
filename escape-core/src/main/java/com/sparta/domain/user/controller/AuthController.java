@@ -13,17 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
-    private final AuthService authService;
 
-    @PostMapping("/auth/reissue")
-    public ResponseEntity<ResponseMessage<Void>> reissue(HttpServletRequest request, HttpServletResponse response) {
-        authService.reissue(request, response);
+  private final AuthService authService;
 
-        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message("Access Token 재발급이 완료되었습니다.")
-                .build();
+  @PostMapping("/api/core/auth/reissue")
+  public ResponseEntity<ResponseMessage<Void>> reissue(HttpServletRequest request,
+      HttpServletResponse response) {
+    authService.reissue(request, response);
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
+        .statusCode(HttpStatus.CREATED.value())
+        .message("Access Token 재발급이 완료되었습니다.")
+        .build();
+
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 }

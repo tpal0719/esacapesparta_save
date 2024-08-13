@@ -12,25 +12,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class ReviewAdminController {
 
-    private final ReviewAdminService reviewService;
+  private final ReviewAdminService reviewService;
 
-    /**
-     * 리뷰 강제 삭제
-     * @param reviewId
-     * @author SEMI
-     */
-    @DeleteMapping("/reviews/{reviewId}")
-    public ResponseEntity<ResponseMessage<Void>> deleteReview(@PathVariable("reviewId")Long reviewId) {
+  /**
+   * 리뷰 강제 삭제
+   *
+   * @param reviewId
+   * @author SEMI
+   */
+  @DeleteMapping("/reviews/{reviewId}")
+  public ResponseEntity<ResponseMessage<Void>> deleteReview(
+      @PathVariable("reviewId") Long reviewId) {
 
-        reviewService.deleteReview(reviewId);
+    reviewService.deleteReview(reviewId);
 
-        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
-                .statusCode(HttpStatus.OK.value())
-                .build();
+    ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
+        .statusCode(HttpStatus.OK.value())
+        .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 }

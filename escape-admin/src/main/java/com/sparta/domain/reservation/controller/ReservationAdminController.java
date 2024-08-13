@@ -11,39 +11,40 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/stores/themes")
+@RequestMapping("/api/admin/stores/themes")
 @RequiredArgsConstructor
 public class ReservationAdminController {
-    private final ReservationAdminService reservationService;
 
-    @GetMapping("/{themeId}/reservations")
-    public ResponseEntity<ResponseMessage<ReservationsGetResponseDto>> getReservations(
-            @PathVariable Long themeId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        ReservationsGetResponseDto responseDto = reservationService.getReservations(themeId);
+  private final ReservationAdminService reservationService;
 
-        ResponseMessage<ReservationsGetResponseDto> responseMessage = ResponseMessage.<ReservationsGetResponseDto>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("해당 방탈출 테마의 예약 내역 조회가 완료되었습니다.")
-                .data(responseDto)
-                .build();
+  @GetMapping("/{themeId}/reservations")
+  public ResponseEntity<ResponseMessage<ReservationsGetResponseDto>> getReservations(
+      @PathVariable Long themeId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    ReservationsGetResponseDto responseDto = reservationService.getReservations(themeId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    ResponseMessage<ReservationsGetResponseDto> responseMessage = ResponseMessage.<ReservationsGetResponseDto>builder()
+        .statusCode(HttpStatus.OK.value())
+        .message("해당 방탈출 테마의 예약 내역 조회가 완료되었습니다.")
+        .data(responseDto)
+        .build();
 
-    @DeleteMapping("/reservations/{reservationId}")
-    public ResponseEntity<ResponseMessage<Void>> cancelReservation(
-            @PathVariable Long reservationId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        reservationService.cancelReservation(reservationId);
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 
-        ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("해당 예약 취소가 완료되었습니다.")
-                .build();
+  @DeleteMapping("/reservations/{reservationId}")
+  public ResponseEntity<ResponseMessage<Void>> cancelReservation(
+      @PathVariable Long reservationId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    reservationService.cancelReservation(reservationId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    ResponseMessage<Void> responseMessage = ResponseMessage.<Void>builder()
+        .statusCode(HttpStatus.OK.value())
+        .message("해당 예약 취소가 완료되었습니다.")
+        .build();
+
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 }

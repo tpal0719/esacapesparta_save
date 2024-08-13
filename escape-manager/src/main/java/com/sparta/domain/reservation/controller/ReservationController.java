@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/manager/stores/themes")
+@RequestMapping("/api/manager/stores/themes")
 @RequiredArgsConstructor
 public class ReservationController {
 

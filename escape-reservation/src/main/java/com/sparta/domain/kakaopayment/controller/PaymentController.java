@@ -17,18 +17,18 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/payments")
+@RequestMapping("/api/reservations")
 public class PaymentController {
 
-    private final PaymentService paymentService;
+  private final PaymentService paymentService;
 
-    @PostMapping("/reservations/{reservationId}")
+    @PostMapping("/{reservationId}/payments")
     public KakaoResponseDto preparePayment(@PathVariable Long reservationId,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return paymentService.preparePayment(reservationId);
     }
 
-    @DeleteMapping("/reservations/{reservationId}")
+    @DeleteMapping("/{reservationId}/payments")
     public ResponseEntity<ResponseMessage<Void>> refundPayment(@PathVariable Long reservationId,
                                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
