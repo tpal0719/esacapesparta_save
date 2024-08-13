@@ -78,7 +78,7 @@ public class ReservationController {
    * @param userDetails 로그인 유저
    * @return 예약 내역
    */
-  @GetMapping("/reservations/temp")
+  @GetMapping("/reservations")
   public ResponseEntity<ResponseMessage<List<ReservationResponseDto>>> getReservations(
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
