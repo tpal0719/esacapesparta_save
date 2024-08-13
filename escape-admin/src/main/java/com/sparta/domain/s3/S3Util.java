@@ -11,8 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@Component
-public class S3Util {
+public abstract class S3Util {
 
   private static final String STORE_DIR = "store";
   private static final String THEME_DIR = "theme";
@@ -21,7 +20,7 @@ public class S3Util {
    * 파일 존재 여부 검사
    */
   public static boolean doesFileExist(MultipartFile multipartFile) {
-    return multipartFile != null && !multipartFile.isEmpty();
+    return !(multipartFile == null || multipartFile.isEmpty());
   }
 
   /**

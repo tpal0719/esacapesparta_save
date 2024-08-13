@@ -19,7 +19,8 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class ReservationRepositoryImpl implements ReservationRepositoryCustom{
+public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
+
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
@@ -28,7 +29,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom{
 
         JPAQuery<Reservation> query = jpaQueryFactory.selectFrom(reservation)
                 .where(reservation.themeTime.eq(themeTime),
-                        reservation.reservationStatus.eq(ReservationStatus.ACTIVE));
+                        reservation.reservationStatus.eq(ReservationStatus.COMPLETE));
 
         return query.fetchFirst();
     }
@@ -39,7 +40,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom{
 
         JPAQuery<Reservation> query = jpaQueryFactory.selectFrom(reservation)
                 .where(reservation.id.eq(reservationId),
-                        reservation.reservationStatus.eq(ReservationStatus.ACTIVE),
+                        reservation.reservationStatus.eq(ReservationStatus.COMPLETE),
                         reservation.user.eq(user));
 
         return query.fetchFirst();
@@ -54,7 +55,9 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom{
         JPAQuery<Reservation> query = jpaQueryFactory.selectFrom(reservation)
                 .leftJoin(reservation.theme, theme).fetchJoin()
                 .leftJoin(theme.store, store).fetchJoin()
-                .where(reservation.user.eq(user));
+                .where(reservation.user.eq(user)
+                        .and(reservation.reservationStatus.eq(ReservationStatus.COMPLETE)
+                                .or(reservation.reservationStatus.eq(ReservationStatus.CANCEL))));
 
         return query.fetch();
     }
