@@ -57,7 +57,9 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                 .leftJoin(theme.store, store).fetchJoin()
                 .where(reservation.user.eq(user)
                         .and(reservation.reservationStatus.eq(ReservationStatus.COMPLETE)
-                                .or(reservation.reservationStatus.eq(ReservationStatus.CANCEL))));
+                                .or(reservation.reservationStatus.eq(ReservationStatus.CANCEL))))
+                .orderBy(reservation.createdAt.desc());
+
 
         return query.fetch();
     }
