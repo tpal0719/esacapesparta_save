@@ -19,3 +19,6 @@ kafka-topics.sh --create --topic reservation_delete_request_topic --bootstrap-se
 kafka-topics.sh --create --topic reservation_delete_response_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 kafka-topics.sh --create --topic reservation_get_request_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 kafka-topics.sh --create --topic reservation_get_response_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+kafka-topics.sh --create --topic top_store_request_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+kafka-topics.sh --create --topic store_info_request_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
