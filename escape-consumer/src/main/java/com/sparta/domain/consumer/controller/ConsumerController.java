@@ -47,7 +47,13 @@ public class ConsumerController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    //  유저 프로필 수정
+    /**
+     * 유저 프로필 수정
+     *
+     * @param userDetails           로그인 유저
+     * @param editProfileRequestDto 수정할 이름
+     * @return status.code, message, responseDto(유저정보) 반환
+     */
     @PutMapping("/profile")
     public ResponseEntity<ResponseMessage<UserResponseDto>> modifyProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -65,7 +71,13 @@ public class ConsumerController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
-    //  비밀번호 수정
+    /**
+     * 비밀번호 수정
+     *
+     * @param userDetails 로그인 유저
+     * @param requestDTO  수정할 비밀번호
+     * @return status.code, message, responseDto(유저정보) 반환
+     */
     @PutMapping("/profile/password")
     public ResponseEntity<ResponseMessage<UserResponseDto>> editPassword(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
