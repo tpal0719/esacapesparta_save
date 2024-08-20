@@ -25,7 +25,8 @@ public class PaymentController {
      *
      * @param reservationId 예약 id
      * @param userDetails   로그인한 유저 정보
-     * @return tid 결제고유번호 next_redirect_pc_url : 결제할수있는 url
+     * @return KakaoResponseDto tid 결제고유번호
+     * next_redirect_pc_url : 결제할수있는 url
      */
     @PostMapping("/{reservationId}/payments")
     public KakaoResponseDto preparePayment(@PathVariable Long reservationId,
@@ -38,7 +39,7 @@ public class PaymentController {
      *
      * @param reservationId 예약 id
      * @param userDetails   로그인한 유저 정보
-     * @return status.code, message 반환
+     * @return status.code, message
      */
     @DeleteMapping("/{reservationId}/payments")
     public ResponseEntity<ResponseMessage<Void>> refundPayment(@PathVariable Long reservationId,
@@ -59,7 +60,7 @@ public class PaymentController {
      *
      * @param requestDto  : reservationId - 예약 id, tid - 결제고유번호
      * @param userDetails 로그인한 유저 정보
-     * @return status.code, message , PaymentResponseDto 반환
+     * @return status.code, message , PaymentResponseDto 결제정보
      */
     @PostMapping("/kakaopay-success")
     public ResponseEntity<ResponseMessage<PaymentResponseDto>> kakaoPaySuccess(
