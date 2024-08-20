@@ -21,49 +21,58 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 @Slf4j
 public class StoreConsumerService {
-    private final StoreRepository storeRepository;
-    private final ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseStoreFutures;
-    private final ConcurrentHashMap<String, CompletableFuture<List<TopStoreResponseDto>>> responseTopStoreFutures;
 
-    @KafkaListener(topics = KafkaTopic.STORE_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
-    public void handleStoreRequest(KafkaStoreRequestDto request) {
-        try {
-            Pageable pageable = PageUtil.createPageable(request.getPageNum(), request.getPageSize(), request.isDesc(), request.getSort());
-            Page<Store> stores = storeRepository.findByName(request.getKeyWord(), request.getStoreRegion(), pageable);
-            Page<StoreResponseDto> storeResponseDtoPage = stores.map(StoreResponseDto::new);
-            KafkaStoreResponseDto response = new KafkaStoreResponseDto(request.getRequestId(), storeResponseDtoPage);
+  private final StoreRepository storeRepository;
+  private final ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseStoreFutures;
+  private final ConcurrentHashMap<String, CompletableFuture<TopStoreResponseDto>> responseTopStoreFutures;
 
-            handleStoreResponse(response);
-        }catch (GlobalCustomException e){
-            log.error(e.getMessage());
-        }
+  @KafkaListener(topics = KafkaTopic.STORE_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
+  public void handleStoreRequest(KafkaStoreRequestDto request) {
+    try {
+      Pageable pageable = PageUtil.createPageable(request.getPageNum(), request.getPageSize(),
+          request.isDesc(), request.getSort());
+      Page<Store> stores = storeRepository.findByName(request.getKeyWord(),
+          request.getStoreRegion(), pageable);
+      Page<StoreResponseDto> storeResponseDtoPage = stores.map(StoreResponseDto::new);
+      KafkaStoreResponseDto response = new KafkaStoreResponseDto(request.getRequestId(),
+          storeResponseDtoPage);
+
+      handleStoreResponse(response);
+    } catch (GlobalCustomException e) {
+      log.error(e.getMessage());
     }
+  }
 
-    private void handleStoreResponse(KafkaStoreResponseDto response) {
-        CompletableFuture<Page<StoreResponseDto>> future = responseStoreFutures.remove(response.getRequestId());
-        if (future != null) {
-            future.complete(response.getResponseDtos());
-        }
+  private void handleStoreResponse(KafkaStoreResponseDto response) {
+    CompletableFuture<Page<StoreResponseDto>> future = responseStoreFutures.remove(
+        response.getRequestId());
+    if (future != null) {
+      future.complete(response.getResponseDtos());
     }
+  }
 
-    @KafkaListener(topics = KafkaTopic.TOP_STORE_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
-    public void handleTopStoreRequest(KafkaTopStoreRequestDto request) {
-        try {
-            List<Store> stores = storeRepository.findTopStore();
-            List<TopStoreResponseDto> storeResponseDtoPage = stores.stream().map(TopStoreResponseDto::new).toList();
-            KafkaTopStoreResponseDto response = new KafkaTopStoreResponseDto(request.getRequestId(), storeResponseDtoPage);
+  @KafkaListener(topics = KafkaTopic.TOP_STORE_REQUEST_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
+  public void handleTopStoreRequest(KafkaTopStoreRequestDto request) {
+    try {
+      List<Store> stores = storeRepository.findTopStore();
+      TopStoreResponseDto responseDto = new TopStoreResponseDto(stores);
 
-            handleTopStoreResponse(response);
-        }catch (GlobalCustomException e){
-            log.error(e.getMessage());
-        }
+//            List<TopStoreResponseDto> storeResponseDtoPage = stores.stream().map(TopStoreResponseDto::new).toList();
+      KafkaTopStoreResponseDto response = new KafkaTopStoreResponseDto(request.getRequestId(),
+          responseDto);
+
+      handleTopStoreResponse(response);
+    } catch (GlobalCustomException e) {
+      log.error(e.getMessage());
     }
+  }
 
-    private void handleTopStoreResponse(KafkaTopStoreResponseDto response) {
-        CompletableFuture<List<TopStoreResponseDto>> future = responseTopStoreFutures.remove(response.getRequestId());
-        if (future != null) {
-            future.complete(response.getResponseDtos());
-        }
+  private void handleTopStoreResponse(KafkaTopStoreResponseDto response) {
+    CompletableFuture<TopStoreResponseDto> future = responseTopStoreFutures.remove(
+        response.getRequestId());
+    if (future != null) {
+      future.complete(response.getResponseDto());
     }
+  }
 
 }

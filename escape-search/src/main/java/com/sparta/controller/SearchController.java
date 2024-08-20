@@ -2,6 +2,7 @@ package com.sparta.controller;
 
 import com.sparta.domain.review.dto.ReviewResponseDto;
 import com.sparta.domain.review.service.ReviewService;
+import com.sparta.domain.store.dto.StoreDetailResponseDto;
 import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.dto.TopStoreResponseDto;
 import com.sparta.domain.store.entity.StoreRegion;
@@ -161,19 +162,49 @@ public class SearchController {
     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
   }
 
-    @GetMapping("/top-stores")
-    public ResponseEntity<ResponseMessage<List<TopStoreResponseDto>>> getTopStores(){
+  @GetMapping("/top-stores")
+  public ResponseEntity<ResponseMessage<TopStoreResponseDto>> getTopStores() {
 
-        List<TopStoreResponseDto> stores = storeService.getTopStores();
+    TopStoreResponseDto responseDto = storeService.getTopStores();
 
-        ResponseMessage<List<TopStoreResponseDto>> responseMessage = ResponseMessage.<List<TopStoreResponseDto>>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("방탈출 카페 조회에 성공했습니다.")
-                .data(stores)
-                .build();
+    ResponseMessage<TopStoreResponseDto> responseMessage = ResponseMessage.<TopStoreResponseDto>builder()
+        .statusCode(HttpStatus.OK.value())
+        .message("인기 방탈출 카페 조회에 성공했습니다.")
+        .data(responseDto)
+        .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    }
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
+
+  @GetMapping("/stores/{storeId}/info")
+  public ResponseEntity<ResponseMessage<StoreDetailResponseDto>> getStoreInfo(
+      @PathVariable Long storeId) {
+
+    StoreDetailResponseDto responseDto = storeService.getStoreInfo(storeId);
+
+    ResponseMessage<StoreDetailResponseDto> responseMessage = ResponseMessage.<StoreDetailResponseDto>builder()
+        .statusCode(HttpStatus.OK.value())
+        .message("방탈출 카페 상세 조회에 성공했습니다.")
+        .data(responseDto)
+        .build();
+
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
+
+  @GetMapping("/stores/{storeId}/info-cache")
+  public ResponseEntity<ResponseMessage<StoreDetailResponseDto>> getStoreInfoWithCache(
+      @PathVariable Long storeId) {
+
+    StoreDetailResponseDto responseDto = storeService.getStoreInfoWithCache(storeId);
+
+    ResponseMessage<StoreDetailResponseDto> responseMessage = ResponseMessage.<StoreDetailResponseDto>builder()
+        .statusCode(HttpStatus.OK.value())
+        .message("방탈출 카페 상세 조회에 성공했습니다.")
+        .data(responseDto)
+        .build();
+
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
 
 }
 

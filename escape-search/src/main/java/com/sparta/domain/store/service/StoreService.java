@@ -2,14 +2,18 @@ package com.sparta.domain.store.service;
 
 import com.sparta.domain.store.dto.KafkaStoreRequestDto;
 import com.sparta.domain.store.dto.KafkaTopStoreRequestDto;
+import com.sparta.domain.store.dto.StoreDetailResponseDto;
 import com.sparta.domain.store.dto.StoreResponseDto;
 import com.sparta.domain.store.dto.TopStoreResponseDto;
+import com.sparta.domain.store.entity.Store;
 import com.sparta.domain.store.entity.StoreRegion;
+import com.sparta.domain.store.repository.StoreRepository;
 import com.sparta.global.exception.customException.KafkaException;
 import com.sparta.global.exception.errorCode.KafkaErrorCode;
 import com.sparta.global.kafka.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -26,7 +30,9 @@ public class StoreService {
   private final KafkaTemplate<String, KafkaStoreRequestDto> kafkaStoreTemplate;
   private final KafkaTemplate<String, KafkaTopStoreRequestDto> kafkaTopStoreTemplate;
   private final ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> responseStoreFutures;
-  private final ConcurrentHashMap<String, CompletableFuture<List<TopStoreResponseDto>>> responseTopStoreFutures;
+  private final ConcurrentHashMap<String, CompletableFuture<TopStoreResponseDto>> responseTopStoreFutures;
+
+  private final StoreRepository storeRepository;
 
   /**
    * 방탈출 카페 조회
@@ -65,25 +71,39 @@ public class StoreService {
     kafkaStoreTemplate.send(KafkaTopic.STORE_REQUEST_TOPIC, storeRequest);
   }
 
-    public List<TopStoreResponseDto> getTopStores() {
-      String requestId = UUID.randomUUID().toString();
+  @Cacheable(value = "top-stores", cacheManager = "redisCacheManager")
+  public TopStoreResponseDto getTopStores() {
+    String requestId = UUID.randomUUID().toString();
 
-      CompletableFuture<List<TopStoreResponseDto>> future = new CompletableFuture<>();
-      responseTopStoreFutures.put(requestId, future);
+    CompletableFuture<TopStoreResponseDto> future = new CompletableFuture<>();
+    responseTopStoreFutures.put(requestId, future);
 
-      sendTopStoreRequest(requestId);
+    sendTopStoreRequest(requestId);
 
-      try {
-        return future.get(3, TimeUnit.SECONDS); // 응답을 기다림
-      } catch (InterruptedException | ExecutionException e) {
-        throw new KafkaException(KafkaErrorCode.KAFKA_SERVER_ERROR);
-      } catch (TimeoutException e) {
-        throw new KafkaException(KafkaErrorCode.KAFKA_RESPONSE_ERROR);
-      }
+    try {
+      return future.get(3, TimeUnit.SECONDS); // 응답을 기다림
+    } catch (InterruptedException | ExecutionException e) {
+      throw new KafkaException(KafkaErrorCode.KAFKA_SERVER_ERROR);
+    } catch (TimeoutException e) {
+      throw new KafkaException(KafkaErrorCode.KAFKA_RESPONSE_ERROR);
     }
+  }
 
   private void sendTopStoreRequest(String requestId) {
     KafkaTopStoreRequestDto topStoreRequest = new KafkaTopStoreRequestDto(requestId);
     kafkaTopStoreTemplate.send(KafkaTopic.TOP_STORE_REQUEST_TOPIC, topStoreRequest);
+  }
+
+  public StoreDetailResponseDto getStoreInfo(Long storeId) {
+    Store store = storeRepository.findByActiveStore(storeId);
+    return new StoreDetailResponseDto(store);
+  }
+
+  @Cacheable(value = "storeInfo", key = "#storeId", cacheManager = "redisCacheManager")
+  // 캐시 이름 storeInfo
+  public StoreDetailResponseDto getStoreInfoWithCache(Long storeId) {
+    System.out.println("캐시 적용 안됨");
+    Store store = storeRepository.findByActiveStore(storeId);
+    return new StoreDetailResponseDto(store);
   }
 }

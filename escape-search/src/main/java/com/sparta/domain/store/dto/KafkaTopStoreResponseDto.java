@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KafkaTopStoreResponseDto {
-    private String requestId;
-    private List<TopStoreResponseDto> responseDtos;
+
+  private String requestId;
+  private TopStoreResponseDto responseDto;
 }

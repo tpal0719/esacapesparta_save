@@ -1,23 +1,18 @@
 package com.sparta.domain.store.dto;
 
 import com.sparta.domain.store.entity.Store;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class TopStoreResponseDto {
-    private Long storeId;
-    private String storeImage;
-    private String title;
-    private String address;
 
-    public TopStoreResponseDto(Store store){
-        this.storeId = store.getId();
-        this.storeImage = store.getStoreImage();
-        this.title = store.getName();
-        this.address = store.getAddress();
-    }
+  private List<StoreResponseDto> responseDtoList;
+
+  public TopStoreResponseDto(List<Store> storeList) {
+    this.responseDtoList = storeList.stream().map(StoreResponseDto::new).toList();
+  }
 }
