@@ -16,33 +16,34 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 public class ConcurrentHashMapConfig {
-    @Bean
-    public ConcurrentHashMap<String, CompletableFuture<List<ReviewResponseDto>>> ReviewResponseFutures(){
-        return new ConcurrentHashMap<>();
-    }
 
-    @Bean
-    public ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> StoreResponseFutures(){
-        return new ConcurrentHashMap<>();
-    }
+  @Bean
+  public ConcurrentHashMap<String, CompletableFuture<List<ReviewResponseDto>>> ReviewResponseFutures() {
+    return new ConcurrentHashMap<>();
+  }
 
-    @Bean
-    public ConcurrentHashMap<String, CompletableFuture<List<TopStoreResponseDto>>> TopStoreResponseFutures(){
-        return new ConcurrentHashMap<>();
-    }
+  @Bean
+  public ConcurrentHashMap<String, CompletableFuture<Page<StoreResponseDto>>> StoreResponseFutures() {
+    return new ConcurrentHashMap<>();
+  }
 
-    @Bean
-    public ConcurrentHashMap<String, CompletableFuture<Page<ThemeResponseDto>>> ThemeResponseFutures(){
-        return new ConcurrentHashMap<>();
-    }
+  @Bean
+  public ConcurrentHashMap<String, CompletableFuture<TopStoreResponseDto>> TopStoreResponseFutures() {
+    return new ConcurrentHashMap<>();
+  }
 
-    @Bean
-    public ConcurrentHashMap<String, CompletableFuture<ThemeInfoResponseDto>> ThemeInfoResponseFutures(){
-        return new ConcurrentHashMap<>();
-    }
+  @Bean
+  public ConcurrentHashMap<String, CompletableFuture<Page<ThemeResponseDto>>> ThemeResponseFutures() {
+    return new ConcurrentHashMap<>();
+  }
 
-    @Bean
-    public ConcurrentHashMap<String, CompletableFuture<List<ThemeTimeResponseDto>>> ThemeTimeResponseFutures(){
-        return new ConcurrentHashMap<>();
-    }
+  @Bean
+  public ConcurrentHashMap<String, CompletableFuture<ThemeInfoResponseDto>> ThemeInfoResponseFutures() {
+    return new ConcurrentHashMap<>();
+  }
+
+  @Bean
+  public ConcurrentHashMap<String, CompletableFuture<List<ThemeTimeResponseDto>>> ThemeTimeResponseFutures() {
+    return new ConcurrentHashMap<>();
+  }
 }

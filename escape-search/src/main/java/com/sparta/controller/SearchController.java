@@ -163,14 +163,14 @@ public class SearchController {
   }
 
   @GetMapping("/top-stores")
-  public ResponseEntity<ResponseMessage<List<TopStoreResponseDto>>> getTopStores() {
+  public ResponseEntity<ResponseMessage<TopStoreResponseDto>> getTopStores() {
 
-    List<TopStoreResponseDto> stores = storeService.getTopStores();
+    TopStoreResponseDto responseDto = storeService.getTopStores();
 
-    ResponseMessage<List<TopStoreResponseDto>> responseMessage = ResponseMessage.<List<TopStoreResponseDto>>builder()
+    ResponseMessage<TopStoreResponseDto> responseMessage = ResponseMessage.<TopStoreResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
-        .message("방탈출 카페 조회에 성공했습니다.")
-        .data(stores)
+        .message("인기 방탈출 카페 조회에 성공했습니다.")
+        .data(responseDto)
         .build();
 
     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -181,6 +181,21 @@ public class SearchController {
       @PathVariable Long storeId) {
 
     StoreDetailResponseDto responseDto = storeService.getStoreInfo(storeId);
+
+    ResponseMessage<StoreDetailResponseDto> responseMessage = ResponseMessage.<StoreDetailResponseDto>builder()
+        .statusCode(HttpStatus.OK.value())
+        .message("방탈출 카페 상세 조회에 성공했습니다.")
+        .data(responseDto)
+        .build();
+
+    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+  }
+
+  @GetMapping("/stores/{storeId}/info-cache")
+  public ResponseEntity<ResponseMessage<StoreDetailResponseDto>> getStoreInfoWithCache(
+      @PathVariable Long storeId) {
+
+    StoreDetailResponseDto responseDto = storeService.getStoreInfoWithCache(storeId);
 
     ResponseMessage<StoreDetailResponseDto> responseMessage = ResponseMessage.<StoreDetailResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
