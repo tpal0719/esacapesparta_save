@@ -1,5 +1,5 @@
 ### 회원가입 전 이메일 인증
-POST http://localhost:8080/users/mail
+POST http://localhost:8080/api/core/users/mail
 Content-Type: application/json
 
 {
@@ -9,19 +9,19 @@ Content-Type: application/json
 
 
 ### 회원가입
-POST http://localhost:8080/users/signup
+POST http://localhost:8080/api/core/users/signup
 Content-Type: application/json
 
 {
   "name": "박세미",
   "email": "tpal071997@gmail.com",
   "password": "Test1234!",
-  "certificateCode": ""
+  "certificateCode": "0557424"
 }
 
 
 ### 로그인
-POST http://localhost:8080/users/login
+POST http://localhost:8080/api/core/users/login
 Content-Type: application/json
 
 
@@ -29,13 +29,15 @@ Content-Type: application/json
   "email": "tpal071997@gmail.com",
   "password": "Test1234!"
 }
-> {% client.global.set("userAuth", response.headers.valueOf("Authorization")); %}
+> {%
+    client.global.set("userAuth", response.headers.valueOf("Authorization"));
+%}
 
 
 
 
 ### 회원가입 전 이메일 인증 - 매니저
-POST http://localhost:8080/users/mail
+POST http://localhost:8080/api/core/users/mail
 Content-Type: application/json
 
 {
@@ -45,20 +47,20 @@ Content-Type: application/json
 
 
 ### 회원가입
-POST http://localhost:8080/users/signup
+POST http://localhost:8080/api/core/users/signup
 Content-Type: application/json
 
 {
   "name": "박세미",
   "email": "tpal0719@naver.com",
   "password": "Test1234!",
-  "certificateCode": ""
+  "certificateCode": "2522258"
 }
 
 
 
 ### 로그인
-POST http://localhost:8080/users/login
+POST http://localhost:8080/api/core/users/login
 Content-Type: application/json
 
 
@@ -66,14 +68,16 @@ Content-Type: application/json
   "email": "tpal0719@naver.com",
   "password": "Test1234!"
 }
-> {% client.global.set("managerAuth", response.headers.valueOf("Authorization")); %}
+> {%
+    client.global.set("managerAuth", response.headers.valueOf("Authorization"));
+%}
 
 
 
 
 
 ### 회원가입 전 이메일 인증 - admin
-POST http://localhost:8080/users/mail
+POST http://localhost:8080/api/core/users/mail
 Content-Type: application/json
 
 {
@@ -83,21 +87,21 @@ Content-Type: application/json
 
 
 ### 회원가입
-POST http://localhost:8080/users/signup
+POST http://localhost:8080/api/core/users/signup
 Content-Type: application/json
 
 {
   "name": "박세미",
   "email": "yian95@naver.com",
   "password": "Test1234!",
-  "certificateCode": "1312178",
+  "certificateCode": "1772434",
   "adminKey": "asknd0enfdlvzn0a9wer2je09f8ashdnojff23g"
 }
 
 
 
 ### 로그인
-POST http://localhost:8080/users/login
+POST http://localhost:8080/api/core/users/login
 Content-Type: application/json
 
 
@@ -105,7 +109,9 @@ Content-Type: application/json
   "email": "yian95@naver.com",
   "password": "Test1234!"
 }
-> {% client.global.set("adminAuth", response.headers.valueOf("Authorization")); %}
+> {%
+    client.global.set("adminAuth", response.headers.valueOf("Authorization"));
+%}
 
 
 

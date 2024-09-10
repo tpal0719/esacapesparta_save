@@ -79,7 +79,9 @@ Content-Type: application/json
   "email": "mmarland0@facebook.com",
   "password": "Test1234!"
 }
-> {% client.global.set("user1Auth", response.headers.valueOf("Authorization")); %}
+> {%
+    client.global.set("user1Auth", response.headers.valueOf("Authorization"));
+%}
 
 ### 로그아웃
 PUT http://localhost:8080/users/logout
@@ -96,9 +98,15 @@ Authorization: {{user1Auth}}
   "password": "Test1234!"
 }
 
+
+
 ### 로그인한 유저 프로필 조회
-GET http://localhost:8081/users/profile
-Authorization: {{user1Auth}}
+GET http://localhost:8083/api/consumer/users/profile
+Authorization: {{userAuth}}
+
+
+
+
 
 
 ### 프로필 수정
@@ -143,7 +151,9 @@ Content-Type: application/json
   "email": "admin@joomla.org",
   "password": "Test1234!"
 }
-> {% client.global.set("adminAuth", response.headers.valueOf("Authorization")); %}
+> {%
+    client.global.set("adminAuth", response.headers.valueOf("Authorization"));
+%}
 
 ### 로그아웃
 PUT http://localhost:8080/users/logout
